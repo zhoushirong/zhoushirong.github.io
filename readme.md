@@ -1,3 +1,6 @@
+## 博客地址
+[https://zhoushirong.github.io](https://zhoushirong.github.io)
+
 ## 使用hexo一分钟搭建博客
 
 注意：开发的时候切换到开发分支，不要切换到master分支，master分支用作hexo自动部署用。
