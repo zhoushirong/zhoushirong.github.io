@@ -203,7 +203,7 @@ body {
 }
 .article-inner,
 .archive-article-inner {
-  background: #fff;
+  background: #f6f6f6;
   -webkit-box-shadow: 1px 2px 3px #ddd;
   box-shadow: 1px 2px 3px #ddd;
   border: 1px solid #ddd;
@@ -974,16 +974,16 @@ a.article-title:hover {
 }
 @media screen and (min-width: 480px) and (max-width: 767px) {
   .archives {
-    -webkit-column-count: 2;
-    -moz-column-count: 2;
-    column-count: 2;
+    -webkit-column-count: 1;
+    -moz-column-count: 1;
+    column-count: 1;
   }
 }
 @media screen and (min-width: 768px) {
   .archives {
-    -webkit-column-count: 3;
-    -moz-column-count: 3;
-    column-count: 3;
+    -webkit-column-count: 1;
+    -moz-column-count: 1;
+    column-count: 1;
   }
 }
 .archive-article {
@@ -1022,7 +1022,7 @@ a.article-title:hover {
 }
 #page-nav {
   margin: 50px auto;
-  background: #fff;
+  background: #f6f6f6;
   -webkit-box-shadow: 1px 2px 3px #ddd;
   box-shadow: 1px 2px 3px #ddd;
   border: 1px solid #ddd;
