@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-109295694-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <title>Mysql入门 | 邑司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Mysql是最流行的关系型数据库管理系统，尤其是在Web应用方面。Mysql是一个关系型数据库管理系统，由瑞典MySQL AB公司开发，目前属于Oracle公司。MySQL是一种关联数据库管理系统，关联数据库将数据保存在不同的表中，而不是将所有数据放在一个大仓库内，这样就增加了速度并提高了灵活性。Mysql是开源的、免费的、支持大型的数据库Mysql使用标准的SQL数据语言形式。下面是Mysql的">
+<meta name="keywords" content="mysql,数据库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql入门">
+<meta property="og:url" content="https://www.epoos.com/2016/12/25/mysql/index.html">
+<meta property="og:site_name" content="邑司">
+<meta property="og:description" content="Mysql是最流行的关系型数据库管理系统，尤其是在Web应用方面。Mysql是一个关系型数据库管理系统，由瑞典MySQL AB公司开发，目前属于Oracle公司。MySQL是一种关联数据库管理系统，关联数据库将数据保存在不同的表中，而不是将所有数据放在一个大仓库内，这样就增加了速度并提高了灵活性。Mysql是开源的、免费的、支持大型的数据库Mysql使用标准的SQL数据语言形式。下面是Mysql的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T11:13:48.433Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mysql入门">
+<meta name="twitter:description" content="Mysql是最流行的关系型数据库管理系统，尤其是在Web应用方面。Mysql是一个关系型数据库管理系统，由瑞典MySQL AB公司开发，目前属于Oracle公司。MySQL是一种关联数据库管理系统，关联数据库将数据保存在不同的表中，而不是将所有数据放在一个大仓库内，这样就增加了速度并提高了灵活性。Mysql是开源的、免费的、支持大型的数据库Mysql使用标准的SQL数据语言形式。下面是Mysql的">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">邑司</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://www.epoos.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-mysql" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/12/25/mysql/" class="article-date">
+  <time datetime="2016-12-24T16:00:00.000Z" itemprop="datePublished">2016-12-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Mysql入门
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Mysql是最流行的关系型数据库管理系统，尤其是在Web应用方面。<br>Mysql是一个关系型数据库管理系统，由瑞典MySQL AB公司开发，目前属于Oracle公司。MySQL是一种关联数据库管理系统，关联数据库将数据保存在不同的表中，而不是将所有数据放在一个大仓库内，这样就增加了速度并提高了灵活性。<br>Mysql是开源的、免费的、支持大型的数据库<br>Mysql使用标准的SQL数据语言形式。<br>下面是Mysql的基本使用。</p>
+<p>ps: ${xxx}表示xxx是变量</p>
+<h3 id="mysql安装"><a href="#mysql安装" class="headerlink" title="mysql安装"></a>mysql安装</h3><p>用brew安装mysql</p>
+<p>安装mysql<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install mysql</span><br></pre></td></tr></table></figure></p>
+<p>设置 MySQL 用户以及数据存放地址<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ unset TMPDIR</span><br><span class="line"></span><br><span class="line">$ mysql_install_db --verbose --user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=/usr/local/var/mysql --tmpdir=/tmp</span><br></pre></td></tr></table></figure></p>
+<p>忘记mysql数据库密码<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> <span class="keyword">user</span> <span class="keyword">set</span> authentication_string=<span class="keyword">password</span>(<span class="string">'my_password'</span>) <span class="keyword">where</span> <span class="keyword">user</span>=<span class="string">'root'</span>;</span><br></pre></td></tr></table></figure></p>
+<p>遇到的问题</p>
+<p>错误码：ERROR 1045 (28000)<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cd /etc</span><br><span class="line"></span><br><span class="line">sudo vim my.cnf</span><br><span class="line"></span><br><span class="line">编辑如下代码到my.cnf文件,保存成功应该就可以了</span><br><span class="line">[mysqld]</span><br><span class="line">skip-grant-tables</span><br><span class="line">lower_case_table_names=1</span><br></pre></td></tr></table></figure></p>
+<p>权限不足的时候可以创建一个账号<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">'golden'</span>@<span class="string">'localhost'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'password'</span>;</span><br><span class="line"><span class="keyword">GRANT</span> ALL <span class="keyword">PRIVILEGES</span> <span class="keyword">ON</span> * . * <span class="keyword">TO</span> <span class="string">'golden'</span>@<span class="string">'localhost'</span>;</span><br><span class="line"><span class="keyword">FLUSH</span> <span class="keyword">PRIVILEGES</span>;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>启动mysql<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql.server start</span><br><span class="line">sudo /etc/init.d/mysql start</span><br></pre></td></tr></table></figure></p>
+<p>or<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /usr/local/mysql/support-files/mysql.server start;</span><br></pre></td></tr></table></figure></p>
+<p>开机启动mysql<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/mysqld start</span><br></pre></td></tr></table></figure></p>
+<p>通过sql文件执行脚本<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">source  /Users/zsr/learn/crawler/sql/createtable.sql;</span><br><span class="line"></span><br><span class="line">or</span><br><span class="line"></span><br><span class="line">mysql -D samp_db -u root -p &lt; createtable.sql</span><br></pre></td></tr></table></figure></p>
+<p>登录mysql<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p</span><br><span class="line"></span><br><span class="line">输入mysql密码</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>创建一个数据库，设置character是为了兼容汉字<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> $&#123;newdatabasename&#125; <span class="built_in">character</span> <span class="keyword">set</span> gbk;</span><br></pre></td></tr></table></figure></p>
+<p>查看所有的数据库<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">databases</span>;</span><br></pre></td></tr></table></figure></p>
+<p>删除数据库<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">database</span> $&#123;databasename&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>选中testdb数据库<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> testdb;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>创建一张表<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> $&#123;databasename&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> students</span><br><span class="line">（</span><br><span class="line">    <span class="keyword">id</span> <span class="built_in">int</span> <span class="keyword">unsigned</span> <span class="keyword">not</span> <span class="literal">null</span> auto_increment primary <span class="keyword">key</span>,</span><br><span class="line">    <span class="keyword">name</span> <span class="built_in">char</span>(<span class="number">8</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    sex <span class="built_in">char</span>(<span class="number">4</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    age tinyint <span class="keyword">unsigned</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    tel <span class="built_in">char</span>(<span class="number">13</span>) <span class="literal">null</span> <span class="keyword">default</span> <span class="string">"-"</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<p>修改表名<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> $&#123;oldtablename&#125; <span class="keyword">rename</span> <span class="keyword">to</span> $&#123;newtablename&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>查看所有表<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">tables</span>;</span><br></pre></td></tr></table></figure></p>
+<p>删除表<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> $&#123;tabename&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>显示数据表的属性，属性类型，主键信息<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">columns</span> <span class="keyword">from</span> students</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>查看列<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">desc $&#123;tablename&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>添加列<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> $&#123;tablename&#125; <span class="keyword">add</span> <span class="keyword">column</span> $&#123;newcolumnname&#125; verchar(<span class="number">30</span>);</span><br></pre></td></tr></table></figure></p>
+<p>删除列<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> $&#123;tablename&#125; <span class="keyword">drop</span> <span class="keyword">column</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> $&#123;tablename&#125; <span class="keyword">drop</span> <span class="keyword">column</span> $&#123;columnname&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>修改列<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> $&#123;tablename&#125; <span class="keyword">change</span> $&#123;ondcolumnname&#125; $&#123;newcolumnname&#125; <span class="built_in">int</span>;</span><br></pre></td></tr></table></figure></p>
+<p>修改列属性<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> $&#123;tablename&#125; <span class="keyword">modify</span> $&#123;oldattr&#125; <span class="built_in">char</span>(<span class="number">80</span>);</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>增加数据<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> $&#123;tablename&#125; <span class="keyword">values</span> ($&#123;column1&#125;, $&#123;column2&#125;); <span class="comment">/*如果自增id，则column1为0*/</span></span><br></pre></td></tr></table></figure></p>
+<p>修改数据<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> $&#123;tablename&#125; <span class="keyword">set</span> $&#123;<span class="keyword">attr</span>&#125;=$&#123;newAttr&#125; <span class="keyword">where</span> $&#123;<span class="keyword">id</span>=<span class="number">3</span>&#125;; <span class="comment">/*id=3代表查询条件*/</span></span><br></pre></td></tr></table></figure></p>
+<p>查询数据<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> $&#123;tablename&#125; <span class="keyword">where</span> $&#123;<span class="keyword">id</span>=<span class="number">3</span>&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>删除数据<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> $&#123;tablename&#125; <span class="keyword">where</span> $&#123;<span class="keyword">id</span>=<span class="number">3</span>&#125;;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>详细的常用查询操作<br>1.查询从第n条开始的m条数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> test_table <span class="keyword">limit</span> n,m;</span><br></pre></td></tr></table></figure>
+<p>查看数据库编码<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">'character%'</span>;</span><br></pre></td></tr></table></figure></p>
+<p>查看数据库位置<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">'datadir%'</span></span><br></pre></td></tr></table></figure></p>
+<p>备份数据<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -udbusername -pdbpwd dbname &gt; ./epoos.sql</span><br><span class="line">scp -r root@xxx.193.173.xx:/xxx/xxx/xxx/epoos.sql /Users/zsr/epoos</span><br></pre></td></tr></table></figure></p>
+<p>还原数据<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -h127.0.0.1 -uroot -p123456 epoos &lt; epoos.sql</span><br></pre></td></tr></table></figure></p>
+<p>如果上面的还原功能不好使，可以<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.创建新数据库 newdb</span><br><span class="line">2.use newdb</span><br><span class="line">3.执行备份的sql文件</span><br></pre></td></tr></table></figure></p>
+<h4 id="ubuntu安装mysql"><a href="#ubuntu安装mysql" class="headerlink" title="ubuntu安装mysql"></a>ubuntu安装mysql</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install mysql-server</span><br><span class="line">mysql_secure_installation</span><br></pre></td></tr></table></figure>
+<h4 id="新建新用户"><a href="#新建新用户" class="headerlink" title="新建新用户"></a>新建新用户</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span> CREATE USER zsr@localhost IDENTIFIED BY '123456';</span><br><span class="line"><span class="meta">mysql&gt;</span> grant all on epoos.* to zsr@localhost INDENTIFIED BY "123456";</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://www.epoos.com/2016/12/25/mysql/" data-id="cjhhk82fm000t8dqtrxq981oq" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/12/26/dns/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          DNS查询
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/12/25/websafe/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Web安全问题</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/05/21/proxy-error/">一个localhost引发的血案。</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/10/react/">React、Flux以及Redux小结</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/20/getrect/">getBoundingClientReact方法</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/20/jsencrypt/">AES加密和RSA加密</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/15/js2/">Javascript基本方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AES/" style="font-size: 10px;">AES</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/cors/" style="font-size: 10px;">cors</a> <a href="/tags/dns/" style="font-size: 10px;">dns</a> <a href="/tags/flux/" style="font-size: 10px;">flux</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/http2/" style="font-size: 10px;">http2</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/nodejs/" style="font-size: 15px;">nodejs</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/redux/" style="font-size: 10px;">redux</a> <a href="/tags/svn/" style="font-size: 10px;">svn</a> <a href="/tags/terminal/" style="font-size: 10px;">terminal</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/tags/web安全/" style="font-size: 10px;">web安全</a> <a href="/tags/加密/" style="font-size: 10px;">加密</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 zhoushirong<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

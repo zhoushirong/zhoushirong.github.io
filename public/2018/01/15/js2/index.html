@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-109295694-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <title>Javascript基本方法 | 邑司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Javascript的基础知识。 ECMAScript有几个常见的基本方法一直没怎么搞清楚， 一、容易混淆的几个方法：split、slice、splicesplit()split()方法用于将一个字符串分割成字符串数组123var str = &apos;abcdefg&apos;;var strArr = str.split(&apos;&apos;);console.log(strArr); // [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;">
+<meta name="keywords" content="js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Javascript基本方法">
+<meta property="og:url" content="https://www.epoos.com/2018/01/15/js2/index.html">
+<meta property="og:site_name" content="邑司">
+<meta property="og:description" content="Javascript的基础知识。 ECMAScript有几个常见的基本方法一直没怎么搞清楚， 一、容易混淆的几个方法：split、slice、splicesplit()split()方法用于将一个字符串分割成字符串数组123var str = &apos;abcdefg&apos;;var strArr = str.split(&apos;&apos;);console.log(strArr); // [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T11:06:48.940Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Javascript基本方法">
+<meta name="twitter:description" content="Javascript的基础知识。 ECMAScript有几个常见的基本方法一直没怎么搞清楚， 一、容易混淆的几个方法：split、slice、splicesplit()split()方法用于将一个字符串分割成字符串数组123var str = &apos;abcdefg&apos;;var strArr = str.split(&apos;&apos;);console.log(strArr); // [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">邑司</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://www.epoos.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-js2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/15/js2/" class="article-date">
+  <time datetime="2018-01-14T16:00:00.000Z" itemprop="datePublished">2018-01-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Javascript基本方法
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Javascript的基础知识。</p>
+<p>ECMAScript有几个常见的基本方法一直没怎么搞清楚，</p>
+<h3 id="一、容易混淆的几个方法：split、slice、splice"><a href="#一、容易混淆的几个方法：split、slice、splice" class="headerlink" title="一、容易混淆的几个方法：split、slice、splice"></a>一、容易混淆的几个方法：split、slice、splice</h3><h3 id="split"><a href="#split" class="headerlink" title="split()"></a>split()</h3><p>split()方法用于将一个字符串分割成字符串数组<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">'abcdefg'</span>;</span><br><span class="line"><span class="keyword">var</span> strArr = str.split(<span class="string">''</span>);</span><br><span class="line"><span class="built_in">console</span>.log(strArr); <span class="comment">// ["a", "b", "c", "d", "e", "f", "g"]</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="slice"><a href="#slice" class="headerlink" title="slice()"></a>slice()</h3><p>slice()方法用于返回从数组中返回的元素，不会改变原数组<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'f'</span>, <span class="string">'g'</span>];</span><br><span class="line">arr.slice(<span class="number">0</span>, <span class="number">1</span>); <span class="comment">// ['a']</span></span><br><span class="line">arr.slice(<span class="number">2</span>, <span class="number">5</span>); <span class="comment">// ['c', 'd', 'e']</span></span><br><span class="line">arr.slice(<span class="number">0</span>); <span class="comment">// 相当于深度拷贝数组</span></span><br><span class="line"><span class="keyword">var</span> str = <span class="string">'abcdefg'</span>; <span class="comment">//也可以用于字符串</span></span><br><span class="line">str.slice(<span class="number">2</span>,<span class="number">5</span>); <span class="comment">// 'cde'</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="splice"><a href="#splice" class="headerlink" title="splice()"></a>splice()</h3><p>splice() 用于对数组，删除添加和替换，会改变元素组<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>];</span><br><span class="line">arr.splice(<span class="number">2</span>, <span class="number">5</span>); <span class="comment">// ['c', 'd', 'e']</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="replace-正则"><a href="#replace-正则" class="headerlink" title="replace()正则"></a>replace()正则</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">text = text.replace(<span class="regexp">/&lt;wiki&gt;(.+?)&lt;\/wiki&gt;/g</span>, <span class="function"><span class="keyword">function</span>(<span class="params">match, contents, offset, input_string</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"&lt;a href='wiki/"</span>+contents.replace(<span class="regexp">/ /g</span>, <span class="string">'_'</span>)+<span class="string">"'&gt;"</span>+contents+<span class="string">"&lt;/a&gt;"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://www.epoos.com/2018/01/15/js2/" data-id="cjhhk82fb000h8dqtzs4u7oxx" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/03/20/jsencrypt/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          AES加密和RSA加密
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/01/14/js1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Javascript数据类型</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/05/21/proxy-error/">一个localhost引发的血案。</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/10/react/">React、Flux以及Redux小结</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/20/getrect/">getBoundingClientReact方法</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/20/jsencrypt/">AES加密和RSA加密</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/15/js2/">Javascript基本方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AES/" style="font-size: 10px;">AES</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/cors/" style="font-size: 10px;">cors</a> <a href="/tags/dns/" style="font-size: 10px;">dns</a> <a href="/tags/flux/" style="font-size: 10px;">flux</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/http2/" style="font-size: 10px;">http2</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/nodejs/" style="font-size: 15px;">nodejs</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/redux/" style="font-size: 10px;">redux</a> <a href="/tags/svn/" style="font-size: 10px;">svn</a> <a href="/tags/terminal/" style="font-size: 10px;">terminal</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/tags/web安全/" style="font-size: 10px;">web安全</a> <a href="/tags/加密/" style="font-size: 10px;">加密</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 zhoushirong<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

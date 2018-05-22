@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-109295694-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <title>Web安全问题 | 邑司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="基于Web环境的互联网应用有着其它平台没有的优势，易于维护、更新迭代更快、使用方便、跨平台等。而缺点也同样明显，那就是性能远远没有桌面应用好，使得相对没那么受欢迎。随着科技的发展，尤其是近几年来设备的更新换代以及新型浏览器的出现，Web应用的性能有了极大的提升。基于web环境的互联网应用越来越多，而与之伴随的Web安全问题也更加凸显。本人对web安全也了解不多，趁此摸鱼的时间，查一查相关资料，在此">
+<meta name="keywords" content="js,cors,web安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web安全问题">
+<meta property="og:url" content="https://www.epoos.com/2016/12/25/websafe/index.html">
+<meta property="og:site_name" content="邑司">
+<meta property="og:description" content="基于Web环境的互联网应用有着其它平台没有的优势，易于维护、更新迭代更快、使用方便、跨平台等。而缺点也同样明显，那就是性能远远没有桌面应用好，使得相对没那么受欢迎。随着科技的发展，尤其是近几年来设备的更新换代以及新型浏览器的出现，Web应用的性能有了极大的提升。基于web环境的互联网应用越来越多，而与之伴随的Web安全问题也更加凸显。本人对web安全也了解不多，趁此摸鱼的时间，查一查相关资料，在此">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T11:14:30.654Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Web安全问题">
+<meta name="twitter:description" content="基于Web环境的互联网应用有着其它平台没有的优势，易于维护、更新迭代更快、使用方便、跨平台等。而缺点也同样明显，那就是性能远远没有桌面应用好，使得相对没那么受欢迎。随着科技的发展，尤其是近几年来设备的更新换代以及新型浏览器的出现，Web应用的性能有了极大的提升。基于web环境的互联网应用越来越多，而与之伴随的Web安全问题也更加凸显。本人对web安全也了解不多，趁此摸鱼的时间，查一查相关资料，在此">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">邑司</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://www.epoos.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-websafe" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/12/25/websafe/" class="article-date">
+  <time datetime="2016-12-24T16:00:00.000Z" itemprop="datePublished">2016-12-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Web安全问题
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>基于Web环境的互联网应用有着其它平台没有的优势，易于维护、更新迭代更快、使用方便、跨平台等。<br>而缺点也同样明显，那就是性能远远没有桌面应用好，使得相对没那么受欢迎。<br>随着科技的发展，尤其是近几年来设备的更新换代以及新型浏览器的出现，Web应用的性能有了极大的提升。<br>基于web环境的互联网应用越来越多，而与之伴随的Web安全问题也更加凸显。<br>本人对web安全也了解不多，趁此摸鱼的时间，查一查相关资料，在此记录一下。</p>
+<h3 id="攻击方式"><a href="#攻击方式" class="headerlink" title="攻击方式"></a>攻击方式</h3><p>1.资源枚举<br>枚举url获取网站文件、枚举错误信息获取网站信息</p>
+<p>2.参数操纵<br>包括了SQL注入、XPath注入、cgi命令执行，还有XXS和会话劫持等，前三个的攻击主要是在服务端触发的，后二者的攻击则是侧重于客户端。</p>
+<p>3.会话劫持</p>
+<p>4.XSS 全称(Cross Site Scripting) 跨站脚本攻击， 是Web程序中最常见的漏洞<br>XSS指攻击者在网页中嵌入客户端脚本（js/css），<br>当用户浏览此网页时，脚本就会在用户客户端上执行，从而达到攻击目的，比如获取用户cookie,导航到恶意网站，携带木马等。<br>1)反射型XSS，又称非持久型XSS<br>    攻击者通过电子邮件等方式将包含注入脚本的恶意链接发送给受害者，当受害者点击该链接时，注 入脚本被传输到目标服务器上，然后服务器将注入脚本“反射”到受害者的浏览器上，从而在该浏览器上执行了这段脚本。<br>2)存储型XSS<br>3)DOM XSS<br>4)XSS payload</p>
+<p>5.CSRF（cross-site request forgery），翻译为跨站请求伪造<br>与XSS非常相似，但XSS是利用用户对当前网站的信任来发起攻击，而CSRF是利用网站对用户的信任来发起攻击。</p>
+<p>对于CSRF攻击，我们所能做的可以有：<br>1). 检查报头中的Referer参数确保请求发自正确的网站（但XHR请求可调用setRequestHeader方法来修改Referer报头）；<br>2). 对于任何重要的请求都需要重新验证用户的身份；<br>3). 创建一个唯一的令牌（Token），将其存在服务端的session中及客户端的cookie中，对任何请求，都检查二者是否一致。</p>
+<p>6.钓鱼攻击 指的是网站的伪造，比如ta0bao.com，然后在其中应用XSS等方式发起攻击。</p>
+<p>7.拒绝服务（DoS）指的是向网站发起洪水一样的请求（Traffic Floor），导致服务器超负荷并关闭.<br>处理方法常规是采用QoS（Quality of Service）的软硬件解决方案。</p>
+<h3 id="攻击层面"><a href="#攻击层面" class="headerlink" title="攻击层面"></a>攻击层面</h3><p>攻击层面指的是有恶意的人可能会从哪些地方来入手制造麻烦，常见的攻击层面有三种：<br>一. 传统WEB应用程序</p>
+<ol>
+<li>表单输入（甚至包括hidden控件的内容）；</li>
+<li>cookie（通过修改cookie内容也可以达到SQL注入攻击的目的）；</li>
+<li>报头（有时候为了方便统计来源数据，服务器会把客户端发来报头的Referer、User-Agent信息存到数据库中，那么通过修改报头信息也可以起到SQL注入工具目的）</li>
+<li>请求参数</li>
+<li>上传文件（在文件内携带恶意代码）</li>
+</ol>
+<p>二. Web服务</p>
+<ol>
+<li>上述“传统WEB服务”的全部方法；</li>
+<li>WSDL文档（暴露了服务端的每个方法及其使用方式）</li>
+</ol>
+<p>三. AJAX应用程序<br>即上述的“一”和“二”的合集</p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>综上所述，我们可以这样审视我们的WEB站点：</p>
+<ol>
+<li>永远不要相信客户端传来的任何信息，对这些信息都应先进行编码或过滤处理；</li>
+<li>谨慎返回用户输入的信息；</li>
+<li>使用黑名单和白名单处理（即“不允许哪些敏感信息”或“只允许哪些信息”，白名单的效果更好但局限性高）；</li>
+<li>检查、验证请求来源，对每一个重要的操作都进行重新验证；</li>
+<li>使用SSL防止第三方监听通信（但无法阻止XSS、CSRF、SQL注入攻击）；</li>
+<li>不要将重要文件、备份文件存放在公众可访问到的地方；</li>
+<li>会话ID无序化；</li>
+<li>对用户上传的文件进行验证（不单单是格式验证，比方一张gif图片还应将其转为二进制并验证其每帧颜色值&lt;无符号8位&gt;和宽高值&lt;无符号16位&gt;）；</li>
+<li>WSDL文档应当要求用户注册后才能获取；</li>
+<li>在报头定义CSP（Content Security Policy）；</li>
+<li>。。。</li>
+</ol>
+<p>虽然我们有一些必要的手段来防止WEB攻击，但永远不会有一枚silver bullet来彻底解决问题，先不谈那些数不胜数的已知的、可被攻击的漏洞，对于谜一样的0-day漏洞，我们所能做的只是提前发现并及时修补它们。</p>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a href="http://www.cnblogs.com/vajoy/p/4176908.html" target="_blank" rel="noopener">http://www.cnblogs.com/vajoy/p/4176908.html</a><br><a href="http://imweb.io/topic/568958714c44bcc56092e409" target="_blank" rel="noopener">http://imweb.io/topic/568958714c44bcc56092e409</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://www.epoos.com/2016/12/25/websafe/" data-id="cjhhk82fz001a8dqtzbnc6se9" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cors/">cors</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web安全/">web安全</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/12/25/mysql/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Mysql入门
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/12/25/nginx/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Nginx入门</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/05/21/proxy-error/">一个localhost引发的血案。</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/10/react/">React、Flux以及Redux小结</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/20/getrect/">getBoundingClientReact方法</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/20/jsencrypt/">AES加密和RSA加密</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/15/js2/">Javascript基本方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AES/" style="font-size: 10px;">AES</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/cors/" style="font-size: 10px;">cors</a> <a href="/tags/dns/" style="font-size: 10px;">dns</a> <a href="/tags/flux/" style="font-size: 10px;">flux</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/http2/" style="font-size: 10px;">http2</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/nodejs/" style="font-size: 15px;">nodejs</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/tags/react/" style="font-size: 10px;">react</a> <a href="/tags/redux/" style="font-size: 10px;">redux</a> <a href="/tags/svn/" style="font-size: 10px;">svn</a> <a href="/tags/terminal/" style="font-size: 10px;">terminal</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/tags/web安全/" style="font-size: 10px;">web安全</a> <a href="/tags/加密/" style="font-size: 10px;">加密</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 zhoushirong<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

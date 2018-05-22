@@ -2,7 +2,8 @@
 layout: default
 title: 一个localhost引发的血案。
 date: 2018-05-21 19:41:48
-tags:
+tags: [npm,proxy]
+category: 技术
 ---
 
 ## {{page.title}}
