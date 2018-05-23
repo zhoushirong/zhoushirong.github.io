@@ -1,9 +1,4 @@
 #!/bin/bash
-echo 'hexo clean'
-hexo clean
-echo 'hexo g'
-hexo g
-# echo 'cp img'
-# cp -R ./img ./.deploy_git/
-echo 'hexo d'
-hexo d
+echo 'hexo clean && hexo g && hexo d:'
+hexo clean && hexo g && hexo d
+echo 'done!'

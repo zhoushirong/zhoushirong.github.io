@@ -80,5 +80,4 @@ theme: landscape
 deploy:
   type: git
   repo: https://github.com/zhoushirong/zhoushirong.github.io.git
-
-# extend_dirs: img
+  extend_dirs: img
