@@ -1,5 +1,5 @@
 ---
-title: Nginx入门
+title: Nginx简单介绍
 tag: nginx
 date: 2016/12/25
 category: 技术
@@ -30,7 +30,7 @@ Nginx最初是作为一个web服务器创建的。但是Nginx除了作为web服�
 
 1.brew
 
-``` shell
+```shell
 brew list 查看brew安装的软件列表
 brew search xx // 搜索
 brew install xx // 安装
@@ -40,19 +40,19 @@ brew uninstall xx //卸载
 
 1.用brew安装nginx
 
-``` shell
+```shell
 brew install nginx
 ```
 
 2.启动nginx
 
-``` shell
+```shell
 [sudo] nginx
 ```
 
 3.查看nginx的进程
 
-``` shell
+```shell
 [sudo] ps aux | grep nginx
 ```
 
@@ -60,25 +60,25 @@ brew install nginx
 
 4.查看nginx版本
 
-``` shell
+```shell
 nginx -v
 ```
 
 5.停止nginx
 
-``` shell
+```shell
 [sudo] nginx -s stop
 ```
 
 6.重新加载nginx
 
-``` shell
+```shell
 [sudo] nginx -s reload
 ```
 
 7.重启nginx
 
-``` shell
+```shell
 [sudo] nginx -s stop && [sudo] nginx
 ```
 
@@ -89,13 +89,13 @@ ps:如果启动或重启的时候遇到pid报错则按如下方法杀掉nginx主
 
 步骤一：询nginx主进程
 
-``` shell
+```shell
 ps -ef | grep nginx
 ```
 
 步骤2：发送信号
 
-``` html
+```html
 从容停止：sudo kill -QUIT 主进程号
 
 快速停止：sudo kill -TERM 主进程号
@@ -105,10 +105,11 @@ ps -ef | grep nginx
 
 8.nginx默认配置位置
 
-``` html
+```shell
 /etc/nginx/nginx.conf
-
-/usr/local/etc/nginx/nginx.conf 或者 /usr/local/nginx/conf/nginx.conf
+/usr/local/etc/nginx/nginx.conf
+# 或者
+/usr/local/nginx/conf/nginx.conf
 ```
 
 
@@ -116,14 +117,14 @@ ps -ef | grep nginx
 
 安装
 
-``` html
+```html
 [sudo] apt-get install nginx
 
 ```
 
 ### 查看nginx是否启动
 
-``` html
+```html
 ps -ef|grep nginx
 ```
 
@@ -158,7 +159,6 @@ http {
 ```html
 req.get("X-Real-IP") || req.get("X-Forwarded-For") || req.ip,
 ```
-
 
 
 

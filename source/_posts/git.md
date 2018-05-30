@@ -20,20 +20,47 @@ git config user.email "邮箱"
 ### 生成ssh-key
 
 ``` shell
-ssh-keygen -t rsa -C "邮箱"
+zsr :: ~ ‹master*› % ssh-keygen                                                                 
+Generating public/private rsa key pair.
+Enter file in which to save the key (/Users/zsr/.ssh/id_rsa): /Users/zsr/.ssh/githubsshkey # 填写路径
+Enter passphrase (empty for no passphrase): # 密码可为空
+Enter same passphrase again: # 密码可为空
+Your identification has been saved in /Users/zsr/.ssh/githubsshkey.
+Your public key has been saved in /Users/zsr/.ssh/githubsshkey.pub.
+The key fingerprint is:
+SHA256:Va57YAfyxN86cD5a1ejR6imhQiJuM/2IeTyK5FI+W+4 zsr@zsr.local
+The key's randomart image is:
++---[RSA 2048]----+
+|            .    |
+|         . o     |
+|        . = .    |
+|         = + . + |
+|        S * + = o|
+|  . . . .. B.+ o |
+| o...+ o  ..B.o  |
+|.oo+=o=.. .+.+ . |
+| .+=E=.o...  .o  |
++----[SHA256]-----+
 ```
 
-然后根据提示连续回车即可在~/ .ssh 目录下得到id_rsa 和id_rsa.pub 两个文件，id_rsa.pub文件里面存放的就是我们要使用的key。
+然后根据提示连续回车即可在/Users/zsr/.ssh 目录下得到githubsshkey 和githubsshkey.pub 
+其中githubsshkey.pub文件里面存放的就是我们要使用的public key。
+
 
 ### 生成多个ssh-key
 
+要生成多个key重复上面操作即可，生成之后再.ssh目录下创建一个config文件，并配置私钥(没有.pub的那个文件)的相对路径
 ``` shell
-ssh-keygen -t rsa  -f ~/.ssh/id_rsa.xxx -C "邮箱"
+Host github.com
+User zhoushirong
+IdentityFile ~/.ssh/githubsshkey
 ```
 
-### git branch
+### git 常用命令
 
 ``` shell
+git clone git仓库地址 # 从git仓库拉取git代码到本地
+
 git branch # 列出本地分支
 
 git branch -r # 列出远程分支
@@ -46,33 +73,18 @@ git branch -d | -D 分支名 # 删除本地分支
 
 git branch -d | -D  -r 分支名 # 删除远程分支
 
+git checkout 分支名 # 拉取远程分支
+
 ```
 
-### git拉取远程分支到本地
 
-``` shell
-git branch -b 远程分支名 origin/远程分支名
-
-git pull origin 远程分支名
-```
-
-### git 切换分支
-
-``` shell
-git chechout 分支名 # git切换分支
-```
-
-### git commit
+### git commit && push
 
 ``` shell
 git commit # 提交缓存区里面的文件
 
 git commit -m "提交描述信息"
-```
 
-### git push
-
-``` shell
 git push # 将本地仓库修改推送到服务器上的仓库
 
 git push origin develop#— 将新分支push到远程分支
@@ -100,20 +112,14 @@ step1:
 ``` shell
 git log —— 按提交时间列出所有的更新
 
-git log --pretty
+git log --pretty # pretty确定输出格式
 
-git log --pretty=oneline 
+git log --pretty=oneline # 日志简化版，只有commit message 和 hash
 
-git log --pretty=oneline 文件名
+git log --pretty=oneline 文件名 # 显示某一个文件的git日志
 
 git log -p -2 # -p 选项展开显示每次提交的内容差异，用 -2 则仅显示最近的两次更新：
 ```
-
-step2: 找到对应的hash str
-``` shell
-git show str
-```
-
 
 
 ### gitignore
@@ -214,14 +220,22 @@ Host key verification failed.
 fatal: Could not read from remote repository.
 ```
 
+出错原因：
+```shell
+know_hosts 
+# ssh登录的时候，当远程主机的公钥被接受以后，就会保存远程主机的公钥到此文件
+# 出错的原因可能是公钥和对应的主机对应不上了。
+```
+
 解决办法
 ```shell
-# 删除~/.ssh/known_hosts
+# 删除~/.ssh/known_hosts里面对应的公钥条目、或者直接删除此文件
 rm -rf ~/.ssh/known_hosts
 ```
 
 
 
+### 传送门
 
-
+[https://git-scm.com/book/zh/v1/起步-关于版本控制](https://git-scm.com/book/zh/v1/%E8%B5%B7%E6%AD%A5)
 

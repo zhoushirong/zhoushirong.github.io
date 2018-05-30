@@ -17,7 +17,7 @@ category: 技术
 可是在服务器上安装就稍微有些麻烦了，在服务端（ubuntu）安装的时候一般都是下载源码，手动编译的，这就显得有些麻烦了。
 刚开始的时候还是有些坑。
 
-#### 通过源码编译安装
+#### 方法一、通过源码编译安装
 
 首先将nodejs的源码安装包下载下来，然后解压编译
 
@@ -58,6 +58,17 @@ nodejs安装目录
 which node # 利用which命令查看当前使用的nodejs可执行文件位置
 where node # 利用where is 命令查看当前所有的nodejs可执行文件位置
 ```
+
+#### 方法二、通过二进制文件安装
+
+``` shell
+wget https://nodejs.org/dist/v8.11.2/node-v8.11.2-linux-x64.tar.xz # 获取nodejs最新包，版本号可选最新的
+xz -d node-v8.11.2-linux-x64tar.xz # 两次解压
+tar -xvf  node-v8.11.2-linux-x64tar
+
+export PATH=/home/xxx/nodejs/node-v8.11.2-linux-x64/bin:$PATH # 在.bashrc 文件中追加此句，设置环境变量
+```
+
 
 ### 第二步：将本地的小网站上传到服务器上去
 
