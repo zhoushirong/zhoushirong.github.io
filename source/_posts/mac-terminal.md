@@ -174,7 +174,12 @@ or
 
 ```
 
+### mac查看物理cpu和逻辑cpu个数：
 
+```shell
+sysctl hw.physicalcpu: 2
+sysctl hw.logicalcpu: 4
+```
 
 
 ### 安装redis教程传送门
