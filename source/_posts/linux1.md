@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Linux学习笔记一
+title: Linux学习笔记(一)
 date: 2018-06-05 21:51:11
 tag: [linux, shell]
 category: 笔记
@@ -35,6 +35,27 @@ category: 笔记
 /sys # 系统目录，存放系统硬件信息的相关文件
 /tmp # 临时目录，可以在该目录中创建和删除临时工作文件
 /var # 可变目录，用以存放经常变化的文件，比如日志文件
+```
+
+#### 基本命令
+
+```shell
+cd
+ls
+touch
+ln
+cp
+echo
+mv
+mkdir
+rm
+rmdir
+file
+cat
+more
+less
+tail
+head
 ```
 
 
