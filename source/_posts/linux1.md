@@ -39,26 +39,26 @@ category: 笔记
 
 #### 基本命令
 
+用的最多的几个基本文件查看操作命令，详细参数使用的时候去查
+
 ```shell
-cd
-ls
-touch
-ln
-cp
-echo
-mv
-mkdir
-rm
-rmdir
-file
-cat
-more
-less
-tail
-head
+cd # 进入目录
+ls # 列出
+cp # 拷贝
+echo # 写入文件
+touch # 创建文件
+ln # 软连接
+mv # 重名了文件(夹)
+mkdir # 创建文件夹
+rm # 删除文件
+rmdir # 删除文件目录
+file # 查看文件类型
+cat # 查看文件内容
+more # 查看一页文件内容 cat升级版
+less # 查看一页文件内容 more升级版
+tail # 查看文件后n行的内容 可指定查看行数 tail -n file
+head # 查看文件前n行的内容 和tail相反 head -n file
 ```
-
-
 
 
 #### 名词解释
