@@ -16,8 +16,7 @@ category: 笔记
 shell是用户和Linux(Linux内核)之间的接口程序。你在控制台输入的每一个命令都是由shell解释之后再传给Linux内核的。
 shell是一个命令语言解释器。
 
-**SH**
-Bourne shell是一个早期的重要shell，是UNIX标准的默认shell
+**SH** (Bourne shell) 是一个早期的重要shell，是UNIX标准的默认shell
 
 **BASH** (GNU Bourne-Again Shell) 是一个为GNU计划编写的Unix shell。
 BASH 是 GNU 组织开发和推广的一个项目。
@@ -30,8 +29,10 @@ BASH的命令语法是Bourne shell命令语法的超集
 ```shell
 cat /etc/shells
 ```
-```html
+
 输出如下：
+
+```html
 /bin/dash
 /bin/rbash
 /bin/bash
