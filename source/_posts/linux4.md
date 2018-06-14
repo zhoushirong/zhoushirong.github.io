@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Linux学习笔记(四)
-date: 2018-06-10 10:39:00
+date: 2018-06-14
 tag: [linux, shell]
 category: 笔记
 ---
