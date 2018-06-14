@@ -19,7 +19,8 @@ ps: ${xxx}表示xxx是变量
 
 安装mysql
 ``` html
-$ brew install mysql
+brew update # 更新下brew
+brew install mysql # brew安装mysql
 ```
 
 设置 MySQL 用户以及数据存放地址
@@ -250,3 +251,20 @@ mysql> CREATE USER zsr@localhost IDENTIFIED BY '123456';
 mysql> grant all on epoos.* to zsr@localhost INDENTIFIED BY "123456";
 ```
 
+
+#### 卸载mysql
+
+把下面几个目录全部删掉应该就可以完全卸载mysql了
+值得注意的是，如果有数据库需要备份的，需提前做好备份。
+
+```shell
+rm -rf ~/Library/PreferencePanes/My*
+sudo rm -rf /Library/Receipts/mysql*
+sudo rm -rf /Library/Receipts/MySQL*
+sudo rm -rf /var/db/receipts/com.mysql.*
+
+sudo rm /usr/local/mysql
+sudo rm -rf /usr/local/mysql*
+sudo rm -rf /Library/StartupItems/MySQLCOM
+sudo rm -rf /Library/PreferencePanes/My* 
+```
