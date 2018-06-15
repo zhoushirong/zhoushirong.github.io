@@ -122,14 +122,35 @@ shell会按照下列顺序，运行第一个被找到的问题件，找到之后
 
 如果你的bash shell不是登录系统时启动的，那么你启动的shell叫做交互式shell。
 交互式shell不会像登录shell一样运行，但它依然提供了命令行提示符来输入命令。
-
-如果bash是作为交互式shell启动的，它就不会访问/etc/profile文件，只会检查用户HOME目录中的.bashrc文件。
+通俗来说，就是在终端，shell等待用户输入，然后执行用户输入的命令。
 
 #### 非交互式shell
 
-系统执行shell脚本时用的就是非交互式shell。
-不同于交互式shell的地方在于它没有命令行提示符。
+系统执行shell脚本时用的就是非交互式shell。不同于交互式shell的地方在于它没有命令行提示符。
+这种模式下，shell不会与用户进行交互，执行完shell script脚本 shell也就终止了。
 
+**交互式shell和非交互式shell的区别在于：**
+如果bash是作为交互式shell启动的，它就不会访问/etc/profile文件，只会检查用户HOME目录中的.bashrc文件。
+非交互式shell，当启动进程时，它会检查这个BASH_SHELL环境变量，读取的是环境变量所指定的配置文件。
+（BASH_SHELL这个环境变量默认情况下并未设置）
+
+
+#### login bash
+
+登录shell可以让用户与计算机交流
+
+#### no login bash
+
+非登录shell不可用让用户与计算机交流。
+比如用linux服务器搭建一个ftl服务器，并且创建了很多用户，那么可以将这些用户设置为nologin shell。
+这样，这些用户仅仅可以使用ftl服务，不能用来登录Linux主机，保证了安全性。
+
+关于用户的默认登录shell是在 /etc/passwd 文件中记录的。此文件中每一行就是一个用户，每行以冒号分割字段，其中最后一个字段表示的是用户默认登录使用的shell。
+
+#### 环境变量持久保存两个方法。
+
+1.将个人环境变量设置放在/etc/profile.d目录中，创建一个.sh结尾的文件，将所有新的或者修改过的全局环境变量设置放在这个文件中。
+2.放在~/.bashrc文件中。
 
 #### 数组变量
 
@@ -137,7 +158,14 @@ shell会按照下列顺序，运行第一个被找到的问题件，找到之后
 数组是能够存储多个值的变量。
 这些值可以单独引用，也可以作为整个数组来引用。
 
-
+```shell
+$ somekey=(one two three four five)
+$ echo $somekey
+one two three four five
+$ echo ${somekey[2]}
+three # 这里有问题，mac上输出的是‘two’ ！！！，linux虚拟机上输出是‘three’！！！
+$ echo ${somekey[*]} # 输出全部，mac上可以不用{}，用此属性需谨慎。
+```
 
 
 
