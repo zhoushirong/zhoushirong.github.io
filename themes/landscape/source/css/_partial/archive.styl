@@ -21,13 +21,19 @@
   avoid-column-break()
 
 .archive-article-inner
-  @extend $block
-  padding: 10px
-  margin-bottom: 15px
+  border: 1px solid color-border
+  background: #f6f6f6
+  border-radius: 3px
 
+  margin-bottom: 15px
+  padding: 6px 0
+.archive-article-header
+  h1 {
+    display: inline-block;
+  }
 .archive-article-title
   text-decoration: none
-  font-weight: bold
+  font-weight: normal
   color: color-default
   transition: color 0.2s
   line-height: line-height
@@ -43,7 +49,9 @@
   font-size: 0.85em
   line-height: 1em
   margin-bottom: 0.5em
-  display: block
+  display: inline-block
+  width: 6em
+  text-indent: 1em
 
 #page-nav
   clearfix()
