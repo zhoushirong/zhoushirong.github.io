@@ -1,5 +1,5 @@
 ---
-title: rpc基础
+title: rpc与thrift简介
 date: 2018/07/31
 tag: rpc thrift nodejs
 ---
