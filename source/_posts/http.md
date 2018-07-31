@@ -147,14 +147,116 @@ WebDAV请求可能包含许多涉及文件操作的子请求，需要很长时�
 ```
 
 ##### 2	2xx成功
-``` html
-```
+```html
 3	3xx重定向
 
 4	4xx客户端错误
 5	5xx服务器错误
 6	非官方状态码
 ```
+
+
+### HTTP跨域
+
+当一个资源从该资源本身所在的服务器不同的域或端口请求一个资源时，资源会发起一个*跨域http请求*
+处于安全原因，浏览器会限制从脚本内发起的跨域http请求。
+例如，XMLHttpRequest和Fetch API遵循同源策略。 
+这意味着使用这些API的Web应用程序只能从加载应用程序的同一个域请求HTTP资源，除非使用CORS头文件。
+
+（跨域并非不一定是浏览器限制了发起跨站请求，而也可能是跨站请求可以正常发起，但是返回结果被浏览器拦截了。最好的例子是 CSRF 跨站攻击原理，请求是发送到了后端服务器无论是否跨域！注意：有些浏览器不允许从 HTTPS 的域跨域访问 HTTP，比如  Chrome 和 Firefox，这些浏览器在请求还未发出的时候就会拦截请求，这是一个特例。）———— MDN HTTP访问控制（CORS）
+
+*CORS*(跨域资源共享) 机制允许web应用服务进行跨域访问控制。现代浏览器支持在 API 容器中（例如 XMLHttpRequest 或 Fetch ）使用 CORS，以降低跨域 HTTP 请求所带来的风险
+
+*跨域资源共享标准（ cross-origin sharing standard ）*允许在下列场景中使用跨域 HTTP 请求：
+
+```html
+1.由XMLHttpRequest 或 Fetch 发起的跨域 HTTP 请求。
+2.Web 字体 (CSS 中通过 @font-face 使用跨域字体资源), 因此，网站就可以发布 TrueType 字体资源，并只允许已授权网站进行跨站调用。
+3.WebGL 贴图
+4.使用 drawImage 将 Images/video 画面绘制到 canvas
+5.样式表（使用 CSSOM）
+6.Scripts (未处理的异常)
+```
+
+
+跨域资源共享标准新增了一组 HTTP 首部字段，允许服务器声明哪些源站有权限访问哪些资源。另外，规范要求，对那些可能对服务器数据产生副作用的 HTTP 请求方法（特别是 GET 以外的 HTTP 请求，或者搭配某些 MIME 类型的 POST 请求），浏览器必须首先使用 OPTIONS 方法发起一个预检请求（preflight request），从而获知服务端是否允许该跨域请求。服务器确认允许之后，才发起实际的HTTP请求。在预检请求的返回中，服务器端也可以通知客户端，是否需要携带身份凭证（包括 Cookies 和 HTTP 认证相关数据）。
+（预检请求一般是浏览器检测到请求跨域之后自动发起的，预检请求报文中的 Access-Control-Request-Method 首部字段告知服务器实际请求所使用的 HTTP 方法；Access-Control-Request-Headers首部字段告知服务器实际请求所携带的自定义首部字段。服务器基于从预检请求获得的信息来判断，是否接受接下来的实际请求。）
+
+跨域请求分两种：简单请求和预检请求。
+
+##### 什么是简单请求?
+需要满足下列所有的条件，为简单请求。
+```html
+1.使用下列方法之一： GET/POST/HEAD
+
+2.Fetch 规范定义了对 CORS 安全的首部字段集合，不得人为设置该集合之外的其他首部字段。该集合为：
+Accept
+Accept-Language
+Content-Language
+Content-Type （需要注意额外的限制）
+DPR
+Downlink
+Save-Data
+Viewport-Width
+Width
+
+3.content-type值仅限于下列三者之一
+text/plain
+multipart/form-data
+application/x-www-form-urlencoded
+
+4.请求中的任意XMLHttpRequestUpload 对象均没有注册任何事件监听器；XMLHttpRequestUpload 对象可以使用 XMLHttpRequest.upload 属性访问。
+
+5.请求中没有使用 ReadableStream 对象。
+```
+
+##### 附带身份凭证的跨域请求
+默认跨域请求是不会发送基于  HTTP cookies 和 HTTP 认证信息的身份凭证的。如果要发送身份凭证，需要设置XMLHttprequest的某个特殊标志位。
+如：
+```html
+xhr.withCredentials = true
+```
+之后，服务端需要在响应中携带下面的属性，浏览器才会将收到的响应内容返回给请求的发送者
+```html
+Access-Control-Allow-Credentials: true // 响应头表示是否可以将对请求的相应暴露给页面。返回true则可以，其它则不可以
+```
+
+对于附带身份凭证的请求，服务器不得设置 Access-Control-Allow-Origin 的值为（ * ）
+
+
+##### Access-Control-Allow-Origin，服务器响应首部字段。
+```html
+Access-Control-Allow-Origin: <origin> | *
+```
+
+##### Access-Control-Expose-Headers 
+在跨域访问时，XMLHttpRequest对象的getResponseHeader()方法只能拿到一些最基本的响应头，Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma，如果要访问其他头，则需要服务器设置本响应头。
+如：
+```html
+Access-Control-Expose-Headers: X-My-Custom-Header, X-Another-Custom-Header
+```
+
+##### Access-Control-Allow-Credentials
+```html
+Access-Control-Allow-Credentials 头指定了当浏览器的credentials设置为true时是否允许浏览器读取response的内容。
+```
+
+##### XDomainRequest (IE89专用)
+XDomainRequest是在IE8和IE9上的HTTP access control (CORS) 的实现，在IE10中被 包含CORS的XMLHttpRequest 取代了，如果你的开发目标是IE10或IE的后续版本，或想要支待其他的浏览器，你需要使用标准的HTTP access control。
+该接口可以发送GET和POST请求
+XDomainRequest为了确保安全构建，采用了多种方法。
+被请求的URL的服务器必须带有 设置为（“ * ”）或包含了请求方的Access-Control-Allow-Origin的头部。
+
+限制
+```html
+1.必须使用 HTTP 或 HTTPS 协议访问目标 URL(不能http、https跨协议访问)
+2.只能使用 HTTP 的 GET 方法和 POST 方法访问目标 URL
+3.请求中不能加入自定义的报头
+4.只支持 text/plain 作为请求报头Content-Type的取值
+5.身份验证和cookie不能和请求一起发送 （解决办法，将cookie等信息放在请求body里面）
+...
+```
+
 
 ---
 
@@ -177,3 +279,6 @@ http://www.alloyteam.com/2016/03/discussion-on-web-caching/
 ### http状态码
 
 https://zh.wikipedia.org/wiki/HTTP状态码
+
+### XDomainRequest
+https://www.cnblogs.com/onepixel/articles/7567948.html
