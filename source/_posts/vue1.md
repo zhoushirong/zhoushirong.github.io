@@ -4,9 +4,7 @@ date: 2018/08/02
 tag: vue
 ---
 
-### Vue运行过程
-
-#### new Vue and Init() 
+#### 初始化 
 ```javascript
 var _v = new Vue()
 _v.init()
