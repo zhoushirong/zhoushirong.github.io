@@ -1,6 +1,6 @@
 ---
 title: vue服务端渲染
-date: 2018/08/01
+date: 2018/08/08
 tag: vue ssr
 ---
 
@@ -29,10 +29,34 @@ Vue.js是构建客户端应用程序的框架。
 ```shell
 npm install vue vue-server-renderer --save
 ```
+注意：vue 和 vue-server-renderer必须匹配版本。
 
+举例：
+```javascript
+// 第一步，创建一个vue实例
+const Vue = require('vue')
+const app = new Vue({
+	template: `<div>Hello World</div>`
+})
 
+// 第二步，创建一个renderer
+const renderer = require('vue-servver-renderer').createRenderer()
 
+// 第三步，将Vue实例渲染为HTML
+renderer.renderToString(app, (err, html) => {
+	if (err) {
+		throw err
+	}
+	console.log(html) // 这里的html就是服务端传到前端页面的html字符串。
+})
 
+// 在2.5.0+，如果没有传入回调函数，则会返回Promise
+renderer.renderToString(app).then(html => {
+	console.log(html)
+}).catch(err => {
+	console.error(err)
+	})
+```
 
 
 

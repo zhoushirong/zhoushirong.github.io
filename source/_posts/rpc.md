@@ -1,7 +1,7 @@
 ---
 title: rpc与thrift简介
 date: 2018/07/31
-tag: rpc thrift nodejs
+tag: [rpc, thrift, nodejs]
 ---
 
 现如今都流行大前端开发，所谓的大前端就是，将后端的传统的MVC（model、view、controler）中的view和controler给接过来。
