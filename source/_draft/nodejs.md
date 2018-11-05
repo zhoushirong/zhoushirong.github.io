@@ -335,7 +335,7 @@ log4js.configure({
 
 ```shell
  location / {
-  proxy_pass http://risk-aml;
+  proxy_pass http://node_server;
   expires 10m; # 这个不需要
 }
 ```
