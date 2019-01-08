@@ -8,6 +8,8 @@ tag: [js, event]
 javascript 的事件捕获和事件冒泡之前一直没能弄明白，知道看到一个例子。
 利用丢一颗石头入水的例子，就能够非常形象的解释了。
 
+<img src="http://zhoushirong.github.io/img/event.png" alt="池塘入水" width="600" height="400">
+![图片]()
 
 事件捕获和事件冒泡就像是一颗石子投入水中：
 首先是水的最外层捕获石头，然后是内层捕获石头，直到最里面。
