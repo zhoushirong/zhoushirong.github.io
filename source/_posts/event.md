@@ -17,16 +17,15 @@ javascript 的事件捕获和事件冒泡之前一直没能弄明白，知道看
 
 
 好吧，我知道画的有点丑，但是不可否认，确实挺形象的。
-如果还是有些迷糊，那么可以再看一下下面这张图。(点击可查看示例)
-
+如果还是有些迷糊，那么可以再看一下下面这张图。(<a href="https://www.epoos.com/demo/event/index.html" target="_blank">点击可查看示例)</a>
 <a href="https://www.epoos.com/demo/event/index.html" target="_blank">
-  <img src="http://zhoushirong.github.io/img/event2.png" alt="DOM 冒泡" width="300" height="200">
+  <img src="http://zhoushirong.github.io/img/event2.png" alt="DOM 冒泡" width="500" height="300">
 </a>
 
-自己试一试便清楚了。
+q去示例中试一试便清楚了~
 
 ### 处理事件
-理解了事件的捕获和冒泡机制，对于处理事件就好办了。
+理解了事件的捕获和冒泡机制，对于事件处理就好办了。
 
 **监听事件**
 ```javascript
