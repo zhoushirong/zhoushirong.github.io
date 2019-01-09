@@ -22,7 +22,7 @@ javascript 的事件捕获和事件冒泡之前一直没能弄明白，知道看
   <img src="http://zhoushirong.github.io/img/event2.png" alt="DOM 冒泡" width="500" height="300">
 </a>
 
-q去示例中试一试便清楚了~
+去示例中试一试便清楚了~
 
 ### 处理事件
 理解了事件的捕获和冒泡机制，对于事件处理就好办了。
