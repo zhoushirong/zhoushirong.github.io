@@ -1,21 +1,21 @@
 ---
 layout: default
-title: NODEJS开发架构
-date: 2018-11-05
+title: NODEJS开发经验
+date: 2019-01-15
 tag: [nodejs, 服务端]
 category: 笔记
 ---
 
-最近做了一个nodejs应用程序
-下面是Nodejs服务端开发的一些开发要点记录。
+前段时间做了一个 nodejs 应用，项目架构是 前端 vue 单页应用，后端 nodejs
+其实有考虑 ssr，但是因开发时间比较紧张，就没能使用。
+下面是开发过程中的一些经验以及遇到的一些问题。
 
 ### 一、技术架构
 <img src="http://zhoushirong.github.io/img/nodejs.png" alt="koa洋葱模型" width="860px" />
 
-因时间问题，ssr相对比较复杂，因此本次开发并没有使用ssr，而是直接用的是前端的单页应用系统。
-具体如下：
+具体项目技术栈如下：
 client端: vue 全家桶、history-router
-server端: koa、koa-router、redis+sentinel、msyql、java(java后端组同学开发)
+server端: koa、koa-router、redis+sentinel、msyql、java (java后端组同学开发)
 
 ### 二、项目目录
 ```html
@@ -29,8 +29,8 @@ mock/ # mock数据，
 - index.js #mock入口文件
 node_modules/ # 项目启动开发工具依赖包
 server/ # 服务端代码
-- channel/ # 数据渠道、来源
-- config/ # 网站配置文件
+- channel/ # 数据渠道、来源（java http、java dubbo、数据库、redis）
+- config/ # 网站配置文件（环境配置、数据库、redis 配置等）
 - middleware/ # 中间件
 - model # 数据库数据模型层
 - node_modules/ # 服务端依赖包
@@ -42,12 +42,11 @@ server/ # 服务端代码
 package.json # 公共项目依赖包文件
 ```
 
-
 ### 三、技术要点
 ##### promise、async await 
 promise、async、await都属于javascript基础，这里略过。
 
-##### client端的请求
+##### client 端的请求
 请求类型大概分为如下几类，以及各个类别对应的 koa 处理中间件模块
 
 1.页面请求 —— history-router
@@ -58,23 +57,13 @@ promise、async、await都属于javascript基础，这里略过。
 
 4.接口请求 —— koa-router
 
-##### KOA中间件的洋葱模型
+##### NODEJS 请求过程
 
-<img src="http://zhoushirong.github.io/img/request1.png" alt="koa洋葱模型" width="560px" />
+<img src="http://zhoushirong.github.io/img/request1.png" alt="请求流程" width="560px" />
 
-<img src="http://zhoushirong.github.io/img/request2.png" alt="koa洋葱模型" width="560px" />
+<img src="http://zhoushirong.github.io/img/request2.png" alt="请求接口模型" width="560px" />
 
-##### koa ctx
-```javascript
-app.use(async ctx => {
-  ctx; // is the Context
-  ctx.request; // is a Koa Request
-  ctx.response; // is a Koa Response
-});
-// ctx.state 推荐命名空间
-```
-
-#####koa 中间件、洋葱模型、node端路由
+##### koa 中间件、node端路由
 
 中间件：中间件在请求和响应的过程中给我们一个修改数据的机会
 
@@ -86,9 +75,10 @@ app.use(async ctx => {
 
 
 中间件是koa的核心，中间件return一个中间件函数，最好是用一个函数给封装起来，以便于传参和可扩展性。
+本项目几乎所有路由处理都是通过中间件完成的。
 
-中间件举例：
-
+中间件操作分为同步操作和异步操作。
+同步操作很简单，处理完事务之后直接 await next() 到下一个中间件即可。
 ```javascript
 function middleFunction(param1, param2) {
   return async function middle1(ctx, next) {
@@ -101,7 +91,8 @@ function middleFunction(param1, param2) {
 }
 ```
 
-中间件包含异步操作举例：
+异步中间件，也很好理解，就是在中间件内部进行处理的是一个异步流程。
+我们可以借助 async 和 await 来处理异步事务。
 
 ```javascript
 function middleFunction(param1, param2) {
@@ -120,7 +111,8 @@ function middleFunction(param1, param2) {
 }
 ```
 
-用koa-compose组合中间件
+koa 中中间件是最核心的操作，因此往往会有很多中间件，中间件多意味着管理上需要花费更多的精力。
+因此，koa 也提供了一些很方便的管理工具，如：用 koa-compose 组合中间件
 
 ```javascript
 const compose = require('koa-compose')
@@ -143,54 +135,101 @@ const middles = compose([middle1, middle2, /*...*/])
 app.use(middles)
 ```
 
-
-koa中间件的使用和执行
-
-```javascript
-app.use(middleware) // app.use实际上就是将中间件给添加到中间件的队列中
-
-//源码如下
-use(fn) {
-  // ...
-  this.middleware.push(fn);
-}
-```
-
-洋葱模型，多个中间件如何执行？执行顺序如何？
+多个中间件如何执行？执行顺序如何？
+koa 中间件执行过程是一层一层的执行的，由外而内，再由内向外。
+网上流传着很广泛的“洋葱模型”很好的诠释了这顺序，如下图所示：
 
 <img src="http://zhoushirong.github.io/img/onion.png" alt="koa洋葱模型" width="360px" />
 
-
-洋葱模型
-
+等同于下面的这张图。
 <img src="http://zhoushirong.github.io/img/routerpath.png" alt="koa洋葱模型2" width="600px" />
 
 
-举例：见附录二、三
+```javascript
+const Koa = require('koa')
+const app = new Koa()
+app.use(async (ctx, next) => {
+  console.log(1)
+  await next()
+  console.log(2)
+})
 
-系统接口路由过程：
+app.use(async (ctx, next) => {
+  console.log(3)
+  await next()
+  console.log(4)
+})
 
+app.use(async (ctx, next) => {
+  console.log(5)
+  ctx.body = 'Hello World'
+  console.log(6)
+})
+app.listen(3000)
+
+// curl localhost:3000 输出：
+// 1
+// 3
+// 5
+// 6
+// 4
+// 2
+```
+
+其执行顺序等同于下面的：
+
+```javascript
+function func1() {
+  return new Promise((resolve, reject) => {
+    console.log(1)
+    func2()
+    console.log(2)
+  })
+}
+
+function func2() {
+  return new Promise((resolve, reject) => {
+    console.log(3)
+    func3()
+    console.log(4)
+  })
+}
+
+function func3() {
+  console.log(5)
+  return new Promise((resolve, reject) => {
+    console.log(6)
+  })
+}
+
+func1()
+
+// node index.js 执行结果如下：
+// 1
+// 3
+// 5
+// 6
+// 4
+// 2
+```
+理解了上面两段代码也就大概理解了 koa 的中间件的执行了。
+
+
+##### 整个系统执行中间件过程如下
 koa-compress > koa-bodyparser > koa2-connect-history-api-fallback > koa-favicon > koa-static > commonRouter -> koa-router
 
-其中 commonRouter内部路由过程如下：
-记录开始时间 > 判断登录态 > 执行后续路由 > 回来执行记录结束时间 > 打日志
+其中 commonRouter 为自定义的中间件，内部路由过程如下：
+记录开始时间 > 判断登录态 > 执行后续路由 > 回来执行记录结束时间 > 打日志(日志需要有请求时间)
 
 
 ##### 容错、错误码
-
-容错，统一出口、入口，对错误进行监控，捕获等异常处理。
-
-错误码分为两种：status、data.code
-
-code、status统一管理。
-
-status正常情况返回200
-
-code返回表示错误类型
-
+容错是程序的必要操作，尤其是后端项目，尤其重要，因为一旦报错很可能导致整个系统崩溃。
+影响范围极大，为了更好的管理错误，我们最好能做到统一出口、入口，以便能够对错误进行更好的监控，以及异常处理。
+可以借助于中间件来完成。
 
 ##### 日志(引入log4 -> 日志埋点上报 -> logsearch|kibana查看)
-
+日志也是后端项目必不可少的，nodejs 项目目前比较流行的日志框架有很多
+log4js 是目前用的比较多的，其格式也跟其它语言的日志类似。（如 java 的log4j）
 log4js：可以做日志收集、写入文件，在服务器直接指定固定目录/data/nodejs/log
 
 ```shell
@@ -199,63 +238,38 @@ data/nodejs/other.log
 data/nodejs/server.log
 ```
 
-##### 服务器监控(哨兵系统)、应用监控(kibana平台)
+##### 本地调试
+断点调试是一个很好的习惯，nodejs 最简单快捷的方式就是 console.log 直接控制台查看。
+但是，对于复杂的情形，我们也会有需要用到断点调试的时候。
+使用 vscode开发，并启动nodejs服务，可以很方便的进行断点 debug。
 
-##### mock 与本地调试：
+##### 数据 mock
+对于 nodejs 数据 mock 可以有很多方式：
+方式一：是用第三方 mock 服务，启动一个mock数据端口<a href="https://github.com/zhoushirong/static-mock">static-mock</a>
+方式二：利用 webpack 的插件<a href="https://www.npmjs.com/package/webpack-api-mocker">webpack-api-mocker</a>
 
-本地调试主要就是在本地启动服务，可以利用vscode进行断点debug
-
-mock 数据，利用 nodejs 对 mock 文件夹进行遍历
-
-(npm run dev)dev-server 做了两件事：
-1.启动mock服务、
-2.将页面打包到dist目录
-
-node ./server/app.js 接口数据来自mock服务、页面html和静态资源内容来自dist目录
-
-http://localhost:8088/ 与 http://localhost:9000/
+开发此项目的时候用的是方法二，好处是可以少启动一个端口，mock 可以和 client 的 webpack-dev-server 共享端口。
 
 
-##### 常用第三方中间件：
-
+##### 用到的主要第三方中间件
 ***koa-static***：将静态目录映射为路由可访问的路径
-
 ***koa-favicon***：将favicon.ico路径映射为可访问路径并设置max-age缓存头
-
 ***koa-compress***：对请求进行开启gzip压缩，效果很明显（nginx也可以做压缩），压缩之后 
-
 response-headers会有这个属性  Content-Encoding:gzip
-
 ***koa-bodyparser***：对于POST请求的处理，koa-bodyparser中间件可以把 koa2 上下文的 formData 数据解析到	      ctx.request.body中
-
 ***koa2-connect-history-api-fallback***：对vue history路由做处理，默认将非.xxx后缀请求跳到默认index.html页面
 
 
 ##### 安全 xss、csrf、sql注入
-
 koa-helmet：9个安全中间件的集合、帮助app抵御常见的一些web安全隐患
-
 koa-limit：防止DOS攻击
-
 koa-csrf：防止CSRF攻击
-
 sql注入：对参数进行过滤（见后面附录1）
 
-
-#####登录流程、权限控制
-
-登录：client请求 -> node数据基本校验 -> 到java端做获取权限 -> node写redis -> client写cookie
-
-权限：client请求 -> node获取cookie -> node做redis查询 -> 权限通过
-
-
-
-##### 启动工具pm2、nodemon、配置、部署、健康检查
-
+除此之外，还用到了如下工具：
+##### 启动工具 pm2、nodemon、配置、部署、健康检查
 ##### redis、sentinels、Medis图形化工具
-
 ##### mysql、mysql连接池、navicat图形化工具
-
 
 #### 四、踩过的坑
 
@@ -369,7 +383,7 @@ npm run build
 
 
 
-8.资源文件下载一半就停止了
+8.经过 Nginx 的静态资源和接口返回的数据被截掉了一部分，返回的数据不完整。
 
 问题原因：
 
@@ -409,7 +423,7 @@ http://doc.hz.netease.com/pages/viewpage.action?pageId=117468038
 https://cnodejs.org/topic/5a502debafa0a121784a89c3
 
 
-###附录1：
+### 附录1：
 
 node-mysql中防止SQL注入四种常用方法：
 
@@ -489,59 +503,3 @@ let sql = 'SELECT * FROM posts ORDER BY ' + connection.escapeId(sorter)
 准备查询，此方法用于准备查询语句，该函数会自动选择合适的转义参数。
 
 
-
-###附录二：
-
-```javascript
-const Koa = require('koa')
-const app = new Koa()
-app.use(async (ctx, next) => {
-  console.log(1)
-  await next()
-  console.log(2)
-})
-
-app.use(async (ctx, next) => {
-  console.log(3)
-  await next()
-  console.log(4)
-})
-
-app.use(async (ctx, next) => {
-  console.log(5)
-  ctx.body = 'Hello World'
-  console.log(6)
-})
-app.listen(3000)
-// curl localhost:3000
-```
-
-
-### 附录三：
-
-```javascript
-function func1() {
-  return new Promise((resolve, reject) => {
-​    console.log(1)
-​    func2()
-​    console.log(2)
-  })
-}
-
-function func2() {
-  return new Promise((resolve, reject) => {
-​    console.log(3)
-​    func3()
-​    console.log(4)
-  })
-}
-
-function func3() {
-  console.log(5)
-  return new Promise((resolve, reject) => {
-​    console.log(6)
-  })
-}
-
-func1()
-```
