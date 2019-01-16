@@ -76,8 +76,7 @@ Dubbo 是阿里开源的一个 java 的分布式服务框架，原来是专门�
 
 #### Dubbo 组成。
 其实，主要就是这一张图。
-
-<img src="http://dubbo.apache.org/docs/zh-cn/user/sources/images/dubbo-architecture.jpg" alt="Dubbo 架构"/>
+<img src="http://zhoushirong.github.io/img/dubbo-arc.png" alt="Dubbo 架构"/>
 Dubbo 的核心就是上面这张图了，能看懂基本上也就明白了什么是 Dubbo 了。
 
 Dubbo 分为几大块：
