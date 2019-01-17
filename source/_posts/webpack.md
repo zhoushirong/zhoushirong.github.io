@@ -1,286 +1,159 @@
 ---
-title: Webpack配置入门
-date: 2017/03/06
+title: Webpack 学习整理(一)
+date: 2019/01/17
 tag: webpack
 category: 技术
 ---
 
-Webpack是一个前端资源加载以及打包工具。
-只需要简单的配置即可实现前端各种工程化的操作。
-Webpack结合其Loader、Plugin能够完成复杂的前端自动化构建。
-除此之外它还可以与Gulp等其它工程化工具结合使用。
+Webpack是一个前端资源加载以及打包工具,只需要简单的配置即可实现前端各种工程化的操作。
+配置 webpack 说难不难，说简单也不简单，现在几大框架都配备了全家桶，quick-start 项目基本上都已经配置好了基础的 webpack 配置。虽然能够正常使用，但是，对于各个配置项，并不是很清楚。
 
-### Webpack的Loader和Plugin
-Loader是Webpack中的一个重要概念，它是指将一段代码转换为另外一段代码的Webpack插件。
-Loader被用来加载某些资源文件。
-因为Webpack本身只能打包commonjs规范的js文件，对于其它资源，例如css、图片或者其他的语法集（jsx、coffee）是没有办法加载的。这就需要对应的loader将资源转化，加载进来。
+这几天利用空余时间，从 0 到 1，纯手工打造一套 基于 webpack4.28+ + vue2.5+ 的基础构建框架。
+顺便理一下几个 loader 和 插件的使用。
 
-Plugin用于扩展Webpack的功能。
-它直接作用于Webpack，Loader也是变相扩展了Webpack的功能，之不过只是专注于资源的加载和转化。
-Plugin的功能更加丰富。不仅局限于资源的加载。
+Demo 源代码以及完整配置在此 <a href="https://github.com/zhoushirong/webpackLearn">https://github.com/zhoushirong/webpackLearn</a>
 
-### Webpack的Loader
-
-处理样式，转成css
-``` html
-css-loader：遍历css文件，找到url()然后处理它们
-
-style-loader：把css代码插入到页面的style标签中
-
-less-loader：和css-loader、style-loader合作让webpack支持less语法
-
-sass-loader：让webpack支持sass语法
+#### 前言
+如果无特殊说明，默认定义 devMode 变量为是否开发环境判断
+```javascript
+// webpack.config.js
+const devMode = process.env.NODE_ENV !== 'production'
 ```
 
-图片处理，两个都必须用上。否则超过大小限制的图片无法生成到目标文件夹中
-``` html
-url-loader：
 
-file-loader：
-```
+#### 关于 loader && loader 的加载顺序
+loader 是一个函数，用来把文件转换为 webpack 识别的模块，webpack 本身只能处理加载 javascript，对于 css、image 等资源是无法处理的。而 loader 就是 webpack 开放出来的接口，供用户开发自己的 loader。
 
-处理js，将es6或更高级的代码转成es5的代码。
-``` html
-babel-loader
+目前社区已经有茫茫多的 loader 了，这里不多介绍。
 
-babel-preset-es2015
-
-babel-preset-react
-```
-
-将js模块暴露到全局.
-``` html
-expose-loader
-```
-
----
-
-### Webpack的Plugin
-
-代码热替换
-``` html
-HotModuleReplacementPlugin
-```
-
-生成html文件
-``` html
-HtmlWebpackPlugin
-```
-
-将css成生文件，而非内联
-``` html
-ExtractTextPlugin
-```
-
-报错但不退出webpack进程
-``` html
-NoErrorsPlugin
-```
-
-代码丑化,开发过程中不建议打开
-``` html
-UglifyJsPlugin
-```
-
-多个 html共用一个js文件(chunk)
-``` html
-CommonsChunkPlugin
-```
-
-清理文件夹
-``` html
-Clean
-```
-
-调用模块的别名,例如想在js中用$，如果通过webpack加载，需要将$与jQuery对应起来
-
-``` html
-ProvidePlugin
-```
-
-定义一些全局的变量,我们可以在模块当中直接使用这些变量，无需作任何声明
-
-``` html
-DefinePlugin
-```
-
-### webpack热更新以及完整示例
-
-热更新，可以在修改代码后，不用刷新浏览器就能看到修改后的效果。而它的另一个好处则是可以只替换修改部分相关的代码，大大的缩短了构建的时间。Webpack的热更新是它的一个特色功能，通过启动一个服务，在内存中运行，速度相对很快。
-
-有几种配置方法都能实现热更新的
-这里介绍一种通过express+webpack-hot-middleware+webpack-dev-middleware中间件来实现。
-
-在网站根目录下创建如下文件
-``` html
-./webpack-dev-server.js
-```
-
-``` javascript
-// 引入express
-let express = require('express');
-
-// 引入webpack
-let webpack = require('webpack');
-
-// 结合webpack-dev-middleware使用的middleware
-// 它可以实现浏览器的无刷新更新（hot reload）。
-// 这也是webpack文档里常说的HMR（Hot Module Replacement）。
-let webpackHotMiddleware = require('webpack-hot-middleware');
-
-// 处理静态资源的中间件
-let webpackDevMiddleware = require("webpack-dev-middleware");
-
-// webpack配置文件
-let webpackConfig = require('./webpack.config.js');
-
-// webpack服务ip端口配置
-let serverConfig = require('./config/server.js');
-
-let app = new express();
-
-let serverOptions = {
-  publicPath: webpackConfig.output.publicPath,
-  contentBase: 'http://' + serverConfig.HOST + ':' + serverConfig.PORT,
-  quiet: false,
-  noInfo: false,
-  hot: true,
-  lazy: false,
-  stats: {
-    chunks : false,
-    chunkModules : false,
-    colors : true
-  },
-};
-
-let compiler = webpack(webpackConfig);
-app.use(webpackDevMiddleware(compiler, serverOptions));
-app.use(webpackHotMiddleware(compiler));
-
-var router = express.Router()
-router.get('/', function (req, res, next) {
-  res.render('/index', { message: 'Hey there!'});
-})
-app.use(router)
-
-app.listen(serverConfig.PORT, function onAppListening(err) {
-  if (err) {
-    console.error(err);
-  } else {
-    console.info('==> 🚧  Webpack development server listening on port %s', serverConfig.PORT);
+如下所示：
+```javascript
+rules: [
+  {
+    test: /\.(css|scss)$/,
+    loader: ['style-loader', '....', 'url-loader']
   }
-});
+]
 ```
+webpack loader 可以是一个数组，数组的加载方式是从右向左，会先使用 url-loader 加载文件，最后用 style-loader 将代码插入文档中。
 
-``` html
-./webpack.config.js
+##### file-loader:
+```html
+<!-- 官方介绍 -->
+The file-loader resolves import/require() on a file into a url and emits the file into the output directory.
 ```
+文件加载 loader，主要用来加载 import/require 导入的文件
+加载比如 css 中 background-image src 的图片等资源
+加载导入的字体文件
 
-``` javascript
-'use strict';
-let webpack = require('webpack');
-let path = require('path');
-let HtmlWebpackPlugin = require('html-webpack-plugin');
-let serverConfig = require('./config/server.js');
+##### url-loader
+依赖 file-loader，file-loader 有的功能它都有
+不同之处在于能将导入的文件转为 base64，可以指定文件大小限制，小于某个值的时候将文件转为 base64 的 url
 
-let config = {
-  devtool: 'source-map',
-  context: path.join(__dirname, './'),
-  entry: {
-    index: [
-      'webpack-hot-middleware/client?reload=true&path=http://' + serverConfig.HOST + ':' + serverConfig.PORT + '/__webpack_hmr',
-      './static/js/Index.js'
-    ] // reload=true是用于当需要刷新的时候允许刷新页面
-  },
-  output: {
-    publicPath:'/',
-    path: path.resolve(__dirname, './'),
-    filename: 'staticPub/js/[name].entry.js'
-  },
+##### style-loader && mini-css-extract-plugin loader
+style-loader 负责将 css 以内联的方式插入文档中
+mini-css-extract-plugin 从名字可以看出，它本身是一个插件，作用是将 css 分离出来
+他提供的 loader 也能将 css 插入文档中，和 style-loader 的区别在于 style 是将 css 内联插入，而它的 loader 通过外部引入的方式将 css 插入文档中。
 
-  module: {
-    loaders: [{
-      test: /\.js$/,
-      loaders: ['babel-loader'],
-      exclude: /node_modules/,
-    },{
-      test: /\.(css|scss)$/,
-      loader: 'style-loader?sourceMap=true!css-loader?sourceMap=true'
-    },{
-      test: /\.scss$/,
-      loader: 'sass-loader?sourceMap=true'
-    },{
-      test: /\.woff|\.woff2|\.svg|.eot|\.ttf/,
-      loader: 'url?prefix=font/&limit=10000',
-    }]
-  },
-
-  //devtool: false,
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),    
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      mangle: true,
-      compress: {
-        warnings: false,
-      },
-    }),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    }),
-    new HtmlWebpackPlugin({
-      favicon: path.join(__dirname, './favicon.ico'),
-      title: '标题',
-      filename: './index.html',
-      template: path.join(__dirname, './static/html/index.html'),
-      inject: true,
-      hash: false,    // 为静态资源生成hash值
-      minify: {       // 压缩HTML文件
-        removeComments: false,      // 移除HTML中的注释
-        collapseWhitespace: true    // 删除空白符与换行符
-      }
-    })
-  ],
-  resolve: {
-    //定义了解析模块路径时的配置，常用的就是extensions，可以用来指定模块的后缀，这样在引入模块时就不需要写后缀了，会自动补全
-    extensions: ['.js', '.jsx', 'es6', 'css', 'scss', 'png', 'jpg', 'jpeg']
-  }
-};
-
-module.exports = config;
-```
-
-``` html
-./config/server.js // 非必须，这里将其拆分出来
-```
-
-``` javascript
-/**
- * 服务器配置
- */
-const config = {
-    HOST: '127.0.0.1',
-    PORT: 3000
+使用举例：
+```javascript
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+// ...
+module: {
+  rules: [
+    {
+    test: /\.(css)$/,
+      loader: [
+        // 会和 style-loader 冲突，开发环境用 style-loader 能是 css 改动热更新
+        // MiniCssExtractPlugin.loader 不能热更新
+        devMode ? 'style-loader' : MiniCssExtractPlugin.loader, 
+      ]
+    }
+  ]
 }
-module.exports = config;
+// 引入插件
+plugins: [
+  new MiniCssExtractPlugin({
+    filename: './style.css'
+  })
+]
 ```
 
-### 相关链接
+##### css-loader
+加载外部引用 css (@import)以及 从 .vue 文件中提取出来的 css 资源
+使用此 loader 只是提取 css 资源，之后还需要用 style-loader 等 loader 将 css 插入 Dom，建议写法：
+```javascript
+{
+  test: /\.css$/,
+  loader: [devMode ? 'style-loader': MiniCssExtractPlugin.loader, 'css-loader']
+},
+```
 
-## webpack指南：
+##### sass-loader
+将 sass/scss 文件编译为 css 文件，需要依赖 node-sass，编译为css之后还需要加载css，所以还得调用 css 的加载 loader，建议写法：
+```javascript
+{
+  test: /\.scss$/,
+  loader: [devMode ? 'style-loader': MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
+}
+```
 
-https://webpack.toobug.net/zh-cn/chapter4/using-loaders.html
+#### postcss-loader
+写过 css3 的人应该遇到过很多需要写 css 前缀的情况，这是因为不同浏览器对新特性的支持情况不一样，很多试验性新特性需要加上浏览器前缀才会生效。
+postcss 是一个很强大的东东，这里我们只是用它的一个 loader，目的是为了简化 css 写法。
+和 autoprefixer 配合使用，会自动给 css 加前缀。
+如：
+```css
+transition: transform 1s
+```
+经过 postcss-loader 会转换为：
+```css
+-webkit-transition: -webkit-transform 1s;
+transition: -webkit-transform 1s;
+-o-transition: transform 1s;
+transition: transform 1s;
+transition: transform 1s, -webkit-transform 1s;
+```
 
+用法相对其它loader，需要依赖 autoprefixer，需要多加一个配置文件 postcss.config.js
+作用是设置浏览器的范围
+```javascript
+// postcss.config.js 文件
+module.exports = {
+  plugins: [
+    require('autoprefixer')({
+      browsers: [
+        '> 1%',
+        'last 20 versions',
+        'ie > 9'
+      ]
+    })
+  ]
+}
+```
+之后就可以正常使用 postcss-loader 了，同样，此 loader 只是将 css 转换，并不会直接插入到文档中
+因此后续还需要用的其它 loader，推荐用法：
+```javascript
+{
+  test: /\.(css|scss)$/,
+  loader: [
+    devMode ? 'style-loader': MiniCssExtractPlugin.loader, 
+    'css-loader',
+    'postcss-loader', 
+    'sass-loader'
+  ]
+}
+```
 
+搞好上面几个 loader，整个 css 的处理基本上就搞清楚了。
+接下来就是弄 javascript 的 loader 了。
 
-
-
-
-
-
-
-
+#### javascript 还需要 loader 吗？
+不是说 webpack 自己能加载 js 吗，为什么还需要 js 相关的 loader 呢？
+没错，javascript 本身是不需要 loader 的，但是如果要使用 es6+ 的新特性，就需要用到 loader 了。
+我们知道，对于 es6 新特性，不同浏览器支持情况是不一样的，我们使用 loader 的目的就是将 es6 转换为可被浏览器接受的 javascript 语法。
+似乎跟前面 css 的 postcss-loader 作用一样？
+我感觉确实是一样的。
+关于 javascript-loader, "babel" 详情，请看下回分解。
 
 
