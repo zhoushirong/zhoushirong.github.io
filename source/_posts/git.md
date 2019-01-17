@@ -13,20 +13,35 @@ git是一种分布式版本管理工具，他有着强大的开源社区github�
 
 ``` shell
 git config user.username "用户名" 
-
 git config user.email "邮箱"
 ```
 
 ### 生成ssh-key
+```shell
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+```
+参数详解：
+```html
+-e：读取openssh的私钥或者公钥文件；
+-C：添加注释；
+-f：指定用来保存密钥的文件名；
+-i：读取未加密的ssh-v2兼容的私钥/公钥文件，然后在标准输出设备上显示openssh兼容的私钥/公钥；
+-l：显示公钥文件的指纹数据；
+-N：提供一个新密语；
+-P：提供（旧）密语；
+-q：静默模式；
+-t：指定要创建的密钥类型。
+```
 
+可以使用其默认的
 ``` shell
 zsr :: ~ ‹master*› % ssh-keygen                                                                 
 Generating public/private rsa key pair.
-Enter file in which to save the key (/Users/zsr/.ssh/id_rsa): /Users/zsr/.ssh/githubsshkey # 填写路径
+Enter file in which to save the key (~/.ssh/id_rsa): ~/.ssh/githubsshkey # 填写路径，可以指定文件名，可以缺省（缺省默认为 id_rsa）
 Enter passphrase (empty for no passphrase): # 密码可为空
 Enter same passphrase again: # 密码可为空
-Your identification has been saved in /Users/zsr/.ssh/githubsshkey.
-Your public key has been saved in /Users/zsr/.ssh/githubsshkey.pub.
+Your identification has been saved in ~/.ssh/githubsshkey.
+Your public key has been saved in ~/.ssh/githubsshkey.pub.
 The key fingerprint is:
 SHA256:Va57YAfyxN86cD5a1ejR6imhQiJuM/2IeTyK5FI+W+4 zsr@zsr.local
 The key's randomart image is:
@@ -43,12 +58,11 @@ The key's randomart image is:
 +----[SHA256]-----+
 ```
 
-然后根据提示连续回车即可在/Users/zsr/.ssh 目录下得到githubsshkey 和githubsshkey.pub 
+然后根据提示连续回车即可在~/.ssh 目录下得到githubsshkey 和githubsshkey.pub 
 其中githubsshkey.pub文件里面存放的就是我们要使用的public key。
 
 
 ### 生成多个ssh-key
-
 要生成多个key重复上面操作即可，生成之后再.ssh目录下创建一个config文件，并配置私钥(没有.pub的那个文件)的相对路径
 ``` shell
 Host github.com
@@ -57,7 +71,6 @@ IdentityFile ~/.ssh/githubsshkey
 ```
 
 ### git 常用命令
-
 ``` shell
 git clone git仓库地址 # 从git仓库拉取git代码到本地
 
@@ -79,7 +92,6 @@ git checkout 分支名 # 拉取远程分支
 
 
 ### git commit && push
-
 ``` shell
 git commit # 提交缓存区里面的文件
 
@@ -213,8 +225,8 @@ It is also possible that a host key has just been changed.
 The fingerprint for the ECDSA key sent by the remote host is
 SHA256:iktCbxKzaP13xO9iY/5B9tkuIYE9BZfC31uW1Z6F4YQ.
 Please contact your system administrator.
-Add correct host key in /Users/zsr/.ssh/known_hosts to get rid of this message.
-Offending ECDSA key in /Users/zsr/.ssh/known_hosts:20
+Add correct host key in ~/.ssh/known_hosts to get rid of this message.
+Offending ECDSA key in ~/.ssh/known_hosts:20
 ECDSA host key for [g.hz.netease.com]:22222 has changed and you have requested strict checking.
 Host key verification failed.
 fatal: Could not read from remote repository.
@@ -232,7 +244,6 @@ know_hosts
 # 删除~/.ssh/known_hosts里面对应的公钥条目、或者直接删除此文件
 rm -rf ~/.ssh/known_hosts
 ```
-
 
 
 ### 传送门

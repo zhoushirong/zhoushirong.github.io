@@ -4,12 +4,6 @@ date: 2018/04/24
 tag: code ESLint
 ---
 
-
-
-
-
-
-
 ####  常见的代码规范工具有：
 
 jslint:jslint是一个JavaScript的代码质量检查工具，主要用来检查代码质量以及找出一些潜在的代码缺陷。
@@ -20,8 +14,6 @@ scss-lint:使scss代码持续保持简洁、高效和可维护性。
 JSLint，古老，不可配置，不可扩展，不可禁用许多特性的校验
 JSHint，可配置的JSLint版本
 ESLint，易于扩展，可自定义规则，可以插件形式安装更多的规则。
-
-
 
 
 #### ESLint
@@ -80,8 +72,6 @@ package.json 示例：
 }
 ```
 
-
-
 #### 文件内配置(eg:禁用 ESLint)
 ```javascript
 /* eslint-disable */
@@ -97,22 +87,11 @@ new Vue({
 })
 ```
 
-
-
 ### 工作流集成，编辑器集成
-
-
-
-
-
-
-
-
 
 
 #### 代码风格检测
 在团队协作中，统一的代码风格更具可读性、可维护性。ESLint 内置了一系列有关代码风格的规则，可以根据团队的编码规范设置。
-
 
 
 #### 插件集成
@@ -134,11 +113,6 @@ babel-eslint
 ## eslint
 
 http://eslint.cn/docs/user-guide/configuring
-
-
-
-
-
 http://tutuxxx.github.io/2016/08/14/%E5%9C%A8Vue+Babel+Webpack%E7%8E%AF%E5%A2%83%E4%B8%AD%E4%BD%BF%E7%94%A8ESLint/
 
 
