@@ -144,6 +144,21 @@ module.exports = {
   ]
 }
 ```
+**注意：**这里有个坑
+在做的过程中，发现在 index.vue 中 通过 ‘@import url("../css/index.scss");’ 导入 index.scss 文件，发现 index.scss 中的 css 属性并没有经过 postcss 转换。
+网上查了一下，说是需要给 css-loader 加一个 options：
+```javascript
+{ loader: 'css-loader', options: { importLoaders: 1 } },
+```
+但是，经过测试，发现并未生效，看网上的人们说的还真有这么回事儿，但是确实不行（可能是我用的 webpack 版本不一样）。
+经过一番折腾，发现只有 @import 加 url 的不行
+解决办法：
+```css
+@import url("../css/index.scss");
+/* 去掉 url 改为 */
+@import "../css/index.scss";
+```
+
 
 搞好上面几个 loader，整个 css 的处理基本上就搞清楚了。
 接下来就是弄 javascript 的 loader 了。
