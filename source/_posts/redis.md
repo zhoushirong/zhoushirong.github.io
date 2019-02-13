@@ -1,7 +1,7 @@
 ---
 title: redis入门
 date: 2018/11/01
-tag: [redis,sentinel]
+tag: [redis, sentinel]
 ---
 
 Redis是一个内存高速缓存数据库，redis全称 Remote Dictionary Server（远程数据服务）
@@ -36,10 +36,25 @@ redis-cli
 ### redis常用命令
 
 ```shell
-set age 25 # 设置一个redis数据age
-keys * # 查看redis数据
-get age # 查看redis数据age
+set age 25 # 设置一个 redis 数据 age
+keys * # 查看 redis 数据
+get age # 查看 redis 数据 age
 ```
+
+### 如果设置了密码
+如果设置了密码可能回报错
+```shell
+(error) NOAUTH Authentication required.
+```
+解决办法：
+```shell
+redis-cli
+auth 'yourpassword'
+keys *
+# is ok, will show all keys!
+```
+
+
 ### redis-cluster
 Redis支持集群模式，能够更稳定的存储数据
 
