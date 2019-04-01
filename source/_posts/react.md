@@ -1,7 +1,7 @@
 ---
 title: React、Flux以及Redux小结
 date: 2018/04/10
-tag: [js,react,flux,redux]
+tag: [js, react, flux, redux]
 category: 技术
 ---
 

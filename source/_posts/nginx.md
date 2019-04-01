@@ -1,6 +1,6 @@
 ---
 title: Nginx简单介绍
-tag: nginx
+tag: [nginx]
 date: 2016/12/25
 category: 技术
 ---

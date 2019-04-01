@@ -58,6 +58,7 @@ more # 查看一页文件内容 cat升级版
 less # 查看一页文件内容 more升级版
 tail # 查看文件后n行的内容 可指定查看行数 tail -n file
 head # 查看文件前n行的内容 和tail相反 head -n file
+cat -n access.log | tail -n 300 | head -n 10
 ```
 
 

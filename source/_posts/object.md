@@ -1,7 +1,7 @@
 ---
 title: Javascript对象
 date: 2016/10/11
-tag: js
+tag: [js, object]
 category: 技术
 ---
 

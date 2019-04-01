@@ -1,7 +1,7 @@
 ---
 title: vue运行过程
 date: 2018/08/02
-tag: vue
+tag: [vue]
 ---
 
 #### 初始化 

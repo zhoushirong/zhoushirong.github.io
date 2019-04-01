@@ -240,9 +240,6 @@ sudo apt-get install mysql-server
 mysql_secure_installation
 ```
 
-
-
-
 #### 新建新用户
 ```shell
 mysql> CREATE USER zsr@localhost IDENTIFIED BY '123456';
@@ -266,3 +263,7 @@ sudo rm -rf /usr/local/mysql*
 sudo rm -rf /Library/StartupItems/MySQLCOM
 sudo rm -rf /Library/PreferencePanes/My* 
 ```
+
+
+### 传送门
+https://dev.mysql.com/doc/refman/5.6/en/linux-installation.html

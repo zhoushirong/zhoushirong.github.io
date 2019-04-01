@@ -2,7 +2,7 @@
 layout: default
 title: 使用npm版本锁定的必要性
 date: 2018-05-22 19:33:33
-tags:
+tag: [npm, npm-lock]
 ---
 
 ## {{page.title}}

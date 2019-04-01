@@ -1,7 +1,7 @@
 ---
 title: vuex
 date: 2018/08/07
-tag: vue vuex
+tag: [vue vuex]
 ---
 
 Vuex是一个专门为Vue.js应用程序开发的状态管理模式。

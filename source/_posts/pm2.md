@@ -1,7 +1,7 @@
 ---
 title: pm2简单用法
 date: 2016/03/29
-tag: [pm2,nodejs]
+tag: [pm2, nodejs]
 category: 技术
 ---
 
