@@ -79,7 +79,6 @@ unset somekey # 删除环境变量。注意：不需要$符号
 PATH环境变量定义了用于进行命令和程序查找的目录。
 
 eg:
-
 ```shell
 $ echo $PATH # 输出系统环境变量
 /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Wireshark.app/Contents/MacOS:/usr/local/mysql/bin

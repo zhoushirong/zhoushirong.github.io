@@ -14,9 +14,7 @@ category: 笔记
 
 ##### ps命令
 
-ps命令默认会显示运行在当前控制台下的属于当前用户端的进程
-
-显示的选项
+ps 命令默认会显示运行在当前控制台下的属于当前用户端的进程，显示的选项
 ```shell
 UID # 启动这些进程的用户
 PPID # 父进程的进程号
@@ -75,14 +73,14 @@ mount挂载的文件举例，eg:
 /dev/disk2s1 on /Volumes/网易POPO (hfs, local, nodev, nosuid, read-only, noowners, quarantine, mounted by zsr)
 ```
 
-使用mount命令手动挂载设备
+使用 mount 命令手动挂载设备
 
 ```shell
 mount -t type device directory
 ```
 
 **type**
-type参数指定了磁盘被格式化的文件系统类型，linux可识别非常多的文件系统类型
+type 参数指定了磁盘被格式化的文件系统类型，linux可识别非常多的文件系统类型
 如果是需要和windows PC共用这些存储设备，通常得使用下列的文件系统类型
 
 ```html

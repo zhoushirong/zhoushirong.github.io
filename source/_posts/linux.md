@@ -79,12 +79,12 @@ $ 普通用户
 ### 用户
 
 ``` shell
-# w                      # 查看活动用户
-# id <用户名>            # 查看指定用户信息
-# last                   # 查看用户登录日志
-# cut -d: -f1 /etc/passwd   # 查看系统所有用户
-# cut -d: -f1 /etc/group    # 查看系统所有组
-# crontab -l             # 查看当前用户的计划任务
+w                      # 查看活动用户
+id <用户名>            # 查看指定用户信息
+last                   # 查看用户登录日志
+cut -d: -f1 /etc/passwd   # 查看系统所有用户
+cut -d: -f1 /etc/group    # 查看系统所有组
+crontab -l             # 查看当前用户的计划任务
 ```
 
 
@@ -103,28 +103,28 @@ last 查询所有的登录信息
 ### 服务
 
 ``` shell
-# chkconfig --list       # 列出所有系统服务
-# chkconfig --list | grep on    # 列出所有启动的系统服务
+chkconfig --list       # 列出所有系统服务
+chkconfig --list | grep on    # 列出所有启动的系统服务
 ```
 
 ### 程序
 
 ``` shell
-# rpm -qa                # 查看所有安装的软件包
+rpm -qa                # 查看所有安装的软件包
 ```
 
 ### 查看CPU信息（型号） 
 
 ``` shell
-# cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c 
+cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c 
 
-# cat /proc/cpuinfo | grep physical | uniq -c 
+cat /proc/cpuinfo | grep physical | uniq -c 
  
-# getconf LONG_BIT 
+getconf LONG_BIT 
 
-# cat /proc/cpuinfo | grep flags | grep ' lm ' | wc -l 
+cat /proc/cpuinfo | grep flags | grep ' lm ' | wc -l 
 
-# dmidecode | grep 'Processor Information' 
+dmidecode | grep 'Processor Information' 
 ```
 
 ### head tail cat awk grep vim 
@@ -144,23 +144,23 @@ cron —— 定时器相关
 ### 查看内存信息 
 
 ``` shell
-# cat /proc/meminfo 
+cat /proc/meminfo 
 
-# uname -a 
+uname -a 
 
-# cat /etc/issue | grep Linux 
+cat /etc/issue | grep Linux 
 ```
 
 ### 查看机器型号 
 
 ``` shell
-# dmidecode | grep "Product Name"  
+dmidecode | grep "Product Name"  
 ```
 
 查看网卡信息 
 
 ``` shell
-# dmesg | grep -i eth
+dmesg | grep -i eth
 ```
 
 ### 显示文件列表
@@ -194,17 +194,17 @@ r读 w写 x执行
 ### linux查找功能
 
 ``` shell
-# locate locate // 更新locate数据库 updatedb
+locate locate // 更新locate数据库 updatedb
 
-# find 范围 -name 文件名
+find 范围 -name 文件名
 
-# find 范围 -iname 文件名（不区分大小写）
+find 范围 -iname 文件名（不区分大小写）
 
-# find 范围 -mtime 文件名 +10 （10天内修改的文件）a访问
+find 范围 -mtime 文件名 +10 （10天内修改的文件）a访问
 
-# find 范围 -size -15k (小于25k的文件) M兆
+find 范围 -size -15k (小于25k的文件) M兆
 
-# find 范围 -size +1k -a -size -50k (大于1k小于50k) -o或
+find 范围 -size +1k -a -size -50k (大于1k小于50k) -o或
 
 ```
 
@@ -223,7 +223,7 @@ help 获取内部命令
 #### .zip .gz .bz2 
 
 ``` html
-.zip在window和linux通用  压缩文件命令为：zip 压缩文件名 源文件名 ； 
+.zip 在 window 和 linux 通用  压缩文件命令为：zip 压缩文件名 源文件名 ； 
 压缩文件夹命令为：zip -r 压缩文件名 源目录 ;解压命令将zip改为unzip即可
 ```
 
@@ -252,7 +252,6 @@ tar -zxvf packfiles.tar.gz
 
 tar -zxvf packfiles.tar.gz -C ./dirs
 ```
-
 
 -----------------------------------------------
 

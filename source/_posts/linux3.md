@@ -13,16 +13,16 @@ category: 笔记
 ### 一、SHELL与BASH简介
 
 **SHELL** 不单单是一种CLI。它是一个时刻都在运行的复杂交互式程序。
-shell是用户和Linux(Linux内核)之间的接口程序。你在控制台输入的每一个命令都是由shell解释之后再传给Linux内核的。
-shell是一个命令语言解释器。
+shell 是用户和 Linux(Linux内核)之间的接口程序。你在控制台输入的每一个命令都是由shell解释之后再传给Linux内核的。
+shell 是一个命令语言解释器。
 
-**SH** (Bourne shell) 是一个早期的重要shell，是UNIX标准的默认shell
+**SH** (Bourne shell) 是一个早期的重要 shell，是UNIX标准的默认 shell
 
-**BASH** (GNU Bourne-Again Shell) 是一个为GNU计划编写的Unix shell。
+**BASH** (GNU Bourne-Again Shell) 是一个为 GNU 计划编写的Unix shell。
 BASH 是 GNU 组织开发和推广的一个项目。
 
-BASH是大多数Linux系统以及Mac OSX默认的shell
-BASH的命令语法是Bourne shell命令语法的超集
+BASH 是大多数Linux系统以及Mac OSX默认的shell
+BASH 的命令语法是Bourne shell命令语法的超集
 
 除此之外，还有很多shell，可通过如下方式查看本机安装的shell
 
