@@ -235,15 +235,56 @@ mysql -h127.0.0.1 -uroot -p123456 epoos < epoos.sql
 
 #### ubuntu安装mysql
 ```shell
-sudo apt-get update
-sudo apt-get install mysql-server
-mysql_secure_installation
+sudo apt-get update 
+sudo apt-get install mysql-server # 安装 mysql 服务端
+mysql_secure_installation # mysql 安装安全配置向导，设置密码
 ```
+执行安全配置向导可能报如下错误：
+```shell
+# 报错信息
+Error: Access denied for user 'root'@'localhost'
+```
+解决方案：
+```shell
+sudo -iu root # 用 root 用户执行此命令即可
+mysql_secure_installation
+
+# 中文解释
+1)为root用户设置密码；
+2)删除匿名账号；
+3)取消root用户远程登录；
+4)删除test库和对test库的访问权限；
+5)刷新授权表使修改生效。
+```
+
 
 #### 新建新用户
 ```shell
-mysql> CREATE USER zsr@localhost IDENTIFIED BY '123456';
-mysql> grant all on epoos.* to zsr@localhost INDENTIFIED BY "123456";
+# 创建 dev 用户
+mysql> CREATE USER dev@% IDENTIFIED BY 'Abc123456!';
+# 给用户 dev 所有数据库的权限
+mysql> grant all PRIVILEGES on *.* to 'dev'@'%' IDENTIFIED BY "Abc123456!";
+# 刷新配置
+flush privileges; 
+```
+
+#### 远程端口不通
+```shell
+# 测试端口是否通顺
+telnet 10.216.8.142 3306
+```
+mysql 数据库经常会遇到本地能连通但是其它机器通过 ip 访问的时候就不通的情况。
+排查可以从下面三种情形入手（具体方式可以网上搜一搜，很多，这里就不列了）
+
+这种情形比较常见的原因有三个：
+1.机器防火墙 3306 端口没有开
+2.登录的数据库用户没有开 ip 访问的权限，找到user表，赋予其 % 权限。
+3.数据库初始的时候地址没有注释掉 bind-address
+
+```shell
+# 这个文件配置可能在/etc/my.cnf/;/etc/mysql/my.cnf;也可能在 /etc/mysql/mysql.conf.d
+# 具体情形根据系统有所不同，但是只需要找到 bind-address 将其注释掉即可
+#bind-address		= 127.0.0.1
 ```
 
 

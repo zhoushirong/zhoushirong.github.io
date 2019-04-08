@@ -14,13 +14,12 @@ Redis也支持持久化存储，即将数据定时存储备份到硬盘，当遭
 sudo apt-get install redis-server
 ```
 
-### 进入redis
-
+### 关闭、启动、重启 redis-server
 ```shell
-redis-server
-# or
-cd /etc/redis 
-sudo redis-server redis.conf
+# ubuntu 这里有点问题，通过杀进程的方式关闭不了redis，得用下面的这种方式
+/etc/init.d/redis-server stop
+/etc/init.d/redis-server start
+/etc/init.d/redis-server restart
 ```
 
 ### 查看redis进程
@@ -30,8 +29,10 @@ ps -ef|grep redis
 
 ### 进入redis-cli
 ```shell
-redis-cli
+redis-cli # 本地连接
+redis-cli -h REDIS_HOST_IP_ADDR -p 6379 # 通过IP地址 
 ```
+
 
 ### redis常用命令
 
