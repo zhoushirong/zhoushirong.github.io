@@ -30,7 +30,7 @@ ps -ef|grep redis
 ### 进入redis-cli
 ```shell
 redis-cli # 本地连接
-redis-cli -h REDIS_HOST_IP_ADDR -p 6379 # 通过IP地址 
+redis-cli -h REDIS_HOST_IP_ADDR -p 6379 -a 123456 # 通过IP地址 
 ```
 
 
