@@ -35,6 +35,11 @@ $ mysql_install_db --verbose --user=`whoami` --basedir="$(brew --prefix mysql)" 
 update user set authentication_string=password('my_password') where user='root';
 ```
 
+修改密码
+``` sql
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('newpass');
+```
+
 可能遇到的问题
 
 错误码：ERROR 1045 (28000)
