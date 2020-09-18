@@ -98,6 +98,6 @@ live2d:
   log: false # Whether to show logs in console
   model:
     # use: live2d_models/mymiku/wanko.model.json # npm-module package name
-    # use: wanko # folder name in (hexo base dir)/live2d_models/
+    # use: mymiku # folder name in (hexo base dir)/live2d_models/
     # use: ./wives/wanko # folder path relative to hexo base dir
     use: https://cdn.jsdelivr.net/npm/live2d-widget-model-wanko@1.0.5/assets/wanko.model.json # Your custom url
