@@ -219,6 +219,42 @@ show variables like 'character%';
 show variables like 'datadir%'
 ```
 
+数据库中文乱码
+```sql
+mysql> show variables like '%char%';
++--------------------------------------+----------------------------+
+| Variable_name                        | Value                      |
++--------------------------------------+----------------------------+
+| character_set_client                 | latin1                       |
+| character_set_connection             | utf8                       |
+| character_set_database               | utf8                       |
+| character_set_filesystem             | binary                     |
+| character_set_results                | utf8                       |
+| character_set_server                 | utf8                       |
+| character_set_system                 | utf8                       |
+| character_sets_dir                   | /usr/share/mysql/charsets/ |
+| validate_password_special_char_count | 1                          |
++--------------------------------------+----------------------------+
+set character_set_client=utf8;
+```
+mysql 数据库中文乱码是因为数据库默认的编码方式是 latin1
+解决办法就是将其手动改为utf8即可
+*但是*这只是临时办法，变量只是session级别的存储，数据库重启之后就没了
+```shell
+sudo vim /etc/mysql/my.cnf
+or
+sudo vim /etc/my.cnf
+```
+在my.cnf 文件里面配置数据库的编码集
+```shell
+[mysqld]
+character-set-server=utf8
+[client]
+default-character-set=utf8
+[mysql]
+default-character-set=utf8
+```
+
 
 备份数据
 ``` html
