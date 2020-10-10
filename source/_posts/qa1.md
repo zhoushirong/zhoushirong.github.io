@@ -103,10 +103,14 @@ const data = {
   website: 'http://www.qq.com'
 }
 function format(str, data) {
-  return str.replace(/\{.*?\}/g, i => {
-    const key = i.replace(/^\{/|, '').replace(/\}$/, '')
-    return data[key]
-  })
+  return str
+  .replace(/&/g, '&amp')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/ /g, '&nbsp;')
+  .replace(/\'/g, '&#39;')
+  .replace(/\"/g, '&quot;')
+  .replace(/\{.*?\}/g, i => data[i.slice(1, -1)])
 }
 format(str, data)
 ```
