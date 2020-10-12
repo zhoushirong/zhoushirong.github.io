@@ -1,5 +1,5 @@
 ---
-title: js基础一
+title: 前端基础一
 date: 2020/09/30
 tag: [基础,面试,试题]
 category: 技术
