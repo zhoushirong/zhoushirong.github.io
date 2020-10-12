@@ -97,7 +97,7 @@ interval(10)
   })
 ```
 ```javascript
-const str = '<div>I am {name}, my website is <a href="{website}">{website}</a></div>'
+const str = '<div>I am { name }, my website is <a href="{website}">{website}</a></div>'
 const data = {
   name: 'James',
   website: 'http://www.qq.com'
@@ -110,7 +110,7 @@ function format(str, data) {
   .replace(/ /g, '&nbsp;')
   .replace(/\'/g, '&#39;')
   .replace(/\"/g, '&quot;')
-  .replace(/\{.*?\}/g, i => data[i.slice(1, -1)])
+  .replace(/\{(.*?)\}/g, (i, k) => data[k.trim()])
 }
 format(str, data)
 ```
@@ -199,8 +199,20 @@ function compare(key, order) {
 list.sort(compare('age', 'desc'))
 list.sort(compare('name'))
 ```
+8、将数组扁平化并去除其中重复数据，最终得到一个升序且不重复的数组
+```javascript
+var arr = [[1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14]]]], 10]
+// 方法一
+Array.from(new Set(arr.toString().split(','))).sort((a, b) => a - b).map(Number)
+// 方法二
+Array.from(new Set(arr.flat(Infinity))).sort((a, b) => a - b)
+// 附录，flat方法兼容方法
+function flat(arr) {
+  return arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? flat(val) : val), [])
+}
+```
 
-8、请按照如下布局在pc端实现htm和css样式，要求:
+9、请按照如下布局在pc端实现htm和css样式，要求:
 a)A区域是 header部分,高度100像素,宽度根据屏幕自适应,居顶部展示
 b)B区域固定宽度200像素,居左侧展示
 c)C区域根据屏幕宽度自适应
