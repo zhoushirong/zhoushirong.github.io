@@ -1,5 +1,5 @@
 ---
-title: javascript常用技巧一
+title: javascript常用技巧二
 date: 2020/09/30
 tag: [基础,面试,试题]
 category: 技术
