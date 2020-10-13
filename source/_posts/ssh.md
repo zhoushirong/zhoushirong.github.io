@@ -1,7 +1,7 @@
 ---
 layout: default
 title: ssh命令笔记
-date: 2020-10-11
+date: 2020/10/11
 tag: ssh
 category: 笔记
 ---

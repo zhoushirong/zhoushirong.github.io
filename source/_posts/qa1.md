@@ -212,7 +212,50 @@ function flat(arr) {
 }
 ```
 
-9、请按照如下布局在pc端实现htm和css样式，要求:
+9、请把两个数组
+['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2'] 和 
+['A', 'B', 'C', 'D'] 合并为 
+['A1', 'A2', 'A', 'B1', 'B2', 'B', 'C1', 'C2', 'C', 'D1', 'D2', 'D']
+```javascript
+var arr1 = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2']
+var arr2 = ['A', 'B', 'C', 'D']
+
+arr2.map(item => item+'3').concat(arr1).sort().map(item => item.replace('3', ''))
+```
+
+10、改造下面代码，使之输出0-9
+```javascript
+// question code
+for (var i = 0; i < 10; i++) {
+  setTimeout(() => {
+    console.log(i)
+  }, 1000)
+}
+// answer1
+for (let i = 0; i<10;i++) {
+  setTimeout(() => {
+    console.log(i)
+  }, 1000)
+}
+// answer2
+for (var i = 0; i < 10; i++) {
+  setTimeout(((i) => {
+    console.log(i)
+  })(i), 1000)
+}
+// anser3
+for (var i = 0; i < 10; i++) {
+  setTimeout((i) => {
+    console.log(i)
+  }, 1000, i)
+}
+// anser4
+for (var i = 0; i < 10; i++) {
+  setTimeout(console.log, 1000, i)
+}
+```
+
+11、请按照如下布局在pc端实现htm和css样式，要求:
 a)A区域是 header部分,高度100像素,宽度根据屏幕自适应,居顶部展示
 b)B区域固定宽度200像素,居左侧展示
 c)C区域根据屏幕宽度自适应

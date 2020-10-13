@@ -59,3 +59,27 @@ test1()
 test2()
 test3()
 ```
+
+1.实现一个 new
+new 关键字调用的基本过程
+1）创建一个新对象
+2）继承父类原型的方法
+3）添加父类属性到新对象上，并初始化，并保存方法的执行结果
+4）如果执行结果有返回值，并且是一个对象，返回执行的结果，否则返回新创建的对象
+
+```javascript
+function Person(firstName, lastName) {
+  this.firstName = firstName
+  this.lastName = lastName
+}
+Person.prototype.getFullName = function() {
+  return this.firstName + ' ' + this.lastName
+}
+function _new(obj, ...args) {
+  var newObj = Object.create(obj.prototype)
+  var result = obj.apply(newObj, args) // obj里面的this变成了newObj，所以，newObj有了obj的属性
+  return (typeof result === 'object' && result !== null ) ? result : newObj
+}
+var newPerson = new Person('jack', 'bob')
+var _newPerson = _new(Person, 'jack', 'bob')
+```
