@@ -212,6 +212,7 @@ function flat(arr) {
 }
 ```
 
+
 9、请把两个数组
 ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2'] 和 
 ['A', 'B', 'C', 'D'] 合并为 
@@ -243,13 +244,13 @@ for (var i = 0; i < 10; i++) {
     console.log(i)
   })(i), 1000)
 }
-// anser3
+// answer3
 for (var i = 0; i < 10; i++) {
   setTimeout((i) => {
     console.log(i)
   }, 1000, i)
 }
-// anser4
+// answer4
 for (var i = 0; i < 10; i++) {
   setTimeout(console.log, 1000, i)
 }
