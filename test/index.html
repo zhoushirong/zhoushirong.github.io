@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <input id="inputField" value="" type="text" placeholder="" />
+  <p id="showField"></p>
+  <script>
+    const proxy1 = {
+      get(target, propKey) {
+        console.log(`getting:${propKey}`)
+        return Reflect.get(target, propKey)
+      },
+      set(target, propKey, value) {
+        console.log(`setting:${propKey}、${value}`)
+        handler(value)
+        return Reflect.set(target, propKey, value)
+      }
+    }
+
+    function addEvent() {
+      document.querySelector('#inputField').addEventListener('input', (e) => {
+        obj.txt = e.target.value
+      })
+    }
+    function handler(value) {
+      document.querySelector('#showField').innerHTML = value
+    }
+
+    var obj = new Proxy({}, proxy1)
+    addEvent()
+  </script>
+</body>
+</html>
