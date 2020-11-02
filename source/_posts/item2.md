@@ -1,5 +1,5 @@
 ---
-title: Mysql入门
+title: item2基础
 tag: [item2]
 date: 2020/07/24
 category: 笔记
