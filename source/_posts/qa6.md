@@ -104,18 +104,18 @@ function toBeLink(arr) {
 * 适用所有二叉树 - 方法2
 */
 function toBeLink(arr, obj = {}, queue = []) {
-  let i = 0
-  if (i === 0 && arr[0] !== null) {
-    obj.value = arr[i]
-    queue.push(obj)
-    i++
-  }
-  
-  while(i < arr.length) {
+  if (!arr || arr[0] === null || arr[0] === '' || arr[0] === undefined) return obj
+  // 根节点初始化
+  obj.value = arr[0]
+  queue.push(obj)
+
+  let i = 1
+  while(i <= arr.length) {
     const current = queue.shift()
     for (let side of ['left', 'right']) {
       const arri = arr[i]
       i++
+      console.log(i, arr.length)
       if (i > arr.length) return obj
       if (arri === null) continue
 
@@ -136,7 +136,7 @@ function toBeLink(arr) {
   var queue = [obj]
   var i = 1
   var sideArr = ['left', 'right']
-  while (i < arr.length) {
+  while (i <= arr.length) {
     var current = queue.shift()
     for (var j = 0; j < sideArr.length; j++) {
       var arri = arr[i]
