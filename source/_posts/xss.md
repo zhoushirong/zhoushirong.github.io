@@ -7,7 +7,7 @@ category: 技术
 
 ### 1.XSS（Cross-site Script）简介
 跨站脚本攻击，Cross-site Script，简称 XSS（因CSS与样式脚本命名一样）。
-是一种代码注入攻击。攻击者在网站上注入恶意脚本，使之在用户的浏览器上运行。
+是一种代码注入攻击。攻击者想尽一切办法，在网站上注入恶意脚本，使之在用户的浏览器上运行，当用户访问该网站的时候浏览器执行该脚本
 攻击者可通过恶意脚本的执行窃取用户的Session、Cookie等敏感信息，进而危害数据安全。
 
 ### XSS 类型：
@@ -40,5 +40,8 @@ category: 技术
 / &#x2f;
 ```
 2、敏感的Cookie、Session信息设置HttpOnly。禁止Javascript读取敏感cookie信息。
+3、设置CSP的安全策略
+  1）通过meta标签设置
+  2) 通过Http响应头 Content-Security-Policy
 
 

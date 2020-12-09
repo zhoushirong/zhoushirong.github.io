@@ -128,3 +128,75 @@ function fn(obj = {}) {
   return res
 }
 ```
+
+3.实现一个简单的仓储系统，可以不断转入和转出货物，货物最多有两层子类目，数字代表该子类目转入/转出的数量。转出时不能出现爆仓情况。
+```javascript
+/*
+ * cargo 说明：
+ * key代表类目/子类目名称
+ * value 为 number时，代表这个类目的数量，为object 时，代表下一层货物的集合，最多嵌套两层
+ * {
+ *  productA:{  // 代表货物的类目名称
+ *    a:1, // 1 代表子类目 a 的数量
+ *    b:2,
+ *    c:{   // c 代表货物的子类名称
+ *      c1:1, // c1代表货物的子类名称
+ *    }
+ *   }，
+ *  productB:{
+ *      e:6
+ *   }
+ * }
+ *
+ * 爆仓情况：如转入 {productA:{a:3,c:1}} 转出 {productA:{a:4}},就会发生子类目a爆仓，此时要返回报错。
+ */
+
+class Depository {
+  constructor() {
+    this.product = {}
+  }
+  compineProduct(cargo, product) {
+    for (let i in cargo) {
+      if (!product[i]) {
+        product[i] = {}
+      }
+      if (typeof cargo[i] === 'number') {
+        if (typeof product[i] === 'number') {
+          product[i] += cargo[i]
+        } else {
+          product[i] = cargo[i]
+        }
+      } else {
+        this.compineProduct(cargo[i], product[i])
+      }
+    }
+  }
+  reduceProduct(cargo, product) {
+    for (let i in cargo) {
+      if (!product[i]) {
+        throw `货物${i}不存在`
+      }
+      if (typeof cargo[i] === 'number') {
+        if (product[i] - cargo[i] <= 0) {
+          throw `货物${i}爆仓`
+        }
+        product[i] -= cargo[i]
+      } else {
+        this.reduceProduct(cargo[i], product[i])
+      }
+    }
+  }
+  // 转入货物
+  transferIn(cargo) {
+    if (!cargo) return this.product
+    this.compineProduct(cargo, this.product)
+    return this.product
+  }
+  // 转出货物
+  transferOut(cargo) {
+    if (!cargo) return this.product
+    this.reduceProduct(cargo, this.product)
+    return this.product
+  }
+}
+```

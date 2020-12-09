@@ -52,6 +52,8 @@ HTTP/1.1协议中共定义了八种方法（也叫“动作”）来以不同方
 - 第二次握手：服务器收到syn包，必须确认客户的SYN（ack=j+1），同时自己也发送一个SYN包（syn=k），即SYN+ACK包，此时服务器进入SYN_RECV状态；
 - 第三次握手：客户端收到服务器的SYN＋ACK包，向服务器发送确认包ACK(ack=k+1)，此包发送完毕，客户端和服务器进入ESTABLISHED状态，完成三次握手。
 
+### TCP四次挥手
+
 ---
 
 ### 状态码
@@ -243,3 +245,7 @@ https://zh.wikipedia.org/wiki/HTTP状态码
 
 ### XDomainRequest
 https://www.cnblogs.com/onepixel/articles/7567948.html
+
+### 三次握手与四次挥手
+https://zhuanlan.zhihu.com/p/53374516
+https://hit-alibaba.github.io/interview/basic/network/TCP.html

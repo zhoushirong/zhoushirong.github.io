@@ -9,7 +9,7 @@ Javascript的基础知识。
 
 ECMAScript 5的五种简单数据类型：Undefined、Null、Boolean、Number、String；
 
-另外还有一种es6新增的Symble也是属于简单数据类型
+另外还有一种es6新增的Symbol也是属于简单数据类型
 
 一种复杂数据类型： Object（Array、Function、RegExp、Date都属于 Object）
 
@@ -18,7 +18,7 @@ ECMAScript 5的五种简单数据类型：Undefined、Null、Boolean、Number、
 
 简单数据类型的值时保存在栈内存中的简单数据段，它们是按值访问的。
 
-复杂的数据类型（引用类型）的值是保存在爱堆内存中的对象，它的值时按照引用访问的。
+复杂的数据类型（引用类型）的值是保存在堆内存中的对象，它的值时按照引用访问的。
 
 
 ### 检测方法用typeof，打印出来分别是：
