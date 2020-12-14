@@ -126,7 +126,6 @@ function toBeLink(arr, obj = {}, queue = []) {
     }
   }
 }
-
 /**
 * 适用所有二叉树 - 方法2 - 纯 es5 版本
 */
@@ -194,8 +193,8 @@ var root = toBeLink(arr)
 function getTreeLeft(root, stack = []) {
   if (root.value === undefined) return stack
   stack.push(root.value)
-  getTree(root.left, stack)
-  getTree(root.right, stack)
+  getTreeLeft(root.left, stack)
+  getTreeLeft(root.right, stack)
   return stack
 }
 
@@ -204,9 +203,9 @@ function getTreeLeft(root, stack = []) {
  */
 function getTreeCenter(root, stack = []) {
   if (root.value === undefined) return stack
-  getTree(root.left, stack)
+  getTreeCenter(root.left, stack)
   stack.push(root.value)
-  getTree(root.right, stack)
+  getTreeCenter(root.right, stack)
   return stack
 }
 
@@ -215,9 +214,9 @@ function getTreeCenter(root, stack = []) {
  */
 function getTreeRight(root, stack = []) {
   if (root.value === undefined) return stack
-  getTree(root.right, stack)
+  getTreeRight(root.right, stack)
   stack.push(root.value)
-  getTree(root.left, stack)
+  getTreeRight(root.left, stack)
   return stack
 }
 
