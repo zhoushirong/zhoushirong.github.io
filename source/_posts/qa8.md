@@ -152,7 +152,7 @@ class Promise {
 }
 ```
 
-7.手写Promise
+7.手写事件监听
 ```javascript
 // 组件通信，一个触发与监听的过程
 class EventEmitter {
