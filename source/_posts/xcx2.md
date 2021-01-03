@@ -21,7 +21,8 @@ category: 技术
 app: onLunch/onShow/onHide
 page: onLoad/onShow/onReady/onHide/onUnload
 component: created/attached/ready/moved/detached/error show/hide/resize
-
+```html
+执行顺序:
 ->app(onlaunch)
 ->app(onshow) 
 ->component(created)
@@ -30,6 +31,7 @@ component: created/attached/ready/moved/detached/error show/hide/resize
 ->page(onshow)
 ->component(ready)
 ->page(onready)
+```
 
 #### 小程序的数据通信
 渲染层与逻辑层：逻辑层到渲染层通信使用setData、渲染层想逻辑层使用事件bindTap/catchTap
