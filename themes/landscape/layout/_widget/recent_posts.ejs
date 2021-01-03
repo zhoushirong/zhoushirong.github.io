@@ -5,6 +5,7 @@
       <ul>
         <% site.posts.sort('date', -1).limit(5).each(function(post){ %>
           <li>
+            <span class="widget-date"><%= date(post.date, 'YYYY-MM-DD') %></span>
             <a href="<%- url_for(post.path) %>"><%= post.title || '(no title)' %></a>
           </li>
         <% }) %>
