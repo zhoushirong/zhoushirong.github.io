@@ -41,7 +41,6 @@ category: 技术
 ```
 2、敏感的Cookie、Session信息设置HttpOnly。禁止Javascript读取敏感cookie信息。
 3、设置CSP的安全策略
-  1）通过meta标签设置
-  2) 通过Http响应头 Content-Security-Policy
-
+  1）通过meta标签设置 http-equiv=content-security-policy
+  2) 通过Http响应头 Content-Security-Policy（当前域、子域、资源域、报告地址）
 
