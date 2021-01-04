@@ -41,18 +41,17 @@ JS通过 __proto__ 和 prototype 的合作实现了原型链以及对象的继�
 上面表达式结果的核心原理也是 __proto__ 和 prototype 的指向和流转原理，明白了这两个属性也差不多就‘懂了’对象了。
 es6中的class extends语法也是基于es5构造函数继承而封装的语法糖，也不外乎上面两个属性。
 ```html
-1.每个js对象一定对应一个原型对象，且从该原型对象继承了属性和方法，对象的 __proto__ 属性的值就是它对应的原型对象
-2.只有函数才有 prototype 属性，创建函数的时候js会自动为函数添加 prototype 属性，该属性的值是一个有 constructor 属性的对象。
-3.instanceOf 用于检测对象的 prototype 属性是否出现在某个实例的原型链上
-4.所有的对象都会从它的原型上继承一个 constructor 属性，这个属性指向父级对象(`被继承了constructor属性的对象`)
-  如：所有构造函数的实例都会从它的原型上继承一个 constructor 属性，这个属性指向该构造函数
-5.对象的 __proto__ 属性指向父级对象的原型（生产环境使用 Object.getPrototypeOf 代替 __proto__ ）
-6.对象的 prototype 属性的 __proto__ 属性表示方法的继承，指向父类的prototype属性
+每个js对象一定对应一个原型对象，且从该原型对象继承了属性和方法，对象的 __proto__ 属性的值就是它对应的原型对象
+只有函数才有 prototype 属性，创建函数的时候js会自动为函数添加 prototype 属性，该属性的值是一个有 constructor 属性的对象。
+instanceOf 用于检测对象的 prototype 属性是否出现在某个实例的原型链上
+所有的对象都会从它的原型上继承一个 constructor 属性，这个属性指向父级对象(`被继承了constructor属性的对象`)，如：所有构造函数的实例都会从它的原型上继承一个 constructor 属性，这个属性指向该构造函数
+对象的 __proto__ 属性指向父级对象的原型（生产环境使用 Object.getPrototypeOf 代替 __proto__ ）
+对象的 prototype 属性的 __proto__ 属性表示方法的继承，指向父类的prototype属性
 ```
 
-最后再来张图片吧，图片来自[jsobj](http://www.mollypages.org/tutorials/js.mp)
-![图片](http://zhoushirong.github.io/img/jsobj.jpg)
+最后再来张图片吧
 
+![http://www.mollypages.org/tutorials/js.mp](http://zhoushirong.github.io/img/jsobj.jpg)
 
 ### 传送门
 从__proto__和prototype来深入理解JS对象和原型链
