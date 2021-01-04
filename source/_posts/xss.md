@@ -41,6 +41,21 @@ category: 技术
 ```
 2、敏感的Cookie、Session信息设置HttpOnly。禁止Javascript读取敏感cookie信息。
 3、设置CSP的安全策略
-  1）通过meta标签设置 http-equiv=content-security-policy
-  2) 通过Http响应头 Content-Security-Policy（当前域、子域、资源域、报告地址）
+1）通过meta标签设置 
+```html
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src https://*; child-src 'none';">
+```
+2) 通过Http响应头 Content-Security-Policy（当前域、子域、资源域、报告地址）
+```javascript
+Content-Security-Policy: default-src 'self'; img-src *; media-src media1.com media2.com; script-src userscripts.example.com
+Content-Security-Policy: default-src https://onlinebanking.jumbobank.com
+Content-Security-Policy: default-src 'self' *.mailsite.com; img-src *
+Content-Security-Policy-Report-Only: policy
+Content-Security-Policy: default-src 'self'; report-uri http://reportcollector.example.com/collector.cgi
+```
 
+
+### 传送门
+https://juejin.cn/post/6898124066063024136
+csp
+https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CSP

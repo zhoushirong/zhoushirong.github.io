@@ -15,3 +15,7 @@ category: 技术
 2.CSRF token，对于重要请求，按照约定规则生成token，发起请求的时候服务端对token进行校验。
 3.双重 Cookie 校验机制，在请求url中再附加一个Cookie信息
 4.Samesite Cookie属性，Chrome最新防护机制；Samesite=Strict 模式下，从第三方网站发起的请求都无法带上Cookie
+
+### 传送门
+Cookie 的 SameSite 属性
+https://www.ruanyifeng.com/blog/2019/09/cookie-samesite.html
