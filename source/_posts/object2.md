@@ -8,7 +8,7 @@ category: 技术
 之前学习对象的继承的时候遇到了很多对象的属性，这些属性理解起来还是比较费力的，理解了很多遍，也记忆了很多遍，同样的也忘记了很多遍
 现在给它做个小整理吧
 
-下面表达式都返回 true
+首先先从问题出发，下面表达式都返回 true。
 ```javascript
 // 初始数据
 function A() {}
@@ -36,9 +36,9 @@ obj.constructor === Object
 arr.constructor === Array
 Object.constructor === Array.constructor
 ```
-#### 总结：
-JS就是通过__proto__和prototype的合作实现了原型链以及对象的继承的。
-而上面的核心也是__proto__以及prototype的指向问题，明白了这两个属性的传递和流转也差不多就‘懂了’对象了。
+#### 分析与总结：
+JS通过 __proto__ 和 prototype 的合作实现了原型链以及对象的继承。
+上面表达式结果的核心原理也是 __proto__ 和 prototype 的指向和流转原理，明白了这两个属性也差不多就‘懂了’对象了。
 es6中的class extends语法也是基于es5构造函数继承而封装的语法糖，也不外乎上面两个属性。
 ```html
 1.每个js对象一定对应一个原型对象，且从该原型对象继承了属性和方法，对象的 __proto__ 属性的值就是它对应的原型对象
@@ -50,7 +50,7 @@ es6中的class extends语法也是基于es5构造函数继承而封装的语法�
 6.对象的 prototype 属性的 __proto__ 属性表示方法的继承，指向父类的prototype属性
 ```
 
-现在好了，经过上面一番梳理，成功把自己绕晕了，盗个图吧。图片来自[jsobj](http://www.mollypages.org/tutorials/js.mp)
+最后再来张图片吧，图片来自[jsobj](http://www.mollypages.org/tutorials/js.mp)
 ![图片](http://zhoushirong.github.io/img/jsobj.jpg)
 
 
