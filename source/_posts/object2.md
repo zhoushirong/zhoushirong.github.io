@@ -37,8 +37,8 @@ arr.constructor === Array
 Object.constructor === Array.constructor
 ```
 #### 分析与总结：
-JS通过 __proto__ 和 prototype 的合作实现了原型链以及对象的继承。
-上面表达式结果的核心原理也是 __proto__ 和 prototype 的指向和流转原理，明白了这两个属性也差不多就‘懂了’对象了。
+JS通过 \_\_proto\_\_ 和 prototype 的合作实现了原型链以及对象的继承。
+上面表达式结果的核心原理也是 \_\_proto\_\_ 和 prototype 的指向和流转原理，明白了这两个属性也差不多就‘懂了’对象了。
 es6中的class extends语法也是基于es5构造函数继承而封装的语法糖，也不外乎上面两个属性。
 ```html
 每个js对象一定对应一个原型对象，且从该原型对象继承了属性和方法，对象的 __proto__ 属性的值就是它对应的原型对象
