@@ -5,8 +5,8 @@ tag: [object,js,对象]
 category: 技术
 ---
 
-之前学习对象的继承的时候遇到了很多对象的属性，这些属性理解起来还是比较费力的
-JS通过__proto__和prototype的合作实现了原型链，以及对象的继承。
+之前学习对象的继承的时候遇到了很多对象的属性，这些属性理解起来还是比较费力的，理解了很多遍，也记忆了很多遍，同样的也忘记了很多遍
+现在给它做个小整理吧
 
 下面表达式都返回 true
 ```javascript
@@ -37,6 +37,10 @@ arr.constructor === Array
 Object.constructor === Array.constructor
 ```
 #### 总结：
+JS就是通过__proto__和prototype的合作实现了原型链以及对象的继承的。
+而上面的核心也是__proto__以及prototype的指向问题，明白了这两个属性的传递和流转也差不多就‘懂了’对象了。
+es6中的class extends语法也是基于es5构造函数继承而封装的语法糖，也不外乎上面两个属性。
+```html
 1.每个js对象一定对应一个原型对象，且从该原型对象继承了属性和方法，对象的 __proto__ 属性的值就是它对应的原型对象
 2.只有函数才有 prototype 属性，创建函数的时候js会自动为函数添加 prototype 属性，该属性的值是一个有 constructor 属性的对象。
 3.instanceOf 用于检测对象的 prototype 属性是否出现在某个实例的原型链上
@@ -44,7 +48,7 @@ Object.constructor === Array.constructor
   如：所有构造函数的实例都会从它的原型上继承一个 constructor 属性，这个属性指向该构造函数
 5.对象的 __proto__ 属性指向父级对象的原型（生产环境使用 Object.getPrototypeOf 代替 __proto__ ）
 6.对象的 prototype 属性的 __proto__ 属性表示方法的继承，指向父类的prototype属性
-
+```
 
 现在好了，经过上面一番梳理，成功把自己绕晕了，盗个图吧。图片来自[jsobj](http://www.mollypages.org/tutorials/js.mp)
 ![图片](http://zhoushirong.github.io/img/jsobj.jpg)
