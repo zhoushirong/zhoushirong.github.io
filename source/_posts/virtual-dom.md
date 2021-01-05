@@ -97,8 +97,8 @@ tag标签名相同
   2）如notSameVnode(x, newStartVnode) ，则调用 createElm 创建一个新的节点。
 
 结束时
-如 新节点 &gt; 老节点，则将多余VNode节点插入到真实DOM中去
-如 新节点 &lt; 老节点，则删除多余的DOM节点
+如 新节点 多余 老节点，则将多余VNode节点插入到真实DOM中去
+如 新节点 少于 老节点，则删除多余的DOM节点
 ```
 
 
