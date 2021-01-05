@@ -61,7 +61,7 @@ VNode = vm._render()
 vm._update(VNode)
 ```
 
-##### diff算法
+#### diff算法
 diff算法通过同层的树节点比较，时间复杂度只有O(n)
 只有Vnode节点相同（是同一个节点）的时候才会进行节点比较（patchVnode），否则直接删除旧节点，添加新节点。
 ##### 判断是否同一个节点的标准
@@ -97,8 +97,8 @@ tag标签名相同
   2）如notSameVnode(x, newStartVnode) ，则调用 createElm 创建一个新的节点。
 
 结束时
-如 新节点 > 老节点，则将多余VNode节点插入到真实DOM中去
-如 新节点 < 老节点，则删除多余的DOM节点
+如 新节点 &gt; 老节点，则将多余VNode节点插入到真实DOM中去
+如 新节点 &lt; 老节点，则删除多余的DOM节点
 ```
 
 
