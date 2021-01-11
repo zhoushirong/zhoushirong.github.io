@@ -5,6 +5,10 @@ tag: [proxy,VUE3]
 category: 技术
 ---
 
+
+VUE2 父子组件生命周期执行顺序
+父beforeCreate-> 父created->父beforeMount->子beforeCreate->子created->子beforeMount->子mounted->父mounted
+
 vue3
 1.global api
 最大的改动就是composition api，将原来挂载到this上的方法直接通过引用的方式调用
