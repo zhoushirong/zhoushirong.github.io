@@ -5,16 +5,6 @@ tag: [MIMETYPE,CONTENTTYPE,请求头]
 category: 笔记
 ---
 
-<style>
-table {
-  width: 100%;
-  border: 1px solid #eee;
-}
-table th:first-of-type {
-	width: 200px;
-}
-</style>
-</style>
 ### 互联网媒体类型
 互联网媒体类型（Internet media type，也称为MIME类型（MIME type）或内容类型（content type））
 是给互联网上传输的内容赋予的分类类型。互联网媒体类型与文件拓展名相对应。
@@ -77,8 +67,8 @@ application/ecmascript | ECMAScript/JavaScript;[4]（相当于application/javasc
 application/EDI-X12 | EDI ANSI ASC X12资料[5]
 application/EDIFACT | EDI EDIFACT资料[5]
 application/json | JSON（JavaScript Object Notation）[6]
-application/javascript | ECMAScript/JavaScript[4]（相当于application/ecmascript但是宽松的处理规则）它不被IE 8或更早之前的版本所支持。虽然可以改用text/javascript，但它却被RFC 4329定义为过时。在HTML5之中，script 标签的type的属性是可省略的，因为所有的浏览器即使在HTML5以前都一直默认使用JavaScript。
-application/octet-stream | 任意的二进制文件（通常做为通知浏览器下载文件）[7]Generally speaking this type identifies files that are not associated with a specific application. Contrary to past assumptions by software packages such as Apache this is not a type that should be applied to unknown files. In such a case, a server or application should not indicate a content type, as it may be incorrect, but rather, should omit the type in order to allow the recipient to guess the type.[8]
+application/javascript | JavaScript。
+application/octet-stream | 任意的二进制文件（通常做为通知浏览器下载文件
 application/ogg | Ogg, 视频文件格式[9]
 application/pdf | PDF（Portable Document Format）[10]
 application/postscript | PostScript[7]
@@ -122,7 +112,7 @@ image/icon | ICO图片文件。
 text/css | CSS文件[29]
 text/csv | CSV文件[30]
 text/html | HTML文件[31]
-text/javascript | (过时)，推荐使用 application/javascript。然而，相比于 application/javascript ，在 HTML 4 和 5 中，可以使用text/javascript ，且有跨浏览器的支持。因为在使用 script 时，对于其 "type" 属性 ，所有浏览器都会使用正确的默认值（尽管 HTML 4 的规格中明确要求），所以 HTML5 中定义为选择性的，且没必要。
+text/javascript | (过时)，推荐使用 application/javascript。
 text/plain | 纯文字内容[32]
 text/vcard | vCard（电子名片）[33]
 text/xml | XML[14]
@@ -154,7 +144,7 @@ model/x3d+xml | X3D ISO standard for representing 3D computer graphics, X3D XML 
 属性值 | 描述 | 示例
 --|--|--
 Accept | 指定客户端能够接收的内容类型 | Accept: text/plain, text/html
-Accept-Charset | 请求头用来告知（服务器）客户端可以处理的字符集类型。 借助内容协商机制，服务器可以从诸多备选项中选择一项进行应用， 并使用Content-Type 应答头通知客户端它的选择。浏览器通常不会设置此项值，因为每种内容类型的默认值通常都是正确的，但是发送它会更有利于识别。 | Accept-Charset: utf-8, iso-8859-1;q=0.5, *;q=0.1
+Accept-Charset | 请求头用来告知（服务器）客户端可以处理的字符集类型。 | Accept-Charset: utf-8, iso-8859-1;q=0.5, *;q=0.1
 Accept-Encoding | 指定浏览器可以支持的web服务器返回内容压缩编码类型 | Accept-Encoding: compress, gzip, deflate
 Accept-Language | 浏览器可接受的语言 | Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7
 Accept-Ranges | 请求资源的某一段数据 | Accept-Ranges: bytes=0-1023
@@ -193,7 +183,7 @@ Age | 从原始服务器到代理缓存形成的估算时间（以秒计，非�
 Allow | 对某网络资源的有效的请求行为，不允许则返回405 | Allow: GET, HEAD
 Access-Control-Allow-Credentials | 表示是否可以将对请求的响应暴露给页面，常用作跨域 | Access-Control-Allow-Credentials: true
 Access-Control-Allow-Origin | 表示请求的许可域名 | Access-Control-Allow-Origin: https://www.163.com
-Access-Control-Allow-Methods | 在对预检请求的应答中明确了客户端所要访问的资源允许使用的方法或方法列表。 | Access-Control-Allow-Methods: POST, OPTIONS
+Access-Control-Allow-Methods | 预检请求应答中明确客户端所要访问的资源允许使用的方法(列表)。 | Access-Control-Allow-Methods: POST, OPTIONS
 Cache-Control | 告诉所有的缓存机制是否可以缓存及哪种类型 | Cache-Control: no-cache
 Content-Encoding | web服务器支持的返回内容压缩编码类型 | Content-Encoding: gzip
 Content-Language | 响应体的语言 | Content-Language: en,zh
