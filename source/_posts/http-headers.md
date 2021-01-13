@@ -5,6 +5,16 @@ tag: [MIMETYPE,CONTENTTYPE,请求头]
 category: 笔记
 ---
 
+<style>
+table {
+  width: 100%;
+  border: 1px solid #eee;
+}
+table th:first-of-type {
+	width: 200px;
+}
+</style>
+</style>
 ### 互联网媒体类型
 互联网媒体类型（Internet media type，也称为MIME类型（MIME type）或内容类型（content type））
 是给互联网上传输的内容赋予的分类类型。互联网媒体类型与文件拓展名相对应。
