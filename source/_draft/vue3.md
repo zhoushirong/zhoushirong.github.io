@@ -1,19 +1,25 @@
 ---
-title: VUE3
-date: 2021/01/04
-tag: [proxy,VUE3]
+title: VUE3简介
+date: 2021/01/14
+tag: [vue,vue3]
 category: 技术
 ---
 
-
-VUE2 父子组件生命周期执行顺序
-父beforeCreate-> 父created->父beforeMount->子beforeCreate->子created->子beforeMount->子mounted->父mounted
-
-vue3
-1.global api
+#### VUE2 父子组件生命周期执行顺序
+```html
+父beforeCreate
+-> 父created
+->父beforeMount
+->子beforeCreate
+->子created
+->子beforeMount
+->子mounted
+->父mounted
+```
+#### 1.composition api
 最大的改动就是composition api，将原来挂载到this上的方法直接通过引用的方式调用
 手动import之后就可以在setup中使用了
-
+```html
 beforeCreated/cateated => setup
 beforeMounted => onBeforeMounted
 mounted => onMounted
@@ -22,6 +28,7 @@ updated => onUpdated
 beforeDestroyed => onBeforeUnmounted
 destroyed => onUnmounted
 errorCaptured => onErrorCaptured
+```
 
 onRenderTracked
 onRenderTriggered
