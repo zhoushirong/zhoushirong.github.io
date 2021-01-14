@@ -1,180 +1,157 @@
 ---
-title: 前端基础四
+title: JS数组操作
 date: 2020/10/14
-tag: [基础,面试,试题]
+tag: [基础,数组]
 category: 技术
 ---
 
-1.下面代码中a在什么情况下会打印1
+1、当前字符串中包含字母和数字, 用一个方法实现出现最多的字母和数字 
+a)如果只有字母, 那么只返回出现最多的字母, 只有数字情况同理
+b)如果有相同次数多的字母或数字出现,将按照第一次出现的顺序返回
+列表如下:
 ```javascript
-var a = ?;
-if (a == 1 && a == 2 && a == 3) {
-  console.log(1)
-}
-// answer1
-a = console.log(1)
-// answer2
-var a = { num: 0 }
-a.valueOf = () => ++a.num
-if (a == 1 && a == 2 && a == 3) {
-  console.log(1)
-}
-// answer3
-Object.defineProperty(window, 'a', {
-  get() { 
-    return this.value = this.value ? ++this.value : 1
+const str = "abcdccbdb58575" 
+["b","c","5"] // 数组 a:1, b:3, c:3, d: 2, 5:3, 7:1, 8:1
+```
+```javascript
+// 方法一
+const str = "abcdccbdb58575" 
+const obj = {}
+Array.from(
+  new Set(
+    str.split('').map(i => {
+      obj[i] = obj[i] ? obj[i]+1 : 1
+      return i
+    })
+  )
+)
+.sort((a, b) => obj[b] - obj[a])
+.filter((item, index, arr) => obj[item] === obj[arr[0]])
+
+// 方法二
+const obj = {}
+const str = "abcdccbdb58575"
+str.split('').forEach((i, index) => {
+  if (!obj[i]) {
+    obj[i] = {
+      index,
+      value: 1
+    }
+  } else {
+     obj[i].value = obj[i].value + 1
   }
 })
-if (a == 1 && a == 2 && a == 3) {
-  console.log(1)
-}
-```
-2.实现一个 sleep 函数，比如 sleep(1000),意味着等等1000毫秒，可从Promise、Generator、Async/Await等角度实现
-```javascript
-// answer1
-function sleep(time) {
-  return new Promise((resolve, reject) => {
-    setTimeout(resolve, time)
-  })
-}
-let start = Date.now()
-sleep(3000).then(() => {
-  console.log(Date.now() - start)
+Object.keys(obj)
+.sort((a, b) => {
+  return obj[b].value - obj[a].value
 })
-```
+.filter((item, index, arr) => obj[item].value === obj[arr[0]].value)
+.sort((a, b) => obj[a].index - obj[b].index)
 
-3.实现(5).add(3).minus(2)功能
-```javascript
-Number.prototype.add = function (i = 0) { return this.valueOf() + i }
-Number.prototype.minus = function (i = 0) { return this.valueOf() - i }
-var result = (5).add(3).minus(2)
-console.log(result)
-```
-
-4.实现加法运算，解决浮点数问题
-```javascript
-function digitLength(a, b) {
-  var as = a.toString()
-  var bs = b.toString()
-
-  var t1 = as.split('.')
-  var t2 = bs.split('.')
-  var len1 = t1[1] ? t1[1].length : 0
-  var len2 = t2[1] ? t2[1].length : 0
-
-  return Math.pow(10, len1 > len2 ? len1 : len2)
-}
-
-function add(a = 0, b = 0) {
-  var max = digitLength(a, b)
-  return (a * max + b * max) / max
-}
-function minus(a = 0, b = 0) {
-  var max = digitLength(a, b)
-  return (a * max - b * max) / max
-}
-function multiply(a = 0, b = 0) {
-  var max = digitLength(a, b)
-  return ((a * max) * (b * max)) / (max*max)
-}
-function devide(a = 0, b = 0) {
-  var max = digitLength(a, b)
-  return (a * max) / (b * max)
-}
-add(0.1, 0.2) // 0.3
-minus(0.3, 0.2) // 0.1
-multiply(0.7, 0.2) // 0.14
-devide(0.7, 0.2) // 3.5
-```
-
-5.冒泡排序如何实现，时间复杂度是多少，如何改进
-```javascript
-var arr = [1,8,4,5,7,9,6,2,3]
-function swap(arr, i, j) {
-  var temp = arr[i]
-  arr[i] = arr[j]
-  arr[j] = temp
-}
-function bubbleSort1(arr) { // O(n^2
-  for (var i = 0; i < arr.length - 1; i++) {
-    var flag = true
-    for (var j = 0; j < arr.length - 1 - i; j++) {
-      if (arr[j] > arr[j+1]) {
-        swap(arr, j, j+1)
-        flag = false
-      }
-    }
-    if (flag) {
-      break
-    }
+// 方法三
+const str = "abcdccbdb58575"
+const map = new Map()
+str.split('').forEach(i => {
+  const v = map.get(i)
+  map.set(i, v ? v + 1 : 1)
+})
+let max
+for (let m of map) {
+  if (!max) {
+    max = m
+    continue
   }
-  return arr
-}
-function bubbleSort2(arr) {
-  var endPos = arr.length - 1
-  while(endPos > 0) {
-    var thisTurnEndPos = endPos
-    for (var i = 0; i < thisTurnEndPos; i++) {
-      if (arr[i] > arr[i+1]) {
-        swap(arr, i, i+1)
-        endPos = i // 记录本次循环最后交换的位置
-      }
-    }
-    if (thisTurnEndPos === endPos) { // 如果最后交换的位置不变则说明整体有序，排序完成
-      return arr
-    }
+  if (m[1] > max[1]) {
+    map.delete(max[0])
+    max = m
+    continue
   }
-  return arr
-}
-
-function bubbleSort3(arr) {
-  var start = 0
-  var end = arr.length - 1
-  var startPos = start
-  var endPos = end
-  while (start < end) {
-    var isSorted = true
-    for (var i = start; i < end; i++) {
-      if (arr[i] > arr[i+1]) {
-        swap(arr, i, i+1)
-        endPos = i
-        isSorted = false
-      }
-    }
-    if (isSorted) return arr
-    end = endPos
-
-    for (var j = end; j > start; j--) {
-      if (arr[j] < arr[j-1]) {
-        swap(arr, j, j-1)
-        startPos = j
-        isSorted = false
-      }
-    }
-    if (isSorted) return arr
-    start = startPos
+  if (m[1] < max[1]) {
+    map.delete(m[0])
   }
-  return arr
 }
-var s0 = Date.now()
-bubbleSort1([].concat(arr))
-var s1 = Date.now()
-bubbleSort2([].concat(arr))
-var s2 = Date.now()
-bubbleSort3([].concat(arr))
-var s3 = Date.now()
-console.log(s1-s0, s2-s1, s3-s2)
+console.log([...map.keys()])
 ```
-冒泡排序平均时间复杂度是O(n\*n)，最好的情况是O(n)、最差的情况是O(n\*n)
-空间复杂度是O(1)
-特点：外层for循环控制循环次数、内层for循环进行两数交换，找出最大的数放到最后
-改进：
-1）处理在排序过程中数组整体已经有序的情况，设置标志位
-2）数组局部有序，遍历过程中记录最后一次交换的位置，设置为下一次交换的终点
-3）同时将最大最小值归位，双向冒泡排序
+
+2、已知有一个数组类似 var list=[{age:12, group:1},{age:20, group:3},{age:12, group:23}]
+请实现对数组的排序,先按age升序排序再按 group降序排序,结果类似[age:12, group:23},{age:12,goup:1},tage:20, group:3]
+
+```javascript
+function compare(key, order) { 
+  return (a,b) => { // return 大于0，b在前面；小于0，a在前面
+    if (order === 'desc') { // 升序
+      return a[key] - b[key] // 如果结果大于0，则b在前面 [b, a]，此为升序
+    }
+    return b[key] - a[key] // 如果结果大于0，则b在前面 [b, a]，此为降序
+  }
+}
+list.sort(compare('age', 'desc'))
+list.sort(compare('name'))
+```
+
+3、将数组扁平化并去除其中重复数据，最终得到一个升序且不重复的数组
+```javascript
+var arr = [[1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14]]]], 10]
+// 方法一
+Array.from(new Set(arr.toString().split(','))).sort((a, b) => a - b).map(Number)
+// 方法二
+Array.from(new Set(arr.flat(Infinity))).sort((a, b) => a - b)
+// 附录，flat方法兼容方法
+function flat(arr) {
+  return arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? flat(val) : val), [])
+}
+```
 
 
-6.某公司1到12月份的销售额存在一个对象里面
+4、请把两个数组
+['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2'] 和 
+['A', 'B', 'C', 'D'] 合并为 
+['A1', 'A2', 'A', 'B1', 'B2', 'B', 'C1', 'C2', 'C', 'D1', 'D2', 'D']
+```javascript
+var arr1 = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2']
+var arr2 = ['A', 'B', 'C', 'D']
+
+arr2.map(item => item+'3').concat(arr1).sort().map(item => item.replace('3', ''))
+```
+
+5.合并两个有序数组
+给你两个有序整数数组 nums1和nums2，请你将nums2合并到nums1，使nums1成为一个有序数组
+说明：
+初始化nums1和nums2的元素数量分别为m，n，你可以假设nums1有足够的空间（空间大小大于等于m+n）来保存nums2的元素
+```javascript
+// 输入：
+var nums1 = [1, 2, 3, 0, 0, 0], m = 3
+var nums2 = [2, 5, 6], n = 3
+
+function deal(nums1, m, nums2, n) {
+  nums1.splice(m, n, ...nums2)
+  nums1.sort((a, b) => a - b)
+  return nums1
+}
+deal(nums1, m, nums2, n) // [1, 2, 2, 3, 5, 6]
+```
+
+
+6.已知如下数组：var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10]
+编写一个程序将数组扁平化去并除其中重复部分数据，最终得到一个升序且不重复的数组
+```javascript
+
+function deal1(arr) {
+  return Array.from(new Set(arr.toString().replace(/\[|\]/g, '').split(','))).map(item => +item).sort((a, b) => a - b)
+}
+function _flat(arr) {
+  return arr.reduce((acc, item) => {
+    return acc.concat(Array.isArray(item) ? _flat(item) : item)
+  }, [])
+}
+function deal(arr) {
+  return Array.from(new Set(_flat(arr))).sort((a, b) => a - b)
+}
+var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10]
+deal(arr)
+```
+
+7.某公司1到12月份的销售额存在一个对象里面
 如：{1:222, 2:123, 5: 888}, 请把数据处理为如下结构
 [222, 123, null, null, 888, null, null, null, null, null, null, null]
 ```javascript
@@ -182,72 +159,6 @@ var data = { 1: 222, 2: 123, 5: 888 }
 new Array(12).fill(null).map((i, index) => {
   return data[index + 1] || null
 })
-```
-
-7.实现一个LazyMan类，实现以下功能
-```javascript
-LazyMan('Tony') // Hi I am Tony
-LazyMan('Tony').sleep(10).eat('lunch') 
-// Hi I am Tony 
-// 等待10s
-// I am eating lunch
-LazyMan('Tony').eat('lunch').sleep(10).eat('dinner')
-// Hi I am Tony 
-// I am eating lunch
-// 等待10s
-// I am eating dinner
-LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5).sleep(10).eat('junk food')
-// Hi I am Tony 
-// 等待5s
-// I am eating lunch
-// I am eating dinner
-// 等待10s
-// I am eating junk food
-```
-```javascript
-class LazyManClass {
-  constructor(name) {
-    this.name = name
-    this.task = []
-    console.log(`Hi I am ${this.name}`)
-    setTimeout(() => this.next())
-  }
-  sleepFirst(time) {
-    const fn = () => {
-      console.log(`sleep ${time}ms`)
-      setTimeout(() => {
-        this.next()
-      }, time)
-    }
-    this.task.unshift(fn)
-    return this
-  }
-  sleep(time) {
-    const fn = () => {
-      console.log(`sleep ${time}ms`)
-      setTimeout(() => {
-        this.next()
-      }, time)
-    }
-    this.task.push(fn)
-    return this
-  }
-  eat(food) {
-    this.task.push(() => {
-      console.log(`I am eating ${food}`)
-      this.next()
-    })
-    return this
-  }
-  next() {
-    const fn = this.task.shift()
-    fn && fn()
-  }
-}
-function LazyMan(name) {
-  return new LazyManClass(name)
-}
-LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5000).sleep(10000).eat('junk food')
 ```
 
 8.给定两个数组，用一个方法来计算他们的公共元素
@@ -286,35 +197,8 @@ sortArr.forEach(item => {
 })
 console.log(newArr)
 ```
-10.如何把一个字符串大小写取反，如 Abc => aBC
-```javascript
-var str = 'aBcDefGhij'
-function capitalReverse1(str) {
-  var arr = str.split('').map(s => s === s.toUpperCase() ? s.toLowerCase() : s.toUpperCase())
-  return arr.join('')
-}
-function capitalReverse2(str) {
-  return str.replace(/./ig, (a) => a === a.toUpperCase() ? a.toLowerCase() : a.toUpperCase())
-}
-var newStr = capitalReverse2(str)
-console.log(newStr)
-```
 
-11.实现一个字符串匹配算法，从长度为n的字符串S中，查找是否存在字符串T，T的长度是m，若存在则返回所在位置
-```javascript
-var S = 'abcdefghijklmnopqrstuvwxyz'
-var T = 'cdef'
-function findStr(t, s) {
-  try {
-    return new RegExp(t).exec(s).index
-  } catch(e) {
-    return -1
-  }
-}
-var index = findStr(T, S)
-console.log(index) // 2
-```
-12.旋转数组
+10.旋转数组
 给定一个数组，将数组中的元素向右移动k个位置，其中k是非负数。
 ```html
 输入：[1, 2, 3, 4, 5, 6, 7] k = n
@@ -331,4 +215,26 @@ function arrReverse(arr, k) {
 }
 var newArr = arrReverse(arr, 4)
 console.log(newArr)
+```
+
+11.算法题【移动零】，给定一个数组nums，编写一个函数将所有0移动到数组的末尾，同时保持非零元素的相对顺序
+输入：[0, 1, 0, 3, 12]
+输出：[1, 3, 12, 0, 0]
+补充：必须在原数组上操作，不能拷贝额外的数组
+```javascript
+// answer1
+function dealArr(arr) {
+  var j = 0
+  for (var i = j; i < arr.length - j; i++) {
+    if (arr[i] === 0) {
+      arr.splice(i, 1)
+      arr.push(0)
+      j++
+      i--
+    }
+  }
+  return arr
+}
+
+console.log(dealArr([0, 1, 0, 3, 12]))
 ```

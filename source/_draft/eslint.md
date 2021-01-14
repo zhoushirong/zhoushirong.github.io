@@ -1,7 +1,7 @@
 ---
 title: ESLint代码规范
 date: 2018/04/24
-tag: code ESLint
+tag: [ESLint,代码规范]
 ---
 
 ####  常见的代码规范工具有：

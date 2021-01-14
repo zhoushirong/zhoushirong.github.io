@@ -1,202 +1,352 @@
 ---
-title: 前端基础七
-date: 2020/10/20
+title: 一些面试题集合
+date: 2020/12/15
 tag: [基础,面试,试题]
 category: 技术
 ---
 
-1.实现convert方法，把原始list转换成树形结构，要求尽可能降低时间复杂度
-以下数据结构中，id代表部门编号，name是部门名称，parentId是父部门编号，为0代表一级部门，现在要求实现一个convert方法，把原始list转换成树形结构，parantId为多少就挂载在该id的属性children数组下
+
+1.关于事件监听
 ```javascript
-let list = [
-  { id: 1, name: '部门A', parentId: 0 },
-  { id: 2, name: '部门B', parentId: 0 },
-  { id: 3, name: '部门C', parentId: 1 },
-  { id: 4, name: '部门D', parentId: 1 },
-  { id: 5, name: '部门E', parentId: 2 },
-  { id: 6, name: '部门F', parentId: 3 },
-  { id: 7, name: '部门G', parentId: 2 },
-  { id: 8, name: '部门H', parentId: 4 },
-  // ...
-]
-function convert(list) {
-  const res = []
-  const map = {}
-  list.forEach(item => map[item.id] = item)
-  list.forEach(item => {
-    if (item.parentId === 0) return res.push(item)
-    const parent = map[item.parentId]
-    if (parent.children) {
-      parent.children.push(item)
-    } else {
-      parent.children = [item]
+const event = require('events')
+const emitter = new event.EventEmitter()
+setTimeout(() => {
+   emitter.emit('some_event', 123)
+}, 3000)
+
+emitter.on('some_event', (evt) => {
+  console.log('receive:',evt)
+})
+```
+
+```javascript
+// 组件通信，一个触发与监听的过程
+class EventEmitter {
+  constructor () {
+    // 存储事件
+    this.events = this.events || new Map()
+  }
+  // 监听事件
+  addListener (type, fn) {
+    if (!this.events.get(type)) {
+      this.events.set(type, fn)
     }
+  }
+  // 触发事件
+  emit (type) {
+    let handle = this.events.get(type)
+    handle.apply(this, [...arguments].slice(1))
+  }
+}
+```
+
+2.手写Promise
+```javascript
+// 未添加异步处理等其他边界情况
+// ①自动执行函数，②三个状态，③then
+class Promise {
+  constructor (fn) {
+    // 三个状态
+    this.state = 'pending'
+    this.value = undefined
+    this.reason = undefined
+    let resolve = value => {
+      if (this.state === 'pending') {
+        this.state = 'fulfilled'
+        this.value = value
+      }
+    }
+    let reject = value => {
+      if (this.state === 'pending') {
+        this.state = 'rejected'
+        this.reason = value
+      }
+    }
+    // 自动执行函数
+    try {
+      fn(resolve, reject)
+    } catch (e) {
+      reject(e)
+    }
+  }
+  // then
+  then(onFulfilled, onRejected) {
+    switch (this.state) {
+      case 'fulfilled':
+        onFulfilled()
+        break
+      case 'rejected':
+        onRejected()
+        break
+      default:
+    }
+  }
+}
+```
+
+4.下面代码中a在什么情况下会打印1
+```javascript
+var a = ?;
+if (a == 1 && a == 2 && a == 3) {
+  console.log(1)
+}
+// answer1
+a = console.log(1)
+// answer2
+var a = { num: 0 }
+a.valueOf = () => ++a.num
+if (a == 1 && a == 2 && a == 3) {
+  console.log(1)
+}
+// answer3
+Object.defineProperty(window, 'a', {
+  get() { 
+    return this.value = this.value ? ++this.value : 1
+  }
+})
+if (a == 1 && a == 2 && a == 3) {
+  console.log(1)
+}
+```
+
+5.实现一个 sleep 函数，比如 sleep(1000),意味着等等1000毫秒，可从Promise、Generator、Async/Await等角度实现
+```javascript
+// answer1
+function sleep(time) {
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, time)
   })
-  return res
 }
-
-let result = convert(list)
-result = [{
-  id: 1,
-  name: '部门A',
-  parentId: 0,
-  children: [{
-    id: 3,
-    name: '部门3',
-    parentId: 1,
-    children: [{
-      id: 6,
-      name: '部门6',
-      parentId: 3,
-    }]
-  }]
-}, /* ... */]
+let start = Date.now()
+sleep(3000).then(() => {
+  console.log(Date.now() - start)
+})
 ```
 
-2.将entry转换为output、将output转换为entry：
+6.实现(5).add(3).minus(2)功能
 ```javascript
-var entry = {
-  'a.b.c.dd': 'abcdd',
-  'a.d.xx': 'adxx',
-  'a.e': 'ae',
+Number.prototype.add = function (i = 0) { return this.valueOf() + i }
+Number.prototype.minus = function (i = 0) { return this.valueOf() - i }
+var result = (5).add(3).minus(2)
+console.log(result)
+```
+
+7.实现加法运算，解决浮点数问题
+```javascript
+function digitLength(a, b) {
+  var as = a.toString()
+  var bs = b.toString()
+
+  var t1 = as.split('.')
+  var t2 = bs.split('.')
+  var len1 = t1[1] ? t1[1].length : 0
+  var len2 = t2[1] ? t2[1].length : 0
+
+  return Math.pow(10, len1 > len2 ? len1 : len2)
 }
-// =>
-var output = {
-  a: {
-    b: {
-      c: {
-        dd: 'abcdd'
-      }
-    },
-    d: {
-      xx: 'adxx'
-    },
-    e: 'ae'
+
+function add(a = 0, b = 0) {
+  var max = digitLength(a, b)
+  return (a * max + b * max) / max
+}
+function minus(a = 0, b = 0) {
+  var max = digitLength(a, b)
+  return (a * max - b * max) / max
+}
+function multiply(a = 0, b = 0) {
+  var max = digitLength(a, b)
+  return ((a * max) * (b * max)) / (max*max)
+}
+function devide(a = 0, b = 0) {
+  var max = digitLength(a, b)
+  return (a * max) / (b * max)
+}
+add(0.1, 0.2) // 0.3
+minus(0.3, 0.2) // 0.1
+multiply(0.7, 0.2) // 0.14
+devide(0.7, 0.2) // 3.5
+```
+
+
+8.如何把一个字符串大小写取反，如 Abc => aBC
+```javascript
+var str = 'aBcDefGhij'
+function capitalReverse1(str) {
+  var arr = str.split('').map(s => s === s.toUpperCase() ? s.toLowerCase() : s.toUpperCase())
+  return arr.join('')
+}
+function capitalReverse2(str) {
+  return str.replace(/./ig, (a) => a === a.toUpperCase() ? a.toLowerCase() : a.toUpperCase())
+}
+var newStr = capitalReverse2(str)
+console.log(newStr)
+```
+
+9.实现一个字符串匹配算法，从长度为n的字符串S中，查找是否存在字符串T，T的长度是m，若存在则返回所在位置
+```javascript
+var S = 'abcdefghijklmnopqrstuvwxyz'
+var T = 'cdef'
+function findStr(t, s) {
+  try {
+    return new RegExp(t).exec(s).index
+  } catch(e) {
+    return -1
   }
+}
+var index = findStr(T, S)
+console.log(index) // 2
+```
+
+
+10、请用闭包定义一个函数,实现每隔1秒,输出从1到500
+```javascript
+function interval(num) {
+  let i = 0
+  const timer = setInterval(function() {
+    if (i >= num) return clearInterval(timer)
+    console.log(++i)
+  }, 1000)
+}
+interval(10)
+```
+
+
+11、改造下面代码，使之输出0-9
+```javascript
+// question code
+for (var i = 0; i < 10; i++) {
+  setTimeout(() => {
+    console.log(i)
+  }, 1000)
+}
+// answer1
+for (let i = 0; i<10;i++) {
+  setTimeout(() => {
+    console.log(i)
+  }, 1000)
+}
+// answer2
+for (var i = 0; i < 10; i++) {
+  setTimeout(((i) => {
+    console.log(i)
+  })(i), 1000)
+}
+// answer3
+for (var i = 0; i < 10; i++) {
+  setTimeout((i) => {
+    console.log(i)
+  }, 1000, i)
+}
+// answer4
+for (var i = 0; i < 10; i++) {
+  setTimeout(console.log, 1000, i)
 }
 ```
 
+
+12.打印出1-10000之间的所有对称数，例如：121、1331等
 ```javascript
-// entry => output
-function gen(obj = {}, str, val) {
-  str.split('.').reduce((acc, i, idx, source) => {
-    if (!acc[i]) {
-      acc[i] = idx === source.length - 1 ? val : {}
+// answer1
+function printNum(min, max) { // 1,2,3,4,5,6,7,8,9,11,22,33,44,55,66,77,88,99,101,111,121,131,...,9999
+  for ( var i = min; i <= max; i++) {
+    var stri = i.toString()
+    if (stri.length % 2 === 0) { // 偶数
+      var halfStri1 = stri.slice(0, stri.length / 2)
+      var halfStri2 = stri.slice(stri.length / 2).split('').reverse().join('')
+      if (halfStri1 === halfStri2) {
+        console.log(i)
+      }
+    } else { // 奇数
+      var c = Math.floor(stri.length / 2)
+      var halfStri1 = stri.slice(0, c)
+      var halfStri2 = stri.slice(c+1).split('').reverse().join('')
+      if (halfStri1 === halfStri2) {
+        console.log(i)
+      }
     }
-    return acc[i]
-  }, obj)
-  return obj
-}
-function generater(obj) {
-  const newObj = {}
-  for (let i in obj) {
-    gen(newObj, i, obj[i])
   }
-  return newObj
 }
-generater(entry)
+// answer2
+function printNum(min, max) {
+  for (var i = min; i <= max; i++) {
+    var stri = i.toString()
+    var reverseI = stri.split('').reverse().join('')
+    if (stri === reverseI) {
+      console.log(i)
+    }
+  }
+}
+// answer3
+function printNum(min, max) {
+  for (var i = 1; i < 10 ; i++) {
+    console.log(i) // 1, ..., 9
+    console.log(i * 11) // 11, 22, 33, ..., 99
+    for (var j = 0; j < 10; j++) {
+      console.log(i * 101 + j * 10) // 101, 111, ..., 191, 202, 212, ... ,999
+      console.log(i * 1001 + j * 110) // 1001, 1111, ..., 9999
+    }
+  }
+}
+
+printNum(1, 100000)
 ```
 
+13.请实现一个add函数，满足以下功能
 ```javascript
-// output => entry answer1
-const isObj = val => Object.prototype.toString.call(val) === '[object Object]'
-function fn(obj = {}, key, newObj = {}) {
-  for (let i in obj) {
-    const nkey = key ? key + '.' + i : i
-    if (isObj(obj[i])) {
-      fn(obj[i], nkey, newObj)
-    } else {
-      newObj[nkey] = obj[i]
-    }
+add(1) // 1
+add(1)(2) // 3
+add(1)(2)(3) // 6
+add(1)(2, 3) // 6
+add(1, 2)(3) // 6
+```
+```javascript
+function add() {
+  let args = [...arguments]
+  let fn = function() {
+    args = args.concat([...arguments])
+    return fn
   }
-  return newObj
+  fn.toString = () => args.reduce((acc, item) => acc + item)
+  return fn
 }
-// output => entry answer2
-function fn(obj = {}) {
-  const queue = Object.entries(obj)
-  const res = {}
-  while(queue.length) {
-    const [key, obj] = queue.pop()
-    for (const [k, v] of Object.entries(obj)) {
-      if (!isObj(v)) {
-        res[`${key}.${k}`] = v
-      } else {
-        queue.push([`${key}.${k}`, v])
-      }
-    }
-  }
-  return res
-}
+add(1,2)(3)(4, 5)
 ```
 
-3.实现一个简单的仓储系统，可以不断转入和转出货物，货物最多有两层子类目，数字代表该子类目转入/转出的数量。转出时不能出现爆仓情况。
+14.算法题之【两数之和】
+给定一个整数数组和一个目标值，找出数组中和为目标值的两个数。
+你可以假设每个输入值对应一种答案，且相同的元素不能重复利用。
+示例：
+```html
+给定 nums = [2, 7, 11, 5], target = 9
+因为 nums[0] + nums[1] = 2 + 7 = 9
+所以返回 [0, 1]
+```
 ```javascript
-/*
- * cargo 说明：
- * key代表类目/子类目名称
- * value 为 number时，代表这个类目的数量，为object 时，代表下一层货物的集合，最多嵌套两层
- * {
- *  productA:{  // 代表货物的类目名称
- *    a:1, // 1 代表子类目 a 的数量
- *    b:2,
- *    c:{   // c 代表货物的子类名称
- *      c1:1, // c1代表货物的子类名称
- *    }
- *   }，
- *  productB:{
- *      e:6
- *   }
- * }
- *
- * 爆仓情况：如转入 {productA:{a:3,c:1}} 转出 {productA:{a:4}},就会发生子类目a爆仓，此时要返回报错。
- */
-
-class Depository {
-  constructor() {
-    this.product = {}
-  }
-  compineProduct(cargo, product) {
-    for (let i in cargo) {
-      if (!product[i]) {
-        product[i] = {}
-      }
-      if (typeof cargo[i] === 'number') {
-        if (typeof product[i] === 'number') {
-          product[i] += cargo[i]
-        } else {
-          product[i] = cargo[i]
-        }
-      } else {
-        this.compineProduct(cargo[i], product[i])
+// answer1
+function calc1(nums, target) {
+  for (let i = 0; i < nums.length; i++) {
+    for (let j = i + 1; j < nums.length; j++) {
+      if (nums[i] + nums[j] === target) {
+        return [i, j]
       }
     }
-  }
-  reduceProduct(cargo, product) {
-    for (let i in cargo) {
-      if (!product[i]) {
-        throw `货物${i}不存在`
-      }
-      if (typeof cargo[i] === 'number') {
-        if (product[i] - cargo[i] <= 0) {
-          throw `货物${i}爆仓`
-        }
-        product[i] -= cargo[i]
-      } else {
-        this.reduceProduct(cargo[i], product[i])
-      }
-    }
-  }
-  // 转入货物
-  transferIn(cargo) {
-    if (!cargo) return this.product
-    this.compineProduct(cargo, this.product)
-    return this.product
-  }
-  // 转出货物
-  transferOut(cargo) {
-    if (!cargo) return this.product
-    this.reduceProduct(cargo, this.product)
-    return this.product
   }
 }
+// answer2
+function calc2(nums, target) {
+  let map = {}
+  for (let [i, n] of nums.entries()) {
+    map[n] = i
+  }
+  for (let i = 0; i < nums.length; i++) {
+    let k = target - nums[i]
+    if (map[k]) {
+      return [i, map[k]]
+    }
+  }
+}
+
+var nums = [2, 7, 11, 5]
+var target = 9
+calc2(nums, target)
 ```

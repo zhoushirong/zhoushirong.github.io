@@ -1,250 +1,444 @@
 ---
-title: 前端基础五
-date: 2020/10/15
-tag: [基础,面试,试题]
+title: js对象和类的操作
+date: 2020/10/19
+tag: [基础,对象]
 category: 技术
 ---
 
-1.打印出1-10000之间的所有对称数，例如：121、1331等
+1.对象深度优先遍历和广度优先遍历的实现
+如图：
+<img src="http://zhoushirong.github.io/img/map.png" alt="ssh-l图片" width="630" height="215">
+
 ```javascript
-// answer1
-function printNum(min, max) { // 1,2,3,4,5,6,7,8,9,11,22,33,44,55,66,77,88,99,101,111,121,131,...,9999
-  for ( var i = min; i <= max; i++) {
-    var stri = i.toString()
-    if (stri.length % 2 === 0) { // 偶数
-      var halfStri1 = stri.slice(0, stri.length / 2)
-      var halfStri2 = stri.slice(stri.length / 2).split('').reverse().join('')
-      if (halfStri1 === halfStri2) {
-        console.log(i)
-      }
-    } else { // 奇数
-      var c = Math.floor(stri.length / 2)
-      var halfStri1 = stri.slice(0, c)
-      var halfStri2 = stri.slice(c+1).split('').reverse().join('')
-      if (halfStri1 === halfStri2) {
-        console.log(i)
-      }
+const obj = {
+  a1: {
+    a1b1: 1,
+    a1b2: 2
+  },
+  a2: {
+    a2b1: 3,
+    a2b2: 4,
+    a2b3: 5
+  }
+}
+// 深度优先遍历
+const depthArr = []
+function depthFirst(obj) {
+  for (let i in obj) {
+    depthArr.push(i)
+    if (Object.prototype.toString.call(obj[i]) === '[object Object]') {
+      depthFirst(obj[i])
     }
   }
+  return depthArr
 }
-// answer2
-function printNum(min, max) {
-  for (var i = min; i <= max; i++) {
-    var stri = i.toString()
-    var reverseI = stri.split('').reverse().join('')
-    if (stri === reverseI) {
-      console.log(i)
+
+// 广度优先遍历
+const breadthArr = []
+function breadthFirst(obj) {
+  const arr = Object.keys(obj)
+  breadthArr = breadthArr.concat(arr)
+  arr.forEach(i => {
+    if (Object.prototype.toString.call(obj[i]) === '[object Object]') {
+      breadthFirst(obj[i])
+    }
+  })
+}
+
+depthFirst(obj) // ['a1', 'a1b1', 'a1b2', 'a2', 'a2b1', 'a2b2', 'a2b3']
+breadthFirst(obj) // ['a1', 'a2', 'a1b1', 'a1b2', 'a2b1', 'a2b2', 'a2b3']
+console.log(depthArr, breadthArr)
+```
+
+2.用深度优先思想实现一个深拷贝函数
+深度拷贝最主要需要考虑的因素就是需要考虑js的各种数据类型
+1）6种基本类型(number,string,null,undefined,boolean,symbol)不需要处理，直接复制返回即可
+2）几种特殊类型 date、regexp、set、map，直接new一遍即可
+3）需要着重处理的类型 Array、Object，直接使用递归处理即可
+4）递归处理Array、Object的过程中需要考虑循环引用，循环引用处理可以利用WeakMap将每次递归的对象存储起来，如果一样，直接返回
+
+```javascript
+const obj = {
+  a1: {
+    a1b1: 1,
+    a1b2: 2
+  },
+  a2: {
+    a2b1: 3,
+    a2b2: 4,
+    a2b3: 5
+  },
+  fn1: function() {
+    console.log('fn1')
+  },
+  symbolData: Symbol('symbolData'),
+  booleanData: false,
+  date: new Date(),
+  nullData: null,
+  arrData: [1, 2, 3, { arr1: { a:1, b: 2 }, arr2: [] }],
+  numberData: 1,
+  strData: 'abc',
+  regexData: new RegExp('abcdefg'),
+  setData: new Set(),
+  mapData: new Map(),
+}
+obj.obj = obj // 循环引用
+
+function isType(target, type) {
+  if (!type) {
+    return Object.prototype.toString.call(target).slice(8, -1)
+  }
+  return Object.prototype.toString.call(target) === `[object ${type}]`
+}
+function depthFirstClone(obj, hash = new WeakMap()) {
+  const oType = isType(obj)
+  if (oType !== 'Object' && oType !== 'Array') return obj
+  if (hash.has(obj)) return hash.get(obj)
+
+  const newObj = oType === 'Array' ? [] : {}
+  hash.set(obj, newObj)
+
+  for (let i in obj) {
+    if (
+      typeof obj[i] === 'string' ||
+      typeof obj[i] === 'number' ||
+      typeof obj[i] === 'boolean' ||
+      typeof obj[i] === 'symbol' ||
+      obj[i] === undefined ||
+      obj[i] === null
+    ) {
+      newObj[i] = obj[i]
+      continue
+    }
+    if (isType(obj[i], 'Function')) {
+      newObj[i] = obj[i]
+      continue
+    }
+    if (isType(obj[i], 'Set')) {
+      newObj[i] = new Set(obj[i])
+      continue
+    }
+    if (isType(obj[i], 'Map')) {
+      newObj[i] = new Map(obj[i])
+      continue
+    }
+    if (isType(obj[i], 'Date')) {
+      newObj[i] = new Date(obj[i])
+      continue
+    }
+    if (isType(obj[i], 'RegExp')) {
+      newObj[i] = new RegExp(obj[i])
+      continue
+    }
+    if (isType(obj[i], 'Array') || isType(obj[i], 'Object')) {
+      newObj[i] = depthFirstClone(obj[i], hash)
+      continue
     }
   }
+  return newObj
 }
-// answer3
-function printNum(min, max) {
-  for (var i = 1; i < 10 ; i++) {
-    console.log(i) // 1, ..., 9
-    console.log(i * 11) // 11, 22, 33, ..., 99
-    for (var j = 0; j < 10; j++) {
-      console.log(i * 101 + j * 10) // 101, 111, ..., 191, 202, 212, ... ,999
-      console.log(i * 1001 + j * 110) // 1001, 1111, ..., 9999
+let cloneObj = depthFirstClone(obj)
+```
+
+3.实现一个LazyMan类，实现以下功能
+```javascript
+LazyMan('Tony') // Hi I am Tony
+LazyMan('Tony').sleep(10).eat('lunch') 
+// Hi I am Tony 
+// 等待10s
+// I am eating lunch
+LazyMan('Tony').eat('lunch').sleep(10).eat('dinner')
+// Hi I am Tony 
+// I am eating lunch
+// 等待10s
+// I am eating dinner
+LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5).sleep(10).eat('junk food')
+// Hi I am Tony 
+// 等待5s
+// I am eating lunch
+// I am eating dinner
+// 等待10s
+// I am eating junk food
+```
+```javascript
+class LazyManClass {
+  constructor(name) {
+    this.name = name
+    this.task = []
+    console.log(`Hi I am ${this.name}`)
+    setTimeout(() => this.next())
+  }
+  sleepFirst(time) {
+    const fn = () => {
+      console.log(`sleep ${time}ms`)
+      setTimeout(() => {
+        this.next()
+      }, time)
     }
+    this.task.unshift(fn)
+    return this
   }
-}
-
-printNum(1, 100000)
-```
-
-2.算法题【移动零】，给定一个数组nums，编写一个函数将所有0移动到数组的末尾，同时保持非零元素的相对顺序
-输入：[0, 1, 0, 3, 12]
-输出：[1, 3, 12, 0, 0]
-补充：必须在原数组上操作，不能拷贝额外的数组
-```javascript
-// answer1
-function dealArr(arr) {
-  var j = 0
-  for (var i = j; i < arr.length - j; i++) {
-    if (arr[i] === 0) {
-      arr.splice(i, 1)
-      arr.push(0)
-      j++
-      i--
+  sleep(time) {
+    const fn = () => {
+      console.log(`sleep ${time}ms`)
+      setTimeout(() => {
+        this.next()
+      }, time)
     }
+    this.task.push(fn)
+    return this
   }
-  return arr
-}
-
-console.log(dealArr([0, 1, 0, 3, 12]))
-```
-
-3.请实现一个add函数，满足以下功能
-```javascript
-add(1) // 1
-add(1)(2) // 3
-add(1)(2)(3) // 6
-add(1)(2, 3) // 6
-add(1, 2)(3) // 6
-```
-```javascript
-function add() {
-  let args = [...arguments]
-  let fn = function() {
-    args = args.concat([...arguments])
-    return fn
+  eat(food) {
+    this.task.push(() => {
+      console.log(`I am eating ${food}`)
+      this.next()
+    })
+    return this
   }
-  fn.toString = () => args.reduce((acc, item) => acc + item)
-  return fn
-}
-add(1,2)(3)(4, 5)
-```
-
-4.算法题之【两数之和】
-给定一个整数数组和一个目标值，找出数组中和为目标值的两个数。
-你可以假设每个输入值对应一种答案，且相同的元素不能重复利用。
-示例：
-```html
-给定 nums = [2, 7, 11, 5], target = 9
-因为 nums[0] + nums[1] = 2 + 7 = 9
-所以返回 [0, 1]
-```
-```javascript
-// answer1
-function calc1(nums, target) {
-  for (let i = 0; i < nums.length; i++) {
-    for (let j = i + 1; j < nums.length; j++) {
-      if (nums[i] + nums[j] === target) {
-        return [i, j]
-      }
-    }
+  next() {
+    const fn = this.task.shift()
+    fn && fn()
   }
 }
-// answer2
-function calc2(nums, target) {
-  let map = {}
-  for (let [i, n] of nums.entries()) {
-    map[n] = i
+function LazyMan(name) {
+  return new LazyManClass(name)
+}
+LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5000).sleep(10000).eat('junk food')
+```
+
+
+4、定义一个列表类List,该类包含成员方法 add()、all() 和属性 length,要求构造函数和add0方法的参数为动态参数
+```javascript
+  // 构造函数示例：
+  var ls = new List('A', 'B','C')
+  // add方法示例
+  ls.add('D','E');
+  // length属性
+  ls.length; // =>5
+  // items属性
+  ls.all(); // =>【A,B,"C,"D,"E]
+```
+
+```javascript
+class List {
+  constructor() {
+    this.args = [...arguments]
   }
-  for (let i = 0; i < nums.length; i++) {
-    let k = target - nums[i]
-    if (map[k]) {
-      return [i, map[k]]
-    }
+  add() {
+    this.args = Array.prototype.concat(this.args, [...arguments])
+  }
+  all() {
+    return this.args
+  }
+  get length() {
+    return this.args.length
   }
 }
 
-var nums = [2, 7, 11, 5]
-var target = 9
-calc2(nums, target)
+let ls = new List('A', 'B', 'C')
+ls.add('D', 'E')
+console.log(ls.length)
+ls.all()
 ```
 
-5.在输入框中如何判断输入的是一个正确的网址
+
+5.实现convert方法，把原始list转换成树形结构，要求尽可能降低时间复杂度
+以下数据结构中，id代表部门编号，name是部门名称，parentId是父部门编号，为0代表一级部门，现在要求实现一个convert方法，把原始list转换成树形结构，parantId为多少就挂载在该id的属性children数组下
 ```javascript
-var url = 'https://www.abc.com'
-function checkUrl(url) {
-  try {
-    return new URL(url)
-  } catch(e) {
-    return false
-  }
-}
-checkUrl(url)
-```
-6.实现一个快速排序算法
-```javascript
-/**
- * 快速排序
- * 1.选择一个基准
- * 2.遍历，小于基准放左边，大于基准放右边
- * 3.递归
- * @param arr 
- */
-function quickSort(arr) {
-  if (arr.length <= 1) return arr
-  var pivotIndex = Math.floor(arr.length / 2)
-  var pivot = arr.splice(pivotIndex, 1)
-  var left = []
-  var right = []
-  for (var i = 0; i < arr.length; i++) {
-    if (arr[i] < pivot) {
-      left.push(arr[i])
+let list = [
+  { id: 1, name: '部门A', parentId: 0 },
+  { id: 2, name: '部门B', parentId: 0 },
+  { id: 3, name: '部门C', parentId: 1 },
+  { id: 4, name: '部门D', parentId: 1 },
+  { id: 5, name: '部门E', parentId: 2 },
+  { id: 6, name: '部门F', parentId: 3 },
+  { id: 7, name: '部门G', parentId: 2 },
+  { id: 8, name: '部门H', parentId: 4 },
+  // ...
+]
+function convert(list) {
+  const res = []
+  const map = {}
+  list.forEach(item => map[item.id] = item)
+  list.forEach(item => {
+    if (item.parentId === 0) return res.push(item)
+    const parent = map[item.parentId]
+    if (parent.children) {
+      parent.children.push(item)
     } else {
-      right.push(arr[i])
+      parent.children = [item]
     }
-  }
-  return quickSort(left).concat(pivot).concat(quickSort(right))
+  })
+  return res
 }
 
-var arr = [1, 8, 4, 5, 7, 9, 6, 2, 3]
-quickSort(arr)
+let result = convert(list)
+result = [{
+  id: 1,
+  name: '部门A',
+  parentId: 0,
+  children: [{
+    id: 3,
+    name: '部门3',
+    parentId: 1,
+    children: [{
+      id: 6,
+      name: '部门6',
+      parentId: 3,
+    }]
+  }]
+}, /* ... */]
 ```
-7.实现插入排序算法
-1）循环数组，每次取一个数，判断是否比已排序数最大的大
-2）如果大则放在后面，如果小则继续比较，如果最小则放在最前面
+
+6.将entry转换为output、将output转换为entry：
+```javascript
+var entry = {
+  'a.b.c.dd': 'abcdd',
+  'a.d.xx': 'adxx',
+  'a.e': 'ae',
+}
+// =>
+var output = {
+  a: {
+    b: {
+      c: {
+        dd: 'abcdd'
+      }
+    },
+    d: {
+      xx: 'adxx'
+    },
+    e: 'ae'
+  }
+}
+```
 
 ```javascript
-/**
- * 插入排序1
- */
-function insertSort(arr) {
-  for (var i = 0; i < arr.length; i++) {
-    for (var j = i - 1; j >= 0; j--) {
-      if (arr[i] >= arr[j]) {
-        arr.splice(j + 1, 0, arr.splice(i, 1)[0])
-        break
-      } else if (j === 0) {
-        arr.splice(j, 0, arr.splice(i, 1)[0])
-      }
+// entry => output
+function gen(obj = {}, str, val) {
+  str.split('.').reduce((acc, i, idx, source) => {
+    if (!acc[i]) {
+      acc[i] = idx === source.length - 1 ? val : {}
     }
-  }
-  return arr
+    return acc[i]
+  }, obj)
+  return obj
 }
-/**
- * 插入排序2
- */
-function insertSort(arr) {
-  if (arr.length <= 1) return arr
-  var newArr = arr.splice(0, 1)
-  for (var i = 0; i < arr.length; i++) {
-    for (var j = newArr.length - 1; j >= 0; j--) {
-      if (arr[i] >= newArr[j]) {
-        newArr.splice(j + 1, 0, arr[i])
-        break
-      } else if (j === 0) {
-        newArr.unshift(arr[i])
-      }
-    }
+function generater(obj) {
+  const newObj = {}
+  for (let i in obj) {
+    gen(newObj, i, obj[i])
   }
-  return newArr
+  return newObj
 }
-
-var arr = [1, 8, 4, 5, 7, 9, 6, 2, 3]
-insertSort(arr)
+generater(entry)
 ```
-
-8.实现选择排序算法
-每次循环选取一个最小的数字放到前面的有序序列中
 
 ```javascript
-function swap(arr, i, j) {
-  var temp = arr[i]
-  arr[i] = arr[j]
-  arr[j] = temp
+// output => entry answer1
+const isObj = val => Object.prototype.toString.call(val) === '[object Object]'
+function fn(obj = {}, key, newObj = {}) {
+  for (let i in obj) {
+    const nkey = key ? key + '.' + i : i
+    if (isObj(obj[i])) {
+      fn(obj[i], nkey, newObj)
+    } else {
+      newObj[nkey] = obj[i]
+    }
+  }
+  return newObj
 }
-function selectSort(arr) {
-  for (var i = 0; i < arr.length; i++) {
-    var minIndex = i
-    for (var j = i + 1; j < arr.length; j++) {
-      if (arr[j] < arr[minIndex]) {
-        minIndex = j
+// output => entry answer2
+function fn(obj = {}) {
+  const queue = Object.entries(obj)
+  const res = {}
+  while(queue.length) {
+    const [key, obj] = queue.pop()
+    for (const [k, v] of Object.entries(obj)) {
+      if (!isObj(v)) {
+        res[`${key}.${k}`] = v
+      } else {
+        queue.push([`${key}.${k}`, v])
       }
     }
-    swap(arr, i, minIndex)
   }
-  return arr
+  return res
 }
-
-var arr = [1, 8, 4, 5, 7, 9, 6, 2, 3]
-selectSort(arr)
 ```
 
-9.使用Javascript Proxy实现简单的数据绑定 
+7.实现一个简单的仓储系统，可以不断转入和转出货物，货物最多有两层子类目，数字代表该子类目转入/转出的数量。转出时不能出现爆仓情况。
+```javascript
+/*
+ * cargo 说明：
+ * key代表类目/子类目名称
+ * value 为 number时，代表这个类目的数量，为object 时，代表下一层货物的集合，最多嵌套两层
+ * {
+ *  productA:{  // 代表货物的类目名称
+ *    a:1, // 1 代表子类目 a 的数量
+ *    b:2,
+ *    c:{   // c 代表货物的子类名称
+ *      c1:1, // c1代表货物的子类名称
+ *    }
+ *   }，
+ *  productB:{
+ *      e:6
+ *   }
+ * }
+ *
+ * 爆仓情况：如转入 {productA:{a:3,c:1}} 转出 {productA:{a:4}},就会发生子类目a爆仓，此时要返回报错。
+ */
+
+class Depository {
+  constructor() {
+    this.product = {}
+  }
+  compineProduct(cargo, product) {
+    for (let i in cargo) {
+      if (!product[i]) {
+        product[i] = {}
+      }
+      if (typeof cargo[i] === 'number') {
+        if (typeof product[i] === 'number') {
+          product[i] += cargo[i]
+        } else {
+          product[i] = cargo[i]
+        }
+      } else {
+        this.compineProduct(cargo[i], product[i])
+      }
+    }
+  }
+  reduceProduct(cargo, product) {
+    for (let i in cargo) {
+      if (!product[i]) {
+        throw `货物${i}不存在`
+      }
+      if (typeof cargo[i] === 'number') {
+        if (product[i] - cargo[i] <= 0) {
+          throw `货物${i}爆仓`
+        }
+        product[i] -= cargo[i]
+      } else {
+        this.reduceProduct(cargo[i], product[i])
+      }
+    }
+  }
+  // 转入货物
+  transferIn(cargo) {
+    if (!cargo) return this.product
+    this.compineProduct(cargo, this.product)
+    return this.product
+  }
+  // 转出货物
+  transferOut(cargo) {
+    if (!cargo) return this.product
+    this.reduceProduct(cargo, this.product)
+    return this.product
+  }
+}
+```
+
+8.使用Javascript Proxy实现简单的数据绑定 
 ```html
 <input id="inputField" value="" type="text" placeholder="" />
 <p id="showField"></p>
@@ -272,4 +466,3 @@ document.querySelector('#inputField').addEventListener('input', (e) => {
 })
 ```
 [demo](https://www.epoos.com/demo/vue/proxy.html)
-

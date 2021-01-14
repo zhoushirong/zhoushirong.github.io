@@ -1,7 +1,7 @@
 ---
 title: Koa
 date: 2018/09/11
-tag: koa nodejs
+tag: [koa,nodejs]
 ---
 
 ### Koa 中间件系统
