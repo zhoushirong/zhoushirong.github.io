@@ -205,3 +205,30 @@ function findAllPath(root) {
   return paths
 }
 ```
+
+4.找到路径和为 target 的二叉树路径
+```javascript
+function findAllPath(root, target) {
+  let paths = []
+  let genPath = (root, path) => {
+    path = Object.assign({}, path)
+    path.str = path.str ? path.str + '->' + root.value : root.value
+    path.sum = path.sum ? path.sum + root.value : root.value
+
+    if (path.sum === target) {
+      console.log('target path is ', path)
+    }
+    if (root.left === undefined && root.right === undefined) {
+      return paths.push(path)
+    }
+    if (root.left !== undefined) {
+      genPath(root.left, path)
+    }
+    if (root.right !== undefined) {
+      genPath(root.right, path)
+    }
+  }
+  genPath(root, {})
+  return paths
+}
+```
