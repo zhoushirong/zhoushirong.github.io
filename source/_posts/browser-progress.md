@@ -63,10 +63,11 @@ ShareWorder是浏览器单独为其开了一个进程来运行Javascript，所�
 
 #### 定时器线程
 js中跑的setTimeout、setInterval等定时器，是一个单独的线程管理的控制的，当计时完成就会将特定的事件推送到事件队列中。等待主线程执行。
+由于setTimeout在 timers 阶段执行，而setImmediate在 check 阶段执行，所以，setTimeout会早于setImmediate完成。但是，setTimeout 定时时间默认可能不是0ms，而是3ms或者更多，所以，setImeediate 也可能在 setTimeout 之前执行。
 
 #### microTask
 microTask是当前task执行结束之后，下一个task之前，渲染之前立即执行的任务。（如：promise、process.nextTick等，mutationobserver 可用来实现微任务）
-
+process.nextTick() 的回调将在事件循环继续之前解析，所以微任务里面，process.nextTick 会在 promise 等其他微任务之前执行。
 
 
 ### 传送门

@@ -78,10 +78,29 @@ defer的下载独立，但是执行会在 DOMContentLoaded 事件之后；async 
 3.多个 async 的脚本并不会保证按照它们在文档中的先后顺序执行，因此，多个 async 的脚本之间不应该有依赖关系。
 4.async 的脚本下载和解析不会阻塞 DOM，解析完成之后执行的时候会阻塞 DOM
 
-
 #### 最后引用网上的一张图
 ![https://i.stack.imgur.com/wfL82.png](http://zhoushirong.github.io/img/deferasync.png)
 
+
+#### 附录（同步脚本插入）
+```javascript
+var script = document.createElement('script');
+script.text = "console.log('from script');"
+// 等价于：
+// script.innerText = "console.log('from script')";
+// script.innerHTML = "console.log('from script')";
+
+console.log('before script');
+document.body.appendChild(script);
+console.log('after script');
+```
+执行结果：before script、from script、after script
+
+原因：
+```html
+javascript 脚本通过上面的方式插入到 DOM 的时候会立即执行
+appendChild 方法执行的是阻塞的，脚本执行完毕才会继续执行后面的代码。
+```
 
 #### 传送门
 [浅谈script标签中的async和defer](https://cloud.tencent.com/developer/article/1093912)
