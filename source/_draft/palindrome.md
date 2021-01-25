@@ -66,44 +66,73 @@ f(left, right) = (s[left] === s[right])
   ? f(left + 1, right - 1)
   : 1 + min(f(left + 1, right), f(left, right - 1))
 ```
+对应的递归方法实现如下：
+```javascript
+const minInsertions = str => {
+  const LEN = str.length
+  const f = (left = 0, right = LEN - 1) => { // abcdefg
+    if (left >= right) {
+      return 0
+    }
+    // console.log(left, right, str[left], str[right])
+    if (str[left] === str[right]) {
+      return f(left + 1, right - 1)
+    }
+    return 1 + Math.min(f(left + 1, right), f(left, right - 1))
+  }
+  return f()
+}
+```
 
-那么接下来按照 ***动态规划（附录有简介）***，我们使用一个数组来记录递推的过程和中间值。
-具体流程如下：
-1.申明一个二维数组。
-2.初始化长度为 1 时候的每个字符串所需要的开销为 0，因为一个字符自身就是回文字符串。
-3.根据上面的递推公式，逐层的推出并保存每一层的值。
-4.最终取出 [0, s.length - 1] 对应的值就是我们的结果。
+另一种实现方式是按照 ***动态规划（附录有简介）*** 方法。
+我们使用一个数组来记录递推的过程和中间值，具体流程如下：
+1）申明一个二维数组。
+2）初始化长度为 1 时候的每个字符串所需要的开销为 0，因为一个字符自身就是回文字符串。
+3）根据上面的递推公式，逐层的推出并保存每一层的值。
+4）最终取出 [0, s.length - 1] 对应的值就是我们的结果。
 ```javascript
 const minInsertions = str => { // abcdefg
   const LEN = str.length // 7
-  const dp = []
-  for (let i = 0; i < LEN; ++i) {
-    dp[i] = new Array(LEN).fill(0) // eg: a = b = ... = g = [0, 0, ... , 0]
-    dp[i][i + 1] = str[i] === str[i + 1] ? 0 : 1 // eg: a[1] = (a === b ? 0 : 1);b[2] = (b === c ? 0 : 1);;c[3] = (c === d ? 0 : 1);
+  const dp = [] // dp[i][j]的定义: 对字符串str[i..j]，最少需要进行dp[i][j]次插入才能变成回文串。
+  for (let i = 0; i < LEN; i++) {
+    dp[i] = new Array(LEN).fill(0) // 一个字符转回文的开销 dp = [0, 0, ... , 0]
+    dp[i][i + 1] = str[i] === str[i + 1] ? 0 : 1 // 当前字符与下一个字符转回文的开销 dp[0][1] = 1; dp[1][2] = 1; ...; dp[LEN - 1][LEN] = 1;
+    // console.log(dp, str[i], str[i + 1])
   }
-  // dp = [[0, 1, ... , 1], [0, 0, 1, ... , 1], [0, 0, 0, 1, ... , 1], ..., [0, ...,0, 1]]
-  for (let i = 2; i < LEN; ++i) {
-    for (j = 0; j < LEN - i; ++j) {
-      dp[j][j + i] = str[j] === str[j + i] ? dp[j + 1][j + i - 1] : 1 + Math.min(dp[j + 1][j + i], dp[j][j + i - 1])
-      // console.log(i, j, dp[j][j+i], str[j], str[j+i])
+  // dp.length === 7; dp = [[0, 1, 0, 0, 0, 0, 0], [0, 0, 1, 0 , 0, 0, 0], ... , [0, 0, 0, 0, 0, 0, 1], [0, 0, 0, 0, 0, 0, 0, 1]]
+  for (let i = 2; i < LEN; i++) {
+    for (j = 0; j < LEN - i; j++) { // LEN - i = 5,4,3,2,1;
+      // 状态转移方程（核心算法）
+      dp[j][j + i] = str[j] === str[j + i]
+        // 如果 str[j] === str[j + i]，则它的内层字符串的回文开销就是它的开销。
+        ? dp[j + 1][j + i - 1]
+        // 否则 取插入到右边的开销和插入到左边的开销的最小值 + 插入一次
+        // (j+i) - (j+1) = i-1，(j+i-1) - j = i-1；相差i-1个位置
+        // 如何保证此时的 dp[j + 1][j + i] 和 dp[j][j + i - 1] 在这之前已经被计算出来了？
+        : 1 + Math.min(dp[j + 1][j + i], dp[j][j + i - 1]) 
     }
   }
+  // console.log(dp)
   return dp[0][LEN - 1] // dp[0][6] === 6
 }
 ```
 上面的代码时间复杂度 O(n^2)，空间复杂度也是 O(n^2)。
-我们可以尝试一下把空间复杂度压缩到 O(n)，即不是用二维数组，只是用一维数组来记录递推的中间值。
 
-优化具体的代码如下：
+把空间复杂度压缩到 O(n)，不用二维数组，只用一维数组来记录递推的中间值。
+优化代码如下：
 ```javascript
-const minInsertions = s => {
-  const LEN = s.length
+const minInsertions = str => { // abcdefg
+  const LEN = str.length
   const dp = new Array(LEN).fill(0)
-  for (let i = LEN - 2; i >= 0; i--) {
+  for (let i = LEN - 2; i >= 0; i--) { //i = 5,4,3,2,1,0
     let prev = 0
-    for (let j = i + 1; j < LEN; j++) {
+    for (let j = i + 1; j < LEN; j++) { // j = [6],[5,6],[4,5,6],[3,4,5,6],[2,3,4,5,6],[1,2,3,4,5,6]
       const tmp = dp[j]
-      dp[j] = s[i] === s[j] ? prev : 1 + Math.min(dp[j], dp[j - 1])
+      if (str[i] === str[j]) { // 如果相等，则取上一个状态的值
+        dp[j] = prev
+      } else { // 不相等的时候
+        dp[j] = 1 + Math.min(dp[j], dp[j - 1])
+      }
       prev = tmp
     }
   }
@@ -111,30 +140,35 @@ const minInsertions = s => {
 }
 ```
 
-#### 问题2：找出让任意字符串成为回文串，所需要插入的最少字符
+#### 问题2：找出让任意字符串成为回文串，所需要插入的最少数，并打印出最终的回文字符串
+```html
+待定...
+```
 
 
 #### 附录 - 动态规划算法
 动态规划有时被认为是一种与递归相反 的技术。
-递归是从顶部开始将问题分解，通过解决掉所有分解出小问题的方式，来解决整 个问题。
-动态规划解决方案从底部开始解决问题，将所有小问题解决掉，然后合并成一个 整体解决方案，从而解决掉整个大问题。
+递归是从顶部开始将问题分解，通过解决掉所有分解出小问题的方式，来解决整个问题。
+动态规划解决方案从底部开始解决问题，将所有小问题解决掉，然后合并成一个整体解决方案，从而解决掉整个大问题。
 
 使用递归去解决问题虽然简洁，但效率不高。
 许多使用递归去解决的编程问题，可以重写为使用动态规划的技巧去解决。
-动态规划方案 通常会使用一个数组来建立一张表，用于存放被分解成众多子问题的解。
-当算法执行完 毕，最终的解将会在这个表中很明显的地方被找到
+动态规划方案通常会使用一个数组来建立一张表，用于存放被分解成众多子问题的解。
+当算法执行完毕，最终的解将会在这个表中很明显的地方被找到
 
 计算斐波拉契数列的值，使用递归算法 和 动态规范算法举例
 ```javascript
 /**
- * 递归
+ * 递归算法计算
  */
 function recurFib(n) {
   if (n < 2) return n
   return recurFib(n - 1) + recurFib(n - 2)
 }
 /**
- * 将每一步的值存起来，最后直接取最后一步的值即可
+ * 动态规划算法计算
+ * 将每一步的值先计算好，并存起来
+ * 最后直接取最后一步的值即可
  */
 function dynFib(n) {
   if (n === 0 || n === 1 || n === 2) return n
@@ -142,14 +176,20 @@ function dynFib(n) {
   var val = new Array(n)
   val[1] = 1
   val[2] = 2
-  for (var i = 3; i <= n; ++i) {
-    val[i] = val[i - 1] + val[i - 2];
+  for (var i = 3; i <= n; i++) {
+    val[i] = val[i - 1] + val[i - 2]
   }
   return val[n - 1]
 }
 ```
 
+#### 附录-动态规划的状态转移方程
+状态转移方程，是动态规划中本阶段的状态往往是上一阶段状态和上一阶段决策的结果。
+如果给定了第K阶段的状态Sk以及决策uk(Sk)，则第K+1阶段的状态Sk+1也就完全确定。
+
+也就是说得到k阶段的状态和决策后就可以得到k+1阶段的状态
+状态转移就是从小规模问题的答案推导更大规模问题的答案，就是如何从已知求得未知的表达式。
+
 ### 传送门
-[知乎-让字符串成为回文串的最少插入次数](https://zhuanlan.zhihu.com/p/102224665)
-
-
+[知乎-让字符串成为回文串的最少插入次数1](https://zhuanlan.zhihu.com/p/102224665)
+[知乎-让字符串成为回文串的最少插入次数2](https://zhuanlan.zhihu.com/p/300617309)
