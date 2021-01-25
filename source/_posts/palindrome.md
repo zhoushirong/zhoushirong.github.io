@@ -1,9 +1,9 @@
 
 ---
 title: 回文字符串
-date: 2021/01/20
+date: 2021/01/25
 tag: [回文,动态规划,算法]
-category: 技术
+category: 笔记
 ---
 
 #### 什么是回文字符串
@@ -124,7 +124,7 @@ const minInsertions = str => { // abcdefg
 const minInsertions = str => { // abcdefg
   const LEN = str.length
   const dp = new Array(LEN).fill(0)
-  for (let i = LEN - 2; i >= 0; i--) { //i = 5,4,3,2,1,0
+  for (let i = LEN - 2; i >= 0; i--) { // i = 5,4,3,2,1,0
     let prev = 0
     for (let j = i + 1; j < LEN; j++) { // j = [6],[5,6],[4,5,6],[3,4,5,6],[2,3,4,5,6],[1,2,3,4,5,6]
       const tmp = dp[j]
@@ -141,8 +141,10 @@ const minInsertions = str => { // abcdefg
 ```
 
 #### 问题2：找出让任意字符串成为回文串，所需要插入的最少数，并打印出最终的回文字符串
-```html
-待定...
+问题1是计算出插入的最少字符数，并没有保存插入的字符和相应的插入位置
+所以，在原来的基础上需要加上。
+```javascript
+// 待定
 ```
 
 
@@ -191,5 +193,4 @@ function dynFib(n) {
 状态转移就是从小规模问题的答案推导更大规模问题的答案，就是如何从已知求得未知的表达式。
 
 ### 传送门
-[知乎-让字符串成为回文串的最少插入次数1](https://zhuanlan.zhihu.com/p/102224665)
-[知乎-让字符串成为回文串的最少插入次数2](https://zhuanlan.zhihu.com/p/300617309)
+[知乎-让字符串成为回文串的最少插入次数](https://zhuanlan.zhihu.com/p/300617309)
