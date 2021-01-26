@@ -18,7 +18,25 @@ abcba
 abcdefgfedcba
 ```
 
-#### 问题1：让任意字符串成为回文串的需要插入的最小字符数
+#### 问题1：如何判断一个字符串是否回文字符串
+```javascript
+/**
+ * 判断是否回文字符串
+ */ 
+function isPlalindrome(str) {
+  const len = str.length
+  let i = 0
+  while(i < len / 2) {
+    if (str[i] !== str[len - i - 1]) {
+      return false
+    }
+    i++
+  }
+  return true
+}
+```
+
+#### 问题2：让任意字符串成为回文串的需要插入的最小字符数
 如：
 ```html
 插入0次
@@ -95,8 +113,8 @@ const minInsertions = str => { // abcdefg
   const LEN = str.length // 7
   const dp = [] // dp[i][j]的定义: 对字符串str[i..j]，最少需要进行dp[i][j]次插入才能变成回文串。
   for (let i = 0; i < LEN; i++) {
-    dp[i] = new Array(LEN).fill(0) // 一个字符转回文的开销 dp = [0, 0, ... , 0]
-    dp[i][i + 1] = str[i] === str[i + 1] ? 0 : 1 // 当前字符与下一个字符转回文的开销 dp[0][1] = 1; dp[1][2] = 1; ...; dp[LEN - 1][LEN] = 1;
+    dp[i] = new Array(LEN).fill(0) // dp[a] dp[b] ... dp[g]
+    dp[i][i + 1] = str[i] === str[i + 1] ? 0 : 1 // dp[ab] dp[bc] ... dp[fg]
     // console.log(dp, str[i], str[i + 1])
   }
   // dp.length === 7; dp = [[0, 1, 0, 0, 0, 0, 0], [0, 0, 1, 0 , 0, 0, 0], ... , [0, 0, 0, 0, 0, 0, 1], [0, 0, 0, 0, 0, 0, 0, 1]]
@@ -109,6 +127,8 @@ const minInsertions = str => { // abcdefg
         // 否则 取插入到右边的开销和插入到左边的开销的最小值 + 插入一次
         // (j+i) - (j+1) = i-1，(j+i-1) - j = i-1；相差i-1个位置
         // 如何保证此时的 dp[j + 1][j + i] 和 dp[j][j + i - 1] 在这之前已经被计算出来了？
+        // 当i=2的时候，(j+1 & j+i)/(j & j+i-1)均相临，所以一定是已知值的
+        // 当i>2的时候，(j+1 & j+i)/(j & j+i-1)间隔2，上一轮循环的时候一定依据计算得到了值，所以已知值
         : 1 + Math.min(dp[j + 1][j + i], dp[j][j + i - 1]) 
     }
   }
@@ -122,15 +142,17 @@ const minInsertions = str => { // abcdefg
 优化代码如下：
 ```javascript
 const minInsertions = str => { // abcdefg
+  let num = 0
   const LEN = str.length
   const dp = new Array(LEN).fill(0)
   for (let i = LEN - 2; i >= 0; i--) { // i = 5,4,3,2,1,0
     let prev = 0
     for (let j = i + 1; j < LEN; j++) { // j = [6],[5,6],[4,5,6],[3,4,5,6],[2,3,4,5,6],[1,2,3,4,5,6]
-      const tmp = dp[j]
+      // console.log(i, j, num++, JSON.stringify(dp))
+      const tmp = dp[j] // 0
       if (str[i] === str[j]) { // 如果相等，则取上一个状态的值
         dp[j] = prev
-      } else { // 不相等的时候
+      } else { // 不相等的时候，取 dp[j] 和 dp[j-1] 中的最小 + 1
         dp[j] = 1 + Math.min(dp[j], dp[j - 1])
       }
       prev = tmp
@@ -138,13 +160,46 @@ const minInsertions = str => { // abcdefg
   }
   return dp[LEN - 1]
 }
+minInsertions('abcdefg')
 ```
 
-#### 问题2：找出让任意字符串成为回文串，所需要插入的最少数，并打印出最终的回文字符串
+#### 问题3：找出让任意字符串成为回文串，所需要插入的最少数，并打印出最终的回文字符串
 问题1是计算出插入的最少字符数，并没有保存插入的字符和相应的插入位置
-所以，在原来的基础上需要加上。
+所以，在原来的基础上需要打印出最终的回文字符串。
+分析：
+插入最少字符数只有一个最优解，打印出来的回文字符串可能有多个。
+所以需要把 dp[0][1]-- dp[i][j]最优的的所有字符串保存起来，得出结果之后再倒推回去
+
 ```javascript
-// 待定
+/**
+ * 补充最短回文字符串
+ * 待补全。。。
+ */ 
+function getPlalindrome(str) { // abcdefg
+  // const LEN = str.length
+  // const dp = []
+  // for (let i = 0; i < LEN; i++) {
+  //   dp[i] = new Array(LEN).fill(0)
+  //   dp[i][i + 1] = str[i] === str[i + 1] ? 0 : 1
+  // }
+
+  // for (let i = 2; i < LEN; i++) {
+  //   for (j = 0; j < LEN - i; j++) {
+  //     if (str[j] === str[j + i]) {
+  //       dp[j][j + i] = dp[j + 1][j + i - 1]
+  //     } else {
+  //       if (dp[j + 1][j + i] > dp[j][j + i - 1]) {
+  //         dp[j][j + i] = 1 + dp[j][j + i - 1]
+  //       } else {
+  //         dp[j][j + i] = 1 + dp[j + 1][j + i]
+  //       }
+  //     }
+  //   }
+  // }
+  // return dp[0][LEN - 1]
+}
+
+getPlalindrome('abcdefg')
 ```
 
 
