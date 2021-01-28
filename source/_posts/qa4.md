@@ -238,3 +238,38 @@ function dealArr(arr) {
 
 console.log(dealArr([0, 1, 0, 3, 12]))
 ```
+
+12.在不新增数组的情况下去重数组
+```javascript
+// 方法1
+// 排序数组，再从前往后遍历数组
+// 当相邻两个值不相等的时候 len 指针移动 1 位
+// 最终 len 的值即为新数组的大小
+let removeDuplicates = nums => {
+  nums.sort()
+  let len = 1
+  
+  for (let i = 1; i < nums.length; i++) {
+    if (nums[i] !== nums[i-1]) {
+      nums[len++] = nums[i]
+    }
+  }
+  nums.splice(len)
+  return nums
+}
+
+// 方法2 优化版本，不需要排序
+// 从后往前遍历，依次用最后一个不重复的值替换当前位置有重复的值
+// 最后，删除多余的数
+let removeDuplicates2 = nums => {
+  let len = nums.length - 1
+  for (let i = len; i >= 0; i--) {
+    if (nums.indexOf(nums[i]) !== i) {
+      nums[i] = nums[len--] // 最后的一个不重复的值替换当前 nums[i](有重复) 的值
+    }
+  }
+  nums.splice(len + 1)
+  return nums
+}
+removeDuplicates2([1,2,3,1]) // [1,2,3]
+```
