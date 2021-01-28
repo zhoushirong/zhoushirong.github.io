@@ -2,7 +2,7 @@
 ---
 title: 回文字符串
 date: 2021/01/25
-tag: [回文,动态规划,算法]
+tag: [回文,算法]
 category: 笔记
 ---
 
@@ -173,7 +173,7 @@ minInsertions('abcdefg')
 ```javascript
 /**
  * 补充最短回文字符串
- * 待补全。。。
+ * 待补全，还没想到办法，留待日后解决。。。
  */ 
 function getPlalindrome(str) { // abcdefg
   // const LEN = str.length
@@ -201,97 +201,6 @@ function getPlalindrome(str) { // abcdefg
 
 getPlalindrome('abcdefg')
 ```
-
-
-#### 附录1 - 动态规划算法
-动态规划有时被认为是一种与递归相反的技术。
-递归是从顶部开始将问题分解，通过解决掉所有分解出小问题的方式，来解决整个问题。
-动态规划解决方案从底部开始解决问题，将所有小问题解决掉，然后合并成一个整体解决方案，从而解决掉整个大问题。
-
-使用递归去解决问题虽然简洁，但效率不高。
-许多使用递归去解决的编程问题，可以重写为使用动态规划的技巧去解决。
-动态规划方案通常会使用一个数组来建立一张表，用于存放被分解成众多子问题的解。
-当算法执行完毕，最终的解将会在这个表中很明显的地方被找到
-
-计算斐波拉契数列的值，使用递归算法 和 动态规范算法举例
-```javascript
-/**
- * 递归算法计算
- */
-function recurFib(n) {
-  if (n < 2) return n
-  return recurFib(n - 1) + recurFib(n - 2)
-}
-/**
- * 动态规划算法计算
- * 将每一步的值先计算好，并存起来
- * 最后直接取最后一步的值即可
- */
-function dynFib(n) {
-  if (n < 2) return n
-
-  var val = new Array(n)
-  val[1] = 1
-  val[2] = 2
-  for (var i = 3; i <= n; i++) {
-    val[i] = val[i - 1] + val[i - 2]
-  }
-  return val[n - 1]
-}
-```
-就上述例子而言，如果仅仅是计算出斐波拉契数列的值，其实可以不用数组
-之所以使用数组就是为了保存每一步的值，然而我们其实不需要中间值，只需要最后的结果就行了。
-因此，可使用迭代的方式进行优化
-```javascript
-function iterFib(n) {
-  if (n < 2) return n
-  var last = 1 // 最后一个
-  var preLast = 1 // 下一个最后一个
-  var result = 1 // 当前结果
-  for (var i = 2; i < n; i++) {
-    result = preLast + last
-    preLast = last
-    last = result
-  }
-  return result
-}
-```
-
-#### 附录2 - 动态规划的状态转移方程
-状态转移方程，是动态规划中本阶段的状态往往是上一阶段状态和上一阶段决策的结果。
-如果给定了第K阶段的状态Sk以及决策uk(Sk)，则第K+1阶段的状态Sk+1也就完全确定。
-
-也就是说得到k阶段的状态和决策后就可以得到k+1阶段的状态
-状态转移就是从小规模问题的答案推导更大规模问题的答案，就是如何从已知求得未知的表达式。
-
-#### 附录3 - 利用动态规划找出两个字符串的最长公共子序列长度
-```javascript
-function lcs(strX, strY) {
-  const m = strX.length
-  const n = strY.length
-  const nArr = new Array(n + 1).fill(0)
-  const l = []
-  for (let i = 0; i < m+1; i++) {
-    l[i] = [...nArr]
-  }
-  
-  for (let i = 1; i <= m; i++) {
-    for (let j = 1; j <= n; j++) {
-      if (strX[i - 1] === strY[j - 1]) { // 两两遍历，如果有相等的，该坐标 +1
-        l[i][j] = l[i - 1][j - 1] + 1
-      } else {
-        l[i][j] = Math.max(l[i - 1][j], l[i][j - 1]) // max
-      }
-    }
-  }
-  // console.log(l)
-  return l[m][n] // {5}
-}
-// lcs('abbcc', 'dbbcc') // bbcc 4
-lcs('abbc', 'abbbc') // abbb 4
-// lcs('ababbccbac', 'abbcac') // abbcac 6
-```
-
 ### 传送门
 [知乎-让字符串成为回文串的最少插入次数](https://zhuanlan.zhihu.com/p/300617309)
 
