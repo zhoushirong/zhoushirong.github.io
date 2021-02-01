@@ -1,7 +1,7 @@
 
 ---
 title: 动态规划算法
-date: 2021/01/29
+date: 2021/01/30
 tag: [动态规划,算法]
 category: 笔记
 ---
@@ -159,10 +159,6 @@ var n = value.length // 所有物品数量
 var result = dKnapsack(capacity, size, value, n) // 总价值计算
 console.log(result)
 ```
-
-#### 最少硬币找零问题
-
-#### 矩阵链相乘
 
 ### 附录 - 动态规划状态转移方程
 状态转移方程，是动态规划中本阶段的状态往往是上一阶段状态和上一阶段决策的结果。
