@@ -1,12 +1,44 @@
 ---
-title: Vue3 Composition API
-date: 2021/01/15
-tag: [vue,vue3]
-category: 技术
+title: Vue3 初探
+date: 2021/02/04
+tag: [vue, vue3]
+category: 笔记
 ---
 
 Vue3 已经来了，详细文档见下方传送门
 这里记录一下比较重要的几个点。
+
+#### 总体概述
+
+优点都是比较比出来的，那么 Vue3 对比 Vue2 优势有
+```html
+更小、更快、更友好、优化方案
+typeScript支持
+API 设计一致性
+自身可维护性
+开放更多底层功能
+```
+1.更小
+移除不常用功能，引入 tree-shaking ，打包体积更小
+
+2.更快
+优化 diff 算法、静态提升、事件监听缓存、ssr优化等
+
+3.更友好
+提出 composition Api，无论代码的编写还是查看都更加清晰方便
+
+4.优化方案
+1）源码优化 vue3 整个源码是通过 monorepo的方式维护的，根据功能将不同的模块拆分到 packages 目录下面不同的子目录中
+Vue3是基于 typeScript 编写的，提供了更好的类型检查，能支持复杂的类型推导
+2）性能优化
+体积优化、编译优化、***数据劫持优化***
+在 vue2 中，数据劫持是通过 Object.defineProperty，这个 API 有一些缺陷，并不能检测对象属性的添加和删除
+vue3 是通过 proxy 监听整个对象，那么对于删除还是监听当然也能监听到
+
+#### 算法优化
+vue3 标记了动态节点，在patch阶段，只会比较动态节点，静态的直接略过了
+而 vue2中，还是会 patch 所有子节点去比对变更
+
 
 #### 关于生命周期函数
 1.Vue2 父子组件生命周期执行顺序
@@ -89,3 +121,5 @@ export default {
 
 ### 传送门
 [Vue3官方文档&迁移指南](https://vue3js.cn/docs/zh/guide/migration/introduction.html)
+
+vue3.0 diff 算法优化细节：[https://juejin.cn/post/6844904136299773965](https://juejin.cn/post/6844904136299773965)

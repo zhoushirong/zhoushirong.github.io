@@ -2,6 +2,7 @@
 title: vue运行过程
 date: 2018/08/02
 tag: [vue]
+category: 笔记
 ---
 
 #### 初始化 

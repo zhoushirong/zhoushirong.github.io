@@ -1,6 +1,6 @@
 ---
 title: react学习笔记
-date: 2021/02/01
+date: 2021/02/05
 tag: [react]
 category: 笔记
 ---
@@ -64,3 +64,121 @@ requestAnimationFrame的基本思想是 让页面重绘的频率和刷新频率�
 #### Fiber
 在应用中我们可以多次调用ReactDOM.render渲染不同的组件树，他们会拥有不同的rootFiber
 但是整个应用的根节点只有一个，那就是fiberRootNode
+
+
+#### jsx
+React DOM 在渲染所有输入内容之前，默认会进行转义，可以有效地防止 xss 攻击
+Babel 会把 JSX 转译成一个名为 React.createElement() 函数调用。
+
+```javascript
+const element = (
+  <h1 className="greeting">
+    Hello, world!
+  </h1>
+)
+```
+等效
+```javascript
+const element = React.createElement(
+  'h1',
+  {className: 'greeting'},
+  'Hello, world!'
+)
+```
+React.createElement() 会预先执行一些检查，以帮助你编写无错代码，但实际上它创建了一个这样的对象：
+```javascript
+// 注意：这是简化过的结构
+const element = {
+  type: 'h1',
+  props: {
+    className: 'greeting',
+    children: 'Hello, world!'
+  }
+}
+```
+
+
+仅使用 React 构建的应用通常只有单一的根 DOM 节点。
+想要将一个 React 元素渲染到根 DOM 节点中，只需把它们一起传入 ReactDOM.render()：
+```javascript
+const element = <h1>Hello, world</h1>
+ReactDOM.render(element, document.getElementById('root'))
+```
+
+#### 函数组件
+```javascript
+function Welcome(props) {
+  return <h1>Hello, {props.name}</h1>;
+}
+```
+该函数是一个有效的 React 组件，因为它接收唯一带有数据的 “props”（代表属性）对象与并返回一个 React 元素。
+这类组件被称为“函数组件”，因为它本质上就是 JavaScript 函数。
+
+也可以使用 es6 的类定义的方式定义 class 组件
+```javascript
+class Welcome extends React.Component {
+  render() {
+    return <h1>Hello, {this.props.name}</h1>;
+  }
+}
+```
+
+#### state
+State 与 props 类似，但是 state 是私有的，并且完全受控于当前组件
+
+
+#### class fields
+
+#### key
+key 帮助 React 识别哪些元素改变了，比如被添加或删除。因此你应当给数组中的每一个元素赋予一个确定的标识。
+当元素没有确定 id 的时候，万不得已你可以使用元素索引 index 作为 key
+如果列表项目的顺序可能会变化，我们不建议使用索引来用作 key 值，因为这样做会导致性能变差，还可能引起组件状态的问题。
+如果你选择不指定显式的 key 值，那么 React 将默认使用索引用作为列表项目的 key 值。
+元素的 key 只有放在就近的数组上下文中才有意义。
+```javascript
+function NumberList(props) {
+  const numbers = props.numbers;
+  const listItems = numbers.map((number) =>
+    // 错误！元素的 key 应该在这里指定：
+    <ListItem value={number} />
+  );
+  return (
+    <ul>
+      {listItems}
+    </ul>
+  );
+}
+```
+一个好的经验法则是：在 map() 方法中的元素需要设置 key 属性。
+数组元素中使用的 key 在其兄弟节点之间应该是独一无二的。
+然而，它们不需要是全局唯一的。当我们生成两个不同的数组时，我们可以使用相同的 key 值
+Post 组件可以读出 props.xx，但是不能读出 props.key (key的值应该使用其他属性名来传递)
+
+#### 受控组件
+表单元素依赖于状态，表单元素需要默认值实时映射到状态的时候，就是受控组件，这个和双向绑定相似.
+受控组件，表单元素的修改会实时映射到状态值上，此时就可以对输入的内容进行校验.
+受控组件只有继承React.Component才会有状态.
+受控组件必须要在表单上使用onChange事件来绑定对应的事件.
+
+#### 状态提升
+通常，多个组件需要反映相同的变化数据，这时我们建议将共享状态提升到最近的共同父组件中去
+
+
+React 最棒的部分之一是引导我们思考如何构建一个应用。
+一个组件原则上只能负责一个功能
+
+#### state 和 props 之间的区别是什么？
+props（“properties” 的缩写）和 state 都是普通的 JavaScript 对象。它们都是用来保存信息的，这些信息可以控制组件的渲染输出，而它们的一个重要的不同点就是：props 是传递给组件的（类似于函数的形参），而 state 是在组件内被组件自己管理的（类似于在一个函数内声明的变量）。
+
+#### 给 setState 传递一个对象与传递一个函数的区别是什么
+传递一个函数可以让你在函数内访问到当前的 state 的值
+因为 setState 的调用是分批的，所以你可以链式地进行更新，并确保它们是一个建立在另一个之上的，这样才不会发生冲突
+
+在事件处理函数内部的 setState 是异步的。
+
+### 传送门
+为什么 React 中 Key 是必须的
+https://zh-hans.reactjs.org/docs/reconciliation.html#recursing-on-children
+
+受控组件和非受控组件
+https://juejin.cn/post/6858276396968951822
