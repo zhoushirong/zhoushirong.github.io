@@ -39,8 +39,41 @@ https://mp.weixin.qq.com/s/KpjFxHAf5jG2GyXXYMEtKQ
 
 
 
-AST 与前端工程化实战
-https://juejin.im/post/5d50d1d9f265da03aa25607b
+#### AST 与前端工程化实战
+AST : 全称为 Abstract Syntax Tree，意为抽象语法树，它是源代码语法结构的一种抽象表示。
+AST 是一个非常基础但是同时非常重要的知识点，我们熟知的 TypeScript、babel、webpack、vue-cli 得都是依赖 AST 进行开发的。本文将通过 AST 与前端工程化的实战向大家展示 AST 的强大以及重要性。
+```javascript
+const a = 1
+```
+词法分析阶段：将字符组成的字符串分解成一个个代码块（词法单元），例子中代码会被解析成 const、a、=、1 四个词法单元。
+语法分析阶段：将词法单元流转换成一个由元素逐级嵌套组成的语法结构树，即所谓的抽象语法树。
+代码生成阶段：将 AST 转换成一系列可执行的机器指令代码，例子就是机器通过执行指令会在内存中创建一个变量 a，并将值 1 赋值给它。
+
+
+
+#### VUE完整版和运行时
+使用vue.js时，可以看到官方提供了两个版本可以使用，包括vue.js（完整版）和vue.runtime.js（运行时版
+vue.runtime.js和vue.js的区别在于，vue.runtime.js不包含模版编译器来获得整个包体积的减少。
+
+如果你需要在客户端编译模板 (比如传入一个字符串给 template 选项，或挂载到一个元素上并以其 DOM 内部的 HTML 作为模板)，就将需要加上编译器，即完整版：
+```javascript
+// 需要编译器
+new Vue({
+  template: '<div>{{ hi }}</div>'
+})
+
+// 不需要编译器
+new Vue({
+  el: "#app",
+  data: { value: 0 },
+  render (h) {
+    return h('div', this.hi)
+  }
+})
+```
+h就是vue.runtime.js提供的函数，它接收模版字符串中的参数，返回渲染好的原始的html。
+在实际开发中，由于h函数的参数比较复杂，实际开发中通过使用webpack的vue-loader插件能将vue单文件组件（以.vue结尾的文件）转换为h函数所需要的参数
+
 
 
 #### webpack编译
