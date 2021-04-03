@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-109295694-1', 'auto');
+ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+<!-- 百度统计 -->
+<script type="text/javascript">
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?e7c73fb59256f4428781ae50108da3bc";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+  
+  <title>实时通信与socket | 邑司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在很久之前浏览器要实现一个与服务端的实时双端通信（比如聊天系统）只能通过http轮询来做当然，除此之外也有利用了flash实现一个socket来作为中转的方式。 后来随着web应用的越发成熟，html5推出了webSocket协议，webSocket协议的出现大大的提高了浏览器与服务端实时通信的效率与性能。随着浏览器设备的不断更新升级，webSocket的逐渐成为了实时通信的主流方式 那么webS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实时通信与socket">
+<meta property="og:url" content="https://blog.epoos.com/2021/01/06/long-connect/index.html">
+<meta property="og:site_name" content="邑司">
+<meta property="og:description" content="在很久之前浏览器要实现一个与服务端的实时双端通信（比如聊天系统）只能通过http轮询来做当然，除此之外也有利用了flash实现一个socket来作为中转的方式。 后来随着web应用的越发成熟，html5推出了webSocket协议，webSocket协议的出现大大的提高了浏览器与服务端实时通信的效率与性能。随着浏览器设备的不断更新升级，webSocket的逐渐成为了实时通信的主流方式 那么webS">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-30T01:32:00.320Z">
+<meta property="article:author" content="zhoushirong">
+<meta property="article:tag" content="长连接">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">邑司</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="https://www.epoos.com" target="_self">主站</a>
+        
+          <a class="main-nav-link" href="/" target="_self">首页</a>
+        
+          <a class="main-nav-link" href="/archives" target="_self">列表</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.epoos.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-long-connect" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/01/06/long-connect/" class="article-date">
+  <time datetime="2021-01-05T16:00:00.000Z" itemprop="datePublished">2021-01-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      实时通信与socket
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在很久之前浏览器要实现一个与服务端的实时双端通信（比如聊天系统）只能通过http轮询来做<br>当然，除此之外也有利用了flash实现一个socket来作为中转的方式。</p>
+<p>后来随着web应用的越发成熟，html5推出了webSocket协议，webSocket协议的出现大大的提高了浏览器与服务端实时通信的效率与性能。<br>随着浏览器设备的不断更新升级，webSocket的逐渐成为了实时通信的主流方式</p>
+<h4 id="那么webSocket的优势在哪里呢？"><a href="#那么webSocket的优势在哪里呢？" class="headerlink" title="那么webSocket的优势在哪里呢？"></a>那么webSocket的优势在哪里呢？</h4><p>首先，跟flash相比，不需要再加载一个flash，少了一个中间中转环节；其次，flash本身在浏览器端就存在很多比如安全、性能等问题，当下flash已经退出了浏览器客户端的舞台了。<br>至于对比http轮询方式，简单来说就是少去了三次握手和四次挥手的过程，也省掉了相对冗余的http头信息，极大的减少了通讯时间和节省了带宽资源。</p>
+<h4 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h4><p>TCP协议对应于传输层，而HTTP协议对应于应用层，Http协议是建立在TCP协议基础之上的，是一个超文本传输协议。<br>当浏览器需要从服务器获取网页数据的时候，会发出一次Http请求。 Http会通过TCP建立起一个到服务器的连接通道，当本次请求的数据完毕后，Http会立即将TCP连接断开，这个过程是很短的。要想通过http建立实时通信，必须每隔一段时间发起一个请求询问服务器一次。<br>当然http也可以开启长链接，增长tcp断开的时间，一定程度上减少http建立连接的耗时。但是http冗余的请求头数据还是无法得到解决。</p>
+<p>Socket 就像一个电话插座，负责连通两端的电话，进行点对点通信，让电话可以进行通信，端口就像插座上的孔，端口不能同时被其他进程占用。<br>而我们建立连接就像把插头插在这个插座上，创建一个Socket 实例开始监听后，这个电话插座就时刻监听着消息的传入，谁拨通我这个“IP 地址和端口”，我就接通谁。<br>Socket 起源于 UNIX，在 UNIX 一切皆文件的思想下，进程间通信就被冠名为文件描述符（file descriptor），Socket 是一种“打开—读/写—关闭”模式的实现，服务器和客户端各自维护一个“文件”，在建立连接打开后，可以向文件写入内容供对方读取或者读取对方内容，通讯结束时关闭文件。</p>
+<p>服务端代码只有处理完一个客户端请求才会去处理下一个客户端的请求，这样的服务器处理能力很弱，而实际中服务器都需要有并发处理能力，为了达到并发处理，服务器就需要 fork 一个新的进程或者线程去处理请求。</p>
+<h4 id="http2-0通讯方式"><a href="#http2-0通讯方式" class="headerlink" title="http2.0通讯方式"></a>http2.0通讯方式</h4><p>好在，前面说的http都是说的http2.0以前的http，随着http2.0标准的普及，越来越多的浏览器都支持了此标准。<br>http2.0的特点是支持多路复用、压缩请求头、采用二进制传输数据。<br>因此理论上来说使用http2.0协议来建立长连接，也是一种替代websocket的手段。</p>
+<h4 id="http2-0轮询与webSocket的比较"><a href="#http2-0轮询与webSocket的比较" class="headerlink" title="http2.0轮询与webSocket的比较"></a>http2.0轮询与webSocket的比较</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">安全与解密：</span><br><span class="line">1）WebSocket 支持明文通信 ws:// 和加密 wss://</span><br><span class="line">2）而 HTTP/2 协议虽然没有规定必须加密，但是主流浏览器都只支持 HTTP/2 over TLS.</span><br><span class="line"></span><br><span class="line">消息推送：</span><br><span class="line">1）WebSocket是全双工通道，可以双向通信。消息直接推送给 Web App。</span><br><span class="line">2）HTTP/2 虽然也支持 Server Push，但是服务器只能主动将资源推送到客户端缓存,并不允许将数据推送到客户端里跑的 Web App 本身</span><br><span class="line">服务器推送只能由浏览器处理，不会在应用程序代码中弹出服务器数据，这意味着应用程序没有 API 来获取这些事件的通知。为了接近实时地将数据推送给 Web App， HTTP/2 可以结合 SSE（Server-Sent Event）使用。这是一种新提出的 API，用于从服务端单向将数据推送给 Web App.</span><br><span class="line">3）WebSocket 在需要接近实时双向通信的领域，很有用武之地。而 HTTP/2 + SSE 适合用于展示实时数据，另外在客户端非浏览器的情况下，使用不加密的 HTTP/2 也是可能的。</span><br></pre></td></tr></table></figure>
+<h4 id="websocket与Socket"><a href="#websocket与Socket" class="headerlink" title="websocket与Socket"></a>websocket与Socket</h4><p>tcp/ip协议是一个协议栈，必须要具体实现以及对外提供操作接口，tcp/ip对外提供的操作接口就是 socket<br>socket跟tcp/ip并没有必然的联系，socket被设计的时候就希望能够适应其它网络协议，所以socket编程接口的出现只是可以更方便的的使用tcp/ip协议栈。<br>其对tcp/ip进行抽象，形成了几个基本的函数接口：create、listen、accept、connect、read、write等<br>不同语言都对应的建立了socket服务和客服端服务库。<br>nodejs可以通过net模块。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> net = <span class="built_in">require</span>(‘net’)</span><br><span class="line"><span class="keyword">const</span> server = net.createServer()</span><br><span class="line">server.on(<span class="string">&#x27;connection&#x27;</span>, <span class="function"><span class="params">client</span> =&gt;</span> &#123;</span><br><span class="line">  client.write(‘Hi \n’)</span><br><span class="line">  client.end(‘Bye\n’)</span><br><span class="line">&#125;)</span><br><span class="line">server.listen(<span class="number">9000</span>)</span><br></pre></td></tr></table></figure><br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl http://127.0.0.1:9000</span><br><span class="line">Hi</span><br><span class="line">Bye!</span><br></pre></td></tr></table></figure><br>与socket连接的不一定只有浏览器，也可能是其它服务器或者其他客户端，比如可以用另一个Nodejs应用来做client端来进行连接。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// client</span></span><br><span class="line"><span class="keyword">const</span> net = <span class="built_in">require</span>(<span class="string">&#x27;net&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> server = net.createServer()</span><br><span class="line">server.on(<span class="string">&#x27;connection&#x27;</span>, <span class="function"><span class="params">client</span> =&gt;</span> &#123;</span><br><span class="line">  client.write(‘Hi \n’)</span><br><span class="line">  client.end(‘Bye\n’)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// Hi</span></span><br><span class="line"><span class="comment">// Bye</span></span><br></pre></td></tr></table></figure></p>
+<p>当然，实际使用过程并不会如此简单，至少得在服务端维护一个连接池，专门用来管理连接<br>而客户端也需要有相应的容错机制，比如重连和心跳等。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">长连接：连接 -&gt; 数据传输 -&gt; 心跳 -&gt; 数据传输 -&gt; 心跳 -&gt; … -&gt; 关闭连接</span><br></pre></td></tr></table></figure></p>
+<p>与socket名称相似的webSocket，其实两个并不是同一个东西。<br>socket本身并不是一个协议，它工作在OSI模型会话层，是一个套接字，是tcp/ip网络的api，是为了方便大家直接使用底层协议而存在的一个抽象层，是传输控制层协议。<br>而WebSocket 却是应用层协议，是一个html5的协议（当然并不是说只能用在html5，其它客户端也可以按照此标准实现自己的），是一个典型的应用层协议。websocket和http一样都是建立在tcp之上的，通过tcp传输数据<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">websocket属性：Socket.readyState、Socket.bufferedAmount</span><br><span class="line">0 - 表示连接尚未建立</span><br><span class="line">1 - 表示连接已建立，可以进行通信</span><br><span class="line">2 - 表示连接正在进行关闭</span><br><span class="line">3 - 表示连接已经关闭或者连接不能打开</span><br><span class="line">websocket事件：open、message、error、close、</span><br><span class="line">websocket方法：send、close</span><br></pre></td></tr></table></figure></p>
+<h3 id="传送门"><a href="#传送门" class="headerlink" title="传送门"></a>传送门</h3><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/51279572">https://zhuanlan.zhihu.com/p/51279572</a><br><a target="_blank" rel="noopener" href="https://baibingqianlan.github.io/2019/07/04/websocket%E4%B8%8Ehttp%E8%BD%AE%E8%AF%A2.html">https://baibingqianlan.github.io/2019/07/04/websocket%E4%B8%8Ehttp%E8%BD%AE%E8%AF%A2.html</a><br>SSE<br><a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2017/05/server-sent_events.html">https://www.ruanyifeng.com/blog/2017/05/server-sent_events.html</a><br><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000013712747">socket通信原理</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.epoos.com/2021/01/06/long-connect/" data-id="ckn1ji9o1000vfqvzbazbave6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%95%BF%E8%BF%9E%E6%8E%A5/" rel="tag">长连接</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/01/09/micro-front/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          我所理解的微前端
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/01/05/code1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">函数式编程简介</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <span class="widget-date">2021-02-26</span>
+            <a href="/2021/02/26/compile/">前端编译</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-24</span>
+            <a href="/2021/02/24/weakSet/">weakSet与js内存回收</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-08</span>
+            <a href="/2021/02/08/react16/">react 学习笔记</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-04</span>
+            <a href="/2021/02/04/vue3/">Vue3 初探</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-01-30</span>
+            <a href="/2021/01/30/dynamic/">动态规划算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签索引</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AES/" style="font-size: 10px;">AES</a> <a href="/tags/CONTENTTYPE/" style="font-size: 10px;">CONTENTTYPE</a> <a href="/tags/MIMETYPE/" style="font-size: 10px;">MIMETYPE</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/apply/" style="font-size: 10px;">apply</a> <a href="/tags/async/" style="font-size: 10px;">async</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/bind/" style="font-size: 10px;">bind</a> <a href="/tags/brew/" style="font-size: 10px;">brew</a> <a href="/tags/browser/" style="font-size: 10px;">browser</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/call/" style="font-size: 10px;">call</a> <a href="/tags/child-process/" style="font-size: 10px;">child_process</a> <a href="/tags/chrome/" style="font-size: 10px;">chrome</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/commonjs/" style="font-size: 10px;">commonjs</a> <a href="/tags/compile/" style="font-size: 10px;">compile</a> <a href="/tags/create/" style="font-size: 10px;">create</a> <a href="/tags/csrf/" style="font-size: 10px;">csrf</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/defer/" style="font-size: 10px;">defer</a> <a href="/tags/dns/" style="font-size: 10px;">dns</a> <a href="/tags/dubbo/" style="font-size: 10px;">dubbo</a> <a href="/tags/es6Module/" style="font-size: 10px;">es6Module</a> <a href="/tags/event/" style="font-size: 10px;">event</a> <a href="/tags/fiber/" style="font-size: 10px;">fiber</a> <a href="/tags/flux/" style="font-size: 10px;">flux</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/http/" style="font-size: 11.25px;">http</a> <a href="/tags/http2/" style="font-size: 10px;">http2</a> <a href="/tags/http3/" style="font-size: 10px;">http3</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/instance/" style="font-size: 10px;">instance</a> <a href="/tags/ios%E6%A8%A1%E6%8B%9F%E5%99%A8/" style="font-size: 10px;">ios模拟器</a> <a href="/tags/iphonex/" style="font-size: 10px;">iphonex</a> <a href="/tags/item2/" style="font-size: 10px;">item2</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 16.25px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 11.25px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/nginx/" style="font-size: 11.25px;">nginx</a> <a href="/tags/nodejs/" style="font-size: 17.5px;">nodejs</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/npm-lock/" style="font-size: 10px;">npm-lock</a> <a href="/tags/object/" style="font-size: 11.25px;">object</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/proxy/" style="font-size: 11.25px;">proxy</a> <a href="/tags/react/" style="font-size: 11.25px;">react</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redux/" style="font-size: 10px;">redux</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/rsync/" style="font-size: 10px;">rsync</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sentinel/" style="font-size: 10px;">sentinel</a> <a href="/tags/set/" style="font-size: 10px;">set</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/simulator/" style="font-size: 10px;">simulator</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/ssr/" style="font-size: 10px;">ssr</a> <a href="/tags/svn/" style="font-size: 10px;">svn</a> <a href="/tags/terminal/" style="font-size: 10px;">terminal</a> <a href="/tags/thrift/" style="font-size: 10px;">thrift</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/virtualDom/" style="font-size: 10px;">virtualDom</a> <a href="/tags/vue/" style="font-size: 12.5px;">vue</a> <a href="/tags/vue-vuex/" style="font-size: 10px;">vue vuex</a> <a href="/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/tags/weakSet/" style="font-size: 10px;">weakSet</a> <a href="/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 11.25px;">web安全</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/xss/" style="font-size: 10px;">xss</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1/" style="font-size: 10px;">事件冒泡</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 10px;">事件循环</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%8D%95%E8%8E%B7/" style="font-size: 10px;">事件捕获</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%86%92%E6%B3%A1%E7%AE%97%E6%B3%95/" style="font-size: 10px;">冒泡算法</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">函数式编程</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BC%96%E8%AF%91/" style="font-size: 10px;">前端编译</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 10px;">动态规划</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 10px;">响应式</a> <a href="/tags/%E5%9B%9E%E6%96%87/" style="font-size: 10px;">回文</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 18.75px;">基础</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 10px;">安全</a> <a href="/tags/%E5%AF%B9%E8%B1%A1/" style="font-size: 11.25px;">对象</a> <a href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 11.25px;">小程序</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" style="font-size: 11.25px;">微信开发</a> <a href="/tags/%E5%BE%AE%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">微前端</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">快速算法</a> <a href="/tags/%E6%80%A7%E8%83%BD/" style="font-size: 10px;">性能</a> <a href="/tags/%E6%8F%92%E5%85%A5%E7%AE%97%E6%B3%95/" style="font-size: 10px;">插入算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12.5px;">数据库</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 10px;">数组</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF/" style="font-size: 10px;">服务端</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B8%B2%E6%9F%93/" style="font-size: 10px;">服务端渲染</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 10px;">浏览器</a> <a href="/tags/%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/" style="font-size: 10px;">硬件加速</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.75px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">线程</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%99%9A%E6%8B%9FDOM/" style="font-size: 10px;">虚拟DOM</a> <a href="/tags/%E8%AF%95%E9%A2%98/" style="font-size: 12.5px;">试题</a> <a href="/tags/%E8%AF%B7%E6%B1%82%E5%A4%B4/" style="font-size: 10px;">请求头</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" style="font-size: 10px;">软件安装</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10px;">进程</a> <a href="/tags/%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95/" style="font-size: 10px;">选择算法</a> <a href="/tags/%E9%95%BF%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">长连接</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12.5px;">面试</a> <a href="/tags/%E9%BD%90%E5%88%98%E6%B5%B7/" style="font-size: 10px;">齐刘海</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 zhoushirong&nbsp;|
+      <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备16019450号-1</a>&nbsp;|
+      <a href="https://github.com/zhoushirong" target="_blank">github</a>&nbsp;|
+      <a href="https://www.epoos.com" target="_blank">epoos.com</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="https://www.epoos.com" class="mobile-nav-link" target="_self">主站</a>
+  
+    <a href="/" class="mobile-nav-link" target="_self">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link" target="_self">列表</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

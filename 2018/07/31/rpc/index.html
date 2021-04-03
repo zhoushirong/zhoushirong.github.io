@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-109295694-1', 'auto');
+ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+<!-- 百度统计 -->
+<script type="text/javascript">
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?e7c73fb59256f4428781ae50108da3bc";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+  
+  <title>rpc与thrift简介 | 邑司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="现如今都流行大前端开发，所谓的大前端就是，将后端的传统的MVC（model、view、controler）中的view和controler给接过来。将view接过来这个没什么问题，最近的vue、react等框架，以前的静态html页面，ftl模板等都是干这种事情的，没什么好说。但是，如果要将controler给接过来，就有些麻烦了。最直接的问题就是需要搞定服务器内部服务之间的通讯 对于Jser来说">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rpc与thrift简介">
+<meta property="og:url" content="https://blog.epoos.com/2018/07/31/rpc/index.html">
+<meta property="og:site_name" content="邑司">
+<meta property="og:description" content="现如今都流行大前端开发，所谓的大前端就是，将后端的传统的MVC（model、view、controler）中的view和controler给接过来。将view接过来这个没什么问题，最近的vue、react等框架，以前的静态html页面，ftl模板等都是干这种事情的，没什么好说。但是，如果要将controler给接过来，就有些麻烦了。最直接的问题就是需要搞定服务器内部服务之间的通讯 对于Jser来说">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-07-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-30T01:32:00.325Z">
+<meta property="article:author" content="zhoushirong">
+<meta property="article:tag" content="nodejs">
+<meta property="article:tag" content="rpc">
+<meta property="article:tag" content="thrift">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">邑司</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="https://www.epoos.com" target="_self">主站</a>
+        
+          <a class="main-nav-link" href="/" target="_self">首页</a>
+        
+          <a class="main-nav-link" href="/archives" target="_self">列表</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.epoos.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-rpc" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/31/rpc/" class="article-date">
+  <time datetime="2018-07-30T16:00:00.000Z" itemprop="datePublished">2018-07-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      rpc与thrift简介
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>现如今都流行大前端开发，所谓的大前端就是，将后端的传统的MVC（model、view、controler）中的view和controler给接过来。<br>将view接过来这个没什么问题，最近的vue、react等框架，以前的静态html页面，ftl模板等都是干这种事情的，没什么好说。<br>但是，如果要将controler给接过来，就有些麻烦了。<br>最直接的问题就是需要搞定服务器内部服务之间的通讯</p>
+<p>对于Jser来说，就是需要搞定nodejs和其它语言（如java）之间的通讯。</p>
+<h3 id="通讯方式"><a href="#通讯方式" class="headerlink" title="通讯方式"></a>通讯方式</h3><p>对于Jser来说，最简单，最熟悉，最好用的莫过于直接通过http请求调用接口了。<br>这种方式最实用，也最好实现，这个也是我之前公司用的方式。（中小型公司首选）</p>
+<p>但是，http协议设计最初是为了实现web与服务器之间的通讯。<br>而http请求是基于http协议的，因此存在有很多web浏览器定制的信息。这对于服务器之间的通讯来说这些信息就是冗余信息了。<br>除此之外，http通讯对于大规模的后端服务器之间数据交互还是存在一定的性能问题的。</p>
+<p>http协议并不是服务器之间通讯的最理想协议。</p>
+<p>那么，除了http协议，还有其他的方式来做服务器之间的通讯吗？<br>当然有，而且目前在后端开发领域还很常见，那就是RPC。<br>而作为JS开发者，要想搞定controler层，RPC就是必须得啃的骨头了。</p>
+<h3 id="rpc是什么？"><a href="#rpc是什么？" class="headerlink" title="rpc是什么？"></a>rpc是什么？</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rpc(remote procedure call)远程过程调用，是一个计算机通信协议。</span><br><span class="line">该协议允许运行在一台计算机的程序调用另一台计算机的子程序。</span><br><span class="line">如果涉及的软件采用面向对象编程，那么远程过程调用亦可称作远程调用或远程方法调用。</span><br></pre></td></tr></table></figure>
+<p>其实可以看做是一个系统内部调用通道。</p>
+<h3 id="IDL是什么？"><a href="#IDL是什么？" class="headerlink" title="IDL是什么？"></a>IDL是什么？</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">IDL（Interface Description Language）接口描述语言。</span><br><span class="line">是一个描述软件组件接口的语言“规范”。</span><br><span class="line">为了不同服务器能够访问服务器，需要定制一些标准化的RPC，大部分采用的接口描述语言。</span><br><span class="line">IDL采用一种中立的方式来描述接口，使得不同平台上运行的对象和用不同语言编写的程序可以相互通信交流。</span><br></pre></td></tr></table></figure>
+<h3 id="rpc框架？"><a href="#rpc框架？" class="headerlink" title="rpc框架？"></a>rpc框架？</h3><p>rpc框架有很多，目前用的比较多的有：gRPC、Thrift、Dubbo<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Dubbo是阿里开源的一款rpc框架</span><br><span class="line">gRPC是google开源的一款rpc框架</span><br><span class="line">Thrift是facebook开源的rpc框架</span><br></pre></td></tr></table></figure></p>
+<p>其中，阿里巴巴开源的Dubbo在国内是最流行的RPC框架（我厂java后端就是用的这个）。<br>当然，据我了解，目前阿里内部都用HSF，据说是继Dubbo之后的下一代RPC框架。<br>只是，目前HSF并没有开源。</p>
+<hr>
+<p><em>当然，thrift也是用的挺多的，至少我之前在网上搜索node-java通讯，搜出来的很多结果都是说用thrift进行通讯，于是顺便了解了一下thrift。</em></p>
+<h3 id="thrift-是什么？"><a href="#thrift-是什么？" class="headerlink" title="thrift 是什么？"></a>thrift 是什么？</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">thrift是一种接口描述语言和二进制通讯协议，它被用来定义和创建跨语言的服务。</span><br><span class="line">它被当做一个远程过程调用（RPC）框架使用。</span><br><span class="line">早期由Facebook“为大规模跨语言服务”而开发的。现在是Apache软件基金会的开源项目。</span><br></pre></td></tr></table></figure>
+<h3 id="thrift与IDL"><a href="#thrift与IDL" class="headerlink" title="thrift与IDL"></a>thrift与IDL</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">thrift采用IDL来定义通用的服务接口，然后通过thrift提供的编译器，可以将服务接口编译成不同语言编写的代码，通过这种方式来实现跨语言通信。</span><br><span class="line">thrift是一个基于IDL生成跨语言的RPC clients and services。</span><br></pre></td></tr></table></figure>
+<h3 id="thrift使用？"><a href="#thrift使用？" class="headerlink" title="thrift使用？"></a>thrift使用？</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1.安装</span><br><span class="line">https://thrift.apache.org/docs/install/os_x</span><br></pre></td></tr></table></figure>
+<h4 id="安装遇到问题："><a href="#安装遇到问题：" class="headerlink" title="安装遇到问题："></a>安装遇到问题：</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Couldn&#x27;t find libtoolize!</span><br></pre></td></tr></table></figure>
+<p>解决：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew reinstall libtool;</span><br></pre></td></tr></table></figure></p>
+<p>问题：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">configure: error: Bison version 2.5 or higher must be installed on the system!</span><br></pre></td></tr></table></figure><br>解决：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew install bison # 缺什么安装什么</span><br><span class="line">export PATH=/usr/local/Cellar/bison/3.0.5/bin:$PATH # 安装完成之后设置环境变量</span><br></pre></td></tr></table></figure></p>
+<p>问题：make报错<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x27;boost/tokenizer.hpp&#x27; file not found</span><br></pre></td></tr></table></figure><br>解决：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install boost</span><br></pre></td></tr></table></figure></p>
+<p>问题：make报错<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make[3]: /usr/local/bin/bundle: No such file or directory</span><br></pre></td></tr></table></figure><br>解决：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">好烦，有完没完。。。</span><br></pre></td></tr></table></figure></p>
+<p>这条路没完没了了，搜一下还有什么其他的方式吧，要不回去用brew安装一下试试？</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install thrift</span><br></pre></td></tr></table></figure>
+<p>解决<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">好吧，安装成功了。</span><br><span class="line">明明记得之前安装会报错的，在源码安装之前其实我有试过brew安装，但是也报了一个什么环境错误。</span><br><span class="line">但是现在却能够安装成功。</span><br><span class="line">唯一的解释是，上面的安装的那些环境包还是有用的。</span><br><span class="line">理论上来说安装方式有多种：一种是通过源码一步一步编译、构建；另一种就是通过brew直接安装。</span><br></pre></td></tr></table></figure></p>
+<p>安装的过程中或多或少都会遇到一些环境问题，但是，只要一步一步去解决最终还是能搞定的。</p>
+<p>至此，整个thrift安装就已经结束了。</p>
+<hr>
+<p>作为程序员，不论学了什么，如果没有跑一个hello world！总觉得少了些什么。<br>要跑thrift的hello world，首先得有一个thrift服务端、一个thrift客户端。<br>既然我们是要做nodejs跟java的通讯，这个demo最好当然是用nodejs和java来互相通讯了。</p>
+<p>但是，我不懂java…</p>
+<p>好吧，其实thrift是rpc框架，不仅仅是跨语言通讯，更主要功能还是做服务器各个子服务之间的通讯。<br>（妥协）那就做一个nodejs跟nodejs之间的一个通讯吧。</p>
+<h3 id="使用thrift协议作为NODEJS之间的通讯实例。"><a href="#使用thrift协议作为NODEJS之间的通讯实例。" class="headerlink" title="使用thrift协议作为NODEJS之间的通讯实例。"></a>使用thrift协议作为NODEJS之间的通讯实例。</h3><p>第一步：<br>要创建一个thrift服务，必须写一些thrift文件来描述它，为目标语言生成代码，并且写一些代码来启动服务器及从客户端调用它。<br>下面是我从thrift上官网上扒下来的NODEJS版本的thrift例子的简化版。</p>
+<p>tutorial.thrift文件，遵循IDL语法规则。<br><figure class="highlight thrift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 命名空间</span></span><br><span class="line"><span class="keyword">namespace</span> js tutorial</span><br><span class="line"><span class="comment">// 定义接口方法</span></span><br><span class="line"><span class="class"><span class="keyword">service</span> <span class="title">Ping</span> </span>&#123;</span><br><span class="line">  <span class="keyword">void</span> ping(),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>通过thrift生成nodejs版本的代码</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">thrift --gen &lt;language&gt; &lt;Thrift filename&gt; # eg：thrift -r --gen js:node tutorial.thrift</span><br></pre></td></tr></table></figure>
+<p>通过上面的命令，会生成如下结构的两个文件（这两个文件不要手动修改）</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-gen-nodejs</span><br><span class="line">  -Ping.js</span><br><span class="line">  -tutorial_types.js</span><br></pre></td></tr></table></figure>
+<p>之后，用nodejs 分别写服务端和客户端文件，并引入上面thrift生成的文件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 文件：./server.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> thrift = <span class="built_in">require</span>(<span class="string">&quot;thrift&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> Ping = <span class="built_in">require</span>(<span class="string">&quot;./gen-nodejs/Ping&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> server = thrift.createServer(Ping, &#123;</span><br><span class="line">	<span class="comment">// 接收到客户端的ping之后，打印一个ping()</span></span><br><span class="line">  ping: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;ping()&quot;</span>);</span><br><span class="line">    result(<span class="literal">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">9090</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 文件：./client.js</span></span><br><span class="line"><span class="keyword">var</span> thrift = <span class="built_in">require</span>(<span class="string">&#x27;thrift&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> Ping = <span class="built_in">require</span>(<span class="string">&#x27;./gen-nodejs/Ping&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> assert = <span class="built_in">require</span>(<span class="string">&#x27;assert&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> transport = thrift.TBufferedTransport;</span><br><span class="line"><span class="keyword">var</span> protocol = thrift.TBinaryProtocol;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> connection = thrift.createConnection(<span class="string">&quot;localhost&quot;</span>, <span class="number">9090</span>, &#123;</span><br><span class="line">  transport : transport,</span><br><span class="line">  protocol : protocol</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">connection.on(<span class="string">&#x27;error&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">  assert(<span class="literal">false</span>, err);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Create a Ping client with the connection</span></span><br><span class="line"><span class="keyword">var</span> client = thrift.createClient(Ping, connection);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ping</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  client.ping(<span class="function"><span class="keyword">function</span>(<span class="params">err, response</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;ping...&#x27;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 每一秒ping一次</span></span><br><span class="line"><span class="built_in">setInterval</span>(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  ping()</span><br><span class="line">&#125;, <span class="number">1000</span>)</span><br></pre></td></tr></table></figure>
+<p>运行：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 先运行服务端</span></span><br><span class="line">node ./server.js</span><br><span class="line"><span class="meta">#</span><span class="bash"> 再运行客户端</span></span><br><span class="line">node ./client.js</span><br></pre></td></tr></table></figure></p>
+<p>客户端控制台结果：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ping...</span><br><span class="line">ping...</span><br><span class="line">ping...</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>服务端控制台结果：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ping()</span><br><span class="line">ping()</span><br><span class="line">ping()</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>至此，我们就完成了一个完整的通过thrift协议进行nodejs之间的通讯了。<br>当然，上面只是一个最简单的例子。<br>要想做一个完整而复杂的thrift通讯还有很多事情要做。</p>
+<p>得了解更多的IDL语法，动态生成获取thrift生成文件，服务的稳定性，容错性等。<br>几乎是需要搭建一整套thrift服务应用程序了。这个过程其实就是开发一个新的基础服务系统。<br>总算明白了为什么得大厂的jser才会玩rpc服务了。</p>
+<h3 id="传送门："><a href="#传送门：" class="headerlink" title="传送门："></a>传送门：</h3><p>thrift的IDL<br><a target="_blank" rel="noopener" href="http://thrift.apache.org/docs/idl">http://thrift.apache.org/docs/idl</a></p>
+<p>NODEJS实例传送门：<br><a target="_blank" rel="noopener" href="https://thrift.apache.org/tutorial/nodejs">https://thrift.apache.org/tutorial/nodejs</a></p>
+<p>dubbo传送门<br><a target="_blank" rel="noopener" href="https://github.com/dubbo/dubbo2.js">https://github.com/dubbo/dubbo2.js</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.epoos.com/2018/07/31/rpc/" data-id="ckn1ji9oi001nfqvzdxo881n4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nodejs/" rel="tag">nodejs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rpc/" rel="tag">rpc</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/thrift/" rel="tag">thrift</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/08/02/vue1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          vue运行过程
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/06/14/linux4/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Linux学习笔记(四)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <span class="widget-date">2021-02-26</span>
+            <a href="/2021/02/26/compile/">前端编译</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-24</span>
+            <a href="/2021/02/24/weakSet/">weakSet与js内存回收</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-08</span>
+            <a href="/2021/02/08/react16/">react 学习笔记</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-04</span>
+            <a href="/2021/02/04/vue3/">Vue3 初探</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-01-30</span>
+            <a href="/2021/01/30/dynamic/">动态规划算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签索引</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AES/" style="font-size: 10px;">AES</a> <a href="/tags/CONTENTTYPE/" style="font-size: 10px;">CONTENTTYPE</a> <a href="/tags/MIMETYPE/" style="font-size: 10px;">MIMETYPE</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/apply/" style="font-size: 10px;">apply</a> <a href="/tags/async/" style="font-size: 10px;">async</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/bind/" style="font-size: 10px;">bind</a> <a href="/tags/brew/" style="font-size: 10px;">brew</a> <a href="/tags/browser/" style="font-size: 10px;">browser</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/call/" style="font-size: 10px;">call</a> <a href="/tags/child-process/" style="font-size: 10px;">child_process</a> <a href="/tags/chrome/" style="font-size: 10px;">chrome</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/commonjs/" style="font-size: 10px;">commonjs</a> <a href="/tags/compile/" style="font-size: 10px;">compile</a> <a href="/tags/create/" style="font-size: 10px;">create</a> <a href="/tags/csrf/" style="font-size: 10px;">csrf</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/defer/" style="font-size: 10px;">defer</a> <a href="/tags/dns/" style="font-size: 10px;">dns</a> <a href="/tags/dubbo/" style="font-size: 10px;">dubbo</a> <a href="/tags/es6Module/" style="font-size: 10px;">es6Module</a> <a href="/tags/event/" style="font-size: 10px;">event</a> <a href="/tags/fiber/" style="font-size: 10px;">fiber</a> <a href="/tags/flux/" style="font-size: 10px;">flux</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/http/" style="font-size: 11.25px;">http</a> <a href="/tags/http2/" style="font-size: 10px;">http2</a> <a href="/tags/http3/" style="font-size: 10px;">http3</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/instance/" style="font-size: 10px;">instance</a> <a href="/tags/ios%E6%A8%A1%E6%8B%9F%E5%99%A8/" style="font-size: 10px;">ios模拟器</a> <a href="/tags/iphonex/" style="font-size: 10px;">iphonex</a> <a href="/tags/item2/" style="font-size: 10px;">item2</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 16.25px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 11.25px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/nginx/" style="font-size: 11.25px;">nginx</a> <a href="/tags/nodejs/" style="font-size: 17.5px;">nodejs</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/npm-lock/" style="font-size: 10px;">npm-lock</a> <a href="/tags/object/" style="font-size: 11.25px;">object</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/proxy/" style="font-size: 11.25px;">proxy</a> <a href="/tags/react/" style="font-size: 11.25px;">react</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redux/" style="font-size: 10px;">redux</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/rsync/" style="font-size: 10px;">rsync</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sentinel/" style="font-size: 10px;">sentinel</a> <a href="/tags/set/" style="font-size: 10px;">set</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/simulator/" style="font-size: 10px;">simulator</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/ssr/" style="font-size: 10px;">ssr</a> <a href="/tags/svn/" style="font-size: 10px;">svn</a> <a href="/tags/terminal/" style="font-size: 10px;">terminal</a> <a href="/tags/thrift/" style="font-size: 10px;">thrift</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/virtualDom/" style="font-size: 10px;">virtualDom</a> <a href="/tags/vue/" style="font-size: 12.5px;">vue</a> <a href="/tags/vue-vuex/" style="font-size: 10px;">vue vuex</a> <a href="/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/tags/weakSet/" style="font-size: 10px;">weakSet</a> <a href="/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 11.25px;">web安全</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/xss/" style="font-size: 10px;">xss</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1/" style="font-size: 10px;">事件冒泡</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 10px;">事件循环</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%8D%95%E8%8E%B7/" style="font-size: 10px;">事件捕获</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%86%92%E6%B3%A1%E7%AE%97%E6%B3%95/" style="font-size: 10px;">冒泡算法</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">函数式编程</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BC%96%E8%AF%91/" style="font-size: 10px;">前端编译</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 10px;">动态规划</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 10px;">响应式</a> <a href="/tags/%E5%9B%9E%E6%96%87/" style="font-size: 10px;">回文</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 18.75px;">基础</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 10px;">安全</a> <a href="/tags/%E5%AF%B9%E8%B1%A1/" style="font-size: 11.25px;">对象</a> <a href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 11.25px;">小程序</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" style="font-size: 11.25px;">微信开发</a> <a href="/tags/%E5%BE%AE%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">微前端</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">快速算法</a> <a href="/tags/%E6%80%A7%E8%83%BD/" style="font-size: 10px;">性能</a> <a href="/tags/%E6%8F%92%E5%85%A5%E7%AE%97%E6%B3%95/" style="font-size: 10px;">插入算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12.5px;">数据库</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 10px;">数组</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF/" style="font-size: 10px;">服务端</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B8%B2%E6%9F%93/" style="font-size: 10px;">服务端渲染</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 10px;">浏览器</a> <a href="/tags/%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/" style="font-size: 10px;">硬件加速</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.75px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">线程</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%99%9A%E6%8B%9FDOM/" style="font-size: 10px;">虚拟DOM</a> <a href="/tags/%E8%AF%95%E9%A2%98/" style="font-size: 12.5px;">试题</a> <a href="/tags/%E8%AF%B7%E6%B1%82%E5%A4%B4/" style="font-size: 10px;">请求头</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" style="font-size: 10px;">软件安装</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10px;">进程</a> <a href="/tags/%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95/" style="font-size: 10px;">选择算法</a> <a href="/tags/%E9%95%BF%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">长连接</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12.5px;">面试</a> <a href="/tags/%E9%BD%90%E5%88%98%E6%B5%B7/" style="font-size: 10px;">齐刘海</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 zhoushirong&nbsp;|
+      <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备16019450号-1</a>&nbsp;|
+      <a href="https://github.com/zhoushirong" target="_blank">github</a>&nbsp;|
+      <a href="https://www.epoos.com" target="_blank">epoos.com</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="https://www.epoos.com" class="mobile-nav-link" target="_self">主站</a>
+  
+    <a href="/" class="mobile-nav-link" target="_self">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link" target="_self">列表</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

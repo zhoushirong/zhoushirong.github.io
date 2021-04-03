@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-109295694-1', 'auto');
+ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+<!-- 百度统计 -->
+<script type="text/javascript">
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?e7c73fb59256f4428781ae50108da3bc";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+  
+  <title>我所理解的微前端 | 邑司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="当下业内的微前端字眼出现的频率比较高，于是大致了解了一下微前端主要内容包括：什么是微前端？微前端的好处和意义是什么？做微前端应该如何做？ 什么是微前端说微前端之前首先得跟微服务区分开来微服务是一种以业务功能为主的服务设计概念，每一个服务都具有自主运行的业务功能，对外开放不受语言限制的API (最常用的是HTTP)，应用程序则是由一个或多个微服务组成。微服务是由以单一应用程序构成的小服务，自己拥有自">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我所理解的微前端">
+<meta property="og:url" content="https://blog.epoos.com/2021/01/09/micro-front/index.html">
+<meta property="og:site_name" content="邑司">
+<meta property="og:description" content="当下业内的微前端字眼出现的频率比较高，于是大致了解了一下微前端主要内容包括：什么是微前端？微前端的好处和意义是什么？做微前端应该如何做？ 什么是微前端说微前端之前首先得跟微服务区分开来微服务是一种以业务功能为主的服务设计概念，每一个服务都具有自主运行的业务功能，对外开放不受语言限制的API (最常用的是HTTP)，应用程序则是由一个或多个微服务组成。微服务是由以单一应用程序构成的小服务，自己拥有自">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-30T01:32:00.321Z">
+<meta property="article:author" content="zhoushirong">
+<meta property="article:tag" content="微前端">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">邑司</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="https://www.epoos.com" target="_self">主站</a>
+        
+          <a class="main-nav-link" href="/" target="_self">首页</a>
+        
+          <a class="main-nav-link" href="/archives" target="_self">列表</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.epoos.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-micro-front" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/01/09/micro-front/" class="article-date">
+  <time datetime="2021-01-08T16:00:00.000Z" itemprop="datePublished">2021-01-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      我所理解的微前端
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>当下业内的微前端字眼出现的频率比较高，于是大致了解了一下微前端<br>主要内容包括：什么是微前端？微前端的好处和意义是什么？做微前端应该如何做？</p>
+<h4 id="什么是微前端"><a href="#什么是微前端" class="headerlink" title="什么是微前端"></a>什么是微前端</h4><p>说微前端之前首先得跟微服务区分开来<br><strong><em>微服务</em></strong>是一种以业务功能为主的服务设计概念，每一个服务都具有自主运行的业务功能，对外开放不受语言限制的API (最常用的是HTTP)，应用程序则是由一个或多个微服务组成。<br>微服务是由以单一应用程序构成的小服务，自己拥有自己的行程与轻量化处理，服务依业务功能设计，以全自动的方式部署，与其他服务使用HTTP API通信。同时服务会使用最小的规模的集中管理 (例如 Docker) 能力，服务可以用不同的编程语言与数据库等组件实现。 —— 维基百科</p>
+<p>而微前端，是针对前台的单页系统而定义的概念，每一个微前端的功能模块都具有自主运行的业务功能，对外提供url访问路径（可以是完整的URL，也可以是前端history/hash等路由），应用有一个或多个单页系统组成，可以独立部署，方便的插拔，又能够方便的实现独立模块间的通信。类似与微服务的不同语言的兼容性，微前端各个子应用也可以使用各自自己的语言，比如react、vue、angular等。<br>现如今前端多框架齐头并进，而且谁也不能保证会不会过几个月就新增一个新的框架，因此，在不重写原有系统的基础上使用新技术开发新功能是十分必要的需求，而微前端的思想就能够很方便的让这一需求成为可能，这也是微服务的一个很重要的卖点。</p>
+<h4 id="微前端的好处和意义"><a href="#微前端的好处和意义" class="headerlink" title="微前端的好处和意义"></a>微前端的好处和意义</h4><p>1.独立开发部署，聚合使用。<br>有过一定前端开发经验的人都知道，一个健康发展，长期迭代更新维护的系统，一定是越做越大，功能越来越多的。<br>而随着功能的增多，代码量增多，打包构建更耗时，模块依赖更复杂，模块崩溃连锁反应风险更大。因此，当到达某个临界点的时候，就会促使开发人员对应用进行拆分了。<br>然而系统拆分确实能够解决问题，但是对于用户来说就变成了使用一个系统变成了使用多个系统了，即使我们做了授权登录或者跨子域登录，对于不同系统之前的切换也是很麻烦的，如果有的选择，用户肯定是希望一个系统就能把自己的事情做完。</p>
+<p>2.跨团队、跨技术开发<br>一个复杂的系统往往需要很多人、甚至不同的团队一起来开发的，而这也就意味着需要跨越多个时间线、多个技术栈和多个团队的编码风格。<br>这些差异点集成在一起往往就是风险的不断叠加和维护成本的不断上升。微前端的思想可以很好的处理这一类问题。</p>
+<p>3.微前端最佳的使用场景是一些B端的管理系统，既能兼容集成历史系统，也可以将新的系统集成进来，并且不影响原先的交互体验。<br>整体的微前端不仅仅是只将系统集成进来，而是整个微前端体系的完善。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">基座应用和微应用的自动部署能力。</span><br><span class="line">微应用的配置管理能力。</span><br><span class="line">本地开发调试能力。</span><br><span class="line">线上监控和统计能力等。</span><br></pre></td></tr></table></figure><br>只有将整个能力体系搭建完善，才能说是整个微前端体系流程的完善。<br>当发现使用微前端反而使效率变低，简单的变更复杂那就说明微前端并不适用。</p>
+<h4 id="如何做微前端"><a href="#如何做微前端" class="headerlink" title="如何做微前端"></a>如何做微前端</h4><p>微前端的思想其实有点类似于 iframe，起一个框架，做一个导航，然后嵌入不同的页面。<br>单纯根据对概念的理解，实现微前端的就是将应用进行拆解和整合，通常是一个父应用加上一些子应用，主应用管理各个子应用。<br>采用iframe来将多个应用整合到一起等等这些其实都属于微前端的实现方案</p>
+<p>当然，如果仅仅是套一个iframe那也太low了。<br>一个好的微前端方案主要需要解决三个问题：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">路由切换、路由分发问题。</span><br><span class="line">子应用之间、子应用与主微应用的隔离问题。</span><br><span class="line">子应用直接的通信问题。</span><br></pre></td></tr></table></figure></p>
+<p>1.路由分发<br>作为一个SPA的基座应用，本身是一套纯前端项目，要想展示微应用的页面除了采用iframe之外，要能先拉取到微应用的页面内容， 这就需要远程拉取机制。<br>远程拉取机制通常会采用fetch API来首先获取到微应用的HTML内容，然后通过解析将微应用的 JavaScript 和 CSS 进行抽离，采用 eval 方法来运行JavaScript，并将CSS和HTML 内容 append 到基座应用中留给微应用的展示区域，当微应用切换走时，同步卸载这些内容，这就构成的当前应用的展示流程。<br>当然这个流程里会涉及到 CSS 样式的污染以及 JavaScript 对全局对象的污染。</p>
+<p>2.微应用隔离<br>当前处理微应用隔离， 应对 CSS 全局对象污染的方法<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">可结合 Webpack等打包工具，使用 css Module或者命名空间的方式给每个子应用添加特定的前缀，每次应用加载时，<span class="tag">&lt;<span class="name">br</span>&gt;</span>将该应用所有的 link 和 style 内容进行标记。在应用卸载后，同步卸载页面上对应的link和style即可</span><br><span class="line"></span><br><span class="line">使用Web Components（shadowDom）技术，Web Components能够填入隔离 CSS 作用域。</span><br></pre></td></tr></table></figure><br>每当微应用的JavaScript被加载并运行时，它的核心实际上是对全局对象 Window 的修改以及一些全局事件的改变，例如jQuery这个js运行后，会在Window上挂载一个window.$对象，对于其他库React，Vue也不例外。为此，需要在加载和卸载每个微应用的同时，尽可能消除这种冲突和影响<br>当前处理 Javascript 全局对象污染的方法<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">最普遍的做法是采用沙箱机制（SandBox）。</span><br><span class="line">沙箱机制的核心是让局部的JavaScript运行时，对外部对象的访问和修改处在可控的范围内，即无论内部怎么运行，都不会影响外部的对象。</span><br><span class="line">通常在Node.js端可以采用vm模块，而对于浏览器，则需要结合 with 关键字和 window.Proxy 对象来实现浏览器端的沙箱。</span><br></pre></td></tr></table></figure></p>
+<p>3.微前端的消息通信<br>消息订阅（pub/sub）模式的通信机制<br>在基座应用中会定义事件中心Event，每个微应用分别来注册事件，当被触发事件时再有事件中心统一分发，这就构成了基本的通信机制<br>如果使用的是 React或者 Vue等框架，可以结合Redux和Vuex来一起使用，实现应用之间的通信。</p>
+<h3 id="传送门"><a href="#传送门" class="headerlink" title="传送门"></a>传送门</h3><p><a target="_blank" rel="noopener" href="https://github.com/fengshi123/blog/issues/21">微前端探索</a>，介绍了了什么是微前端，以及乾坤框架的一些简介。</p>
+<p><a target="_blank" rel="noopener" href="https://qiankun.umijs.org/zh/guide">qiankun框架</a> 是一个基于 single-spa 的微前端实现库，旨在帮助大家能更简单、无痛的构建一个生产可用微前端架构系统。</p>
+<p><a target="_blank" rel="noopener" href="https://tech.meituan.com/2020/02/27/meituan-waimai-micro-frontends-practice.html">微前端在美团外卖的实践</a>，美团在微前端的实践经验</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/phodal/microfrontends">微前端那些事</a>，微前端框架 Mooa </p>
+<p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2019/08/web_components.html">Web Components</a> 入门实例教程</p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1408030">with关键字</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2016/06/css_modules.html">CSS Module简介</a>（CSSmodule就是一个css模块化的一个方案）</p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904162509979662">微应用简介</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.epoos.com/2021/01/09/micro-front/" data-id="ckn1ji9o4000xfqvzehwf3u2d" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BE%AE%E5%89%8D%E7%AB%AF/" rel="tag">微前端</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/01/11/data-bind/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          响应式
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/01/06/long-connect/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">实时通信与socket</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <span class="widget-date">2021-02-26</span>
+            <a href="/2021/02/26/compile/">前端编译</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-24</span>
+            <a href="/2021/02/24/weakSet/">weakSet与js内存回收</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-08</span>
+            <a href="/2021/02/08/react16/">react 学习笔记</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-04</span>
+            <a href="/2021/02/04/vue3/">Vue3 初探</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-01-30</span>
+            <a href="/2021/01/30/dynamic/">动态规划算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签索引</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AES/" style="font-size: 10px;">AES</a> <a href="/tags/CONTENTTYPE/" style="font-size: 10px;">CONTENTTYPE</a> <a href="/tags/MIMETYPE/" style="font-size: 10px;">MIMETYPE</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/apply/" style="font-size: 10px;">apply</a> <a href="/tags/async/" style="font-size: 10px;">async</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/bind/" style="font-size: 10px;">bind</a> <a href="/tags/brew/" style="font-size: 10px;">brew</a> <a href="/tags/browser/" style="font-size: 10px;">browser</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/call/" style="font-size: 10px;">call</a> <a href="/tags/child-process/" style="font-size: 10px;">child_process</a> <a href="/tags/chrome/" style="font-size: 10px;">chrome</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/commonjs/" style="font-size: 10px;">commonjs</a> <a href="/tags/compile/" style="font-size: 10px;">compile</a> <a href="/tags/create/" style="font-size: 10px;">create</a> <a href="/tags/csrf/" style="font-size: 10px;">csrf</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/defer/" style="font-size: 10px;">defer</a> <a href="/tags/dns/" style="font-size: 10px;">dns</a> <a href="/tags/dubbo/" style="font-size: 10px;">dubbo</a> <a href="/tags/es6Module/" style="font-size: 10px;">es6Module</a> <a href="/tags/event/" style="font-size: 10px;">event</a> <a href="/tags/fiber/" style="font-size: 10px;">fiber</a> <a href="/tags/flux/" style="font-size: 10px;">flux</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/http/" style="font-size: 11.25px;">http</a> <a href="/tags/http2/" style="font-size: 10px;">http2</a> <a href="/tags/http3/" style="font-size: 10px;">http3</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/instance/" style="font-size: 10px;">instance</a> <a href="/tags/ios%E6%A8%A1%E6%8B%9F%E5%99%A8/" style="font-size: 10px;">ios模拟器</a> <a href="/tags/iphonex/" style="font-size: 10px;">iphonex</a> <a href="/tags/item2/" style="font-size: 10px;">item2</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 16.25px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 11.25px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/nginx/" style="font-size: 11.25px;">nginx</a> <a href="/tags/nodejs/" style="font-size: 17.5px;">nodejs</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/npm-lock/" style="font-size: 10px;">npm-lock</a> <a href="/tags/object/" style="font-size: 11.25px;">object</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/proxy/" style="font-size: 11.25px;">proxy</a> <a href="/tags/react/" style="font-size: 11.25px;">react</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redux/" style="font-size: 10px;">redux</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/rsync/" style="font-size: 10px;">rsync</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sentinel/" style="font-size: 10px;">sentinel</a> <a href="/tags/set/" style="font-size: 10px;">set</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/simulator/" style="font-size: 10px;">simulator</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/ssr/" style="font-size: 10px;">ssr</a> <a href="/tags/svn/" style="font-size: 10px;">svn</a> <a href="/tags/terminal/" style="font-size: 10px;">terminal</a> <a href="/tags/thrift/" style="font-size: 10px;">thrift</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/virtualDom/" style="font-size: 10px;">virtualDom</a> <a href="/tags/vue/" style="font-size: 12.5px;">vue</a> <a href="/tags/vue-vuex/" style="font-size: 10px;">vue vuex</a> <a href="/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/tags/weakSet/" style="font-size: 10px;">weakSet</a> <a href="/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 11.25px;">web安全</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/xss/" style="font-size: 10px;">xss</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1/" style="font-size: 10px;">事件冒泡</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 10px;">事件循环</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%8D%95%E8%8E%B7/" style="font-size: 10px;">事件捕获</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%86%92%E6%B3%A1%E7%AE%97%E6%B3%95/" style="font-size: 10px;">冒泡算法</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">函数式编程</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BC%96%E8%AF%91/" style="font-size: 10px;">前端编译</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 10px;">动态规划</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 10px;">响应式</a> <a href="/tags/%E5%9B%9E%E6%96%87/" style="font-size: 10px;">回文</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 18.75px;">基础</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 10px;">安全</a> <a href="/tags/%E5%AF%B9%E8%B1%A1/" style="font-size: 11.25px;">对象</a> <a href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 11.25px;">小程序</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" style="font-size: 11.25px;">微信开发</a> <a href="/tags/%E5%BE%AE%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">微前端</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">快速算法</a> <a href="/tags/%E6%80%A7%E8%83%BD/" style="font-size: 10px;">性能</a> <a href="/tags/%E6%8F%92%E5%85%A5%E7%AE%97%E6%B3%95/" style="font-size: 10px;">插入算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12.5px;">数据库</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 10px;">数组</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF/" style="font-size: 10px;">服务端</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B8%B2%E6%9F%93/" style="font-size: 10px;">服务端渲染</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 10px;">浏览器</a> <a href="/tags/%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/" style="font-size: 10px;">硬件加速</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.75px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">线程</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%99%9A%E6%8B%9FDOM/" style="font-size: 10px;">虚拟DOM</a> <a href="/tags/%E8%AF%95%E9%A2%98/" style="font-size: 12.5px;">试题</a> <a href="/tags/%E8%AF%B7%E6%B1%82%E5%A4%B4/" style="font-size: 10px;">请求头</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" style="font-size: 10px;">软件安装</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10px;">进程</a> <a href="/tags/%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95/" style="font-size: 10px;">选择算法</a> <a href="/tags/%E9%95%BF%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">长连接</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12.5px;">面试</a> <a href="/tags/%E9%BD%90%E5%88%98%E6%B5%B7/" style="font-size: 10px;">齐刘海</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 zhoushirong&nbsp;|
+      <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备16019450号-1</a>&nbsp;|
+      <a href="https://github.com/zhoushirong" target="_blank">github</a>&nbsp;|
+      <a href="https://www.epoos.com" target="_blank">epoos.com</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="https://www.epoos.com" class="mobile-nav-link" target="_self">主站</a>
+  
+    <a href="/" class="mobile-nav-link" target="_self">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link" target="_self">列表</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

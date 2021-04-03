@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-109295694-1', 'auto');
+ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+<!-- 百度统计 -->
+<script type="text/javascript">
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?e7c73fb59256f4428781ae50108da3bc";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+  
+  <title>Linux学习笔记(三) | 邑司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="接下来一段时间打算学一下linux学习来源书本《Linux命令行与shell脚本编程大全 第三版》 一、SHELL与BASH简介SHELL 不单单是一种CLI。它是一个时刻都在运行的复杂交互式程序。shell 是用户和 Linux(Linux内核)之间的接口程序。你在控制台输入的每一个命令都是由shell解释之后再传给Linux内核的。shell 是一个命令语言解释器。 SH (Bourne sh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux学习笔记(三)">
+<meta property="og:url" content="https://blog.epoos.com/2018/06/10/linux3/index.html">
+<meta property="og:site_name" content="邑司">
+<meta property="og:description" content="接下来一段时间打算学一下linux学习来源书本《Linux命令行与shell脚本编程大全 第三版》 一、SHELL与BASH简介SHELL 不单单是一种CLI。它是一个时刻都在运行的复杂交互式程序。shell 是用户和 Linux(Linux内核)之间的接口程序。你在控制台输入的每一个命令都是由shell解释之后再传给Linux内核的。shell 是一个命令语言解释器。 SH (Bourne sh">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-06-10T02:39:00.000Z">
+<meta property="article:modified_time" content="2021-03-30T01:32:00.320Z">
+<meta property="article:author" content="zhoushirong">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="shell">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">邑司</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="https://www.epoos.com" target="_self">主站</a>
+        
+          <a class="main-nav-link" href="/" target="_self">首页</a>
+        
+          <a class="main-nav-link" href="/archives" target="_self">列表</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.epoos.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="default-linux3" class="article article-type-default" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/10/linux3/" class="article-date">
+  <time datetime="2018-06-10T02:39:00.000Z" itemprop="datePublished">2018-06-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Linux学习笔记(三)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>接下来一段时间打算学一下linux<br>学习来源书本《Linux命令行与shell脚本编程大全 第三版》</p>
+<h3 id="一、SHELL与BASH简介"><a href="#一、SHELL与BASH简介" class="headerlink" title="一、SHELL与BASH简介"></a>一、SHELL与BASH简介</h3><p><strong>SHELL</strong> 不单单是一种CLI。它是一个时刻都在运行的复杂交互式程序。<br>shell 是用户和 Linux(Linux内核)之间的接口程序。你在控制台输入的每一个命令都是由shell解释之后再传给Linux内核的。<br>shell 是一个命令语言解释器。</p>
+<p><strong>SH</strong> (Bourne shell) 是一个早期的重要 shell，是UNIX标准的默认 shell</p>
+<p><strong>BASH</strong> (GNU Bourne-Again Shell) 是一个为 GNU 计划编写的Unix shell。<br>BASH 是 GNU 组织开发和推广的一个项目。</p>
+<p>BASH 是大多数Linux系统以及Mac OSX默认的shell<br>BASH 的命令语法是Bourne shell命令语法的超集</p>
+<p>除此之外，还有很多shell，可通过如下方式查看本机安装的shell</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/shells</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/bin/dash</span><br><span class="line">/bin/rbash</span><br><span class="line">/bin/bash</span><br><span class="line">/bin/csh</span><br><span class="line">/bin/ksh</span><br><span class="line">/bin/sh</span><br><span class="line">/bin/tcsh</span><br><span class="line">/bin/zsh</span><br></pre></td></tr></table></figure>
+<h5 id="默认SHELL类型"><a href="#默认SHELL类型" class="headerlink" title="默认SHELL类型"></a>默认SHELL类型</h5><p>系统启动什么样的shell程序取决于个人用户ID配置。<br>在/etc/passwd文件中，在用户ID记录的第七个字段中列出了默认的shell程序。</p>
+<p>eg：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/passwd</span><br><span class="line">nobody:*:-2:-2:Unprivileged User:/var/empty:/usr/bin/false</span><br><span class="line">root:*:0:0:System Administrator:/var/root:/bin/sh</span><br><span class="line">daemon:*:1:1:System Services:/var/root:/usr/bin/false</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>比如上面的root用户配置的默认shell程序为/bin/sh</p>
+<p>或通过如下方式直接查看：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ls -l /bin/sh</span><br><span class="line">-r-xr-xr-x  1 root  wheel  618512 10 26  2017 /bin/sh</span><br></pre></td></tr></table></figure>
+<p>可直接通过输入bash命令进入相应的shell解释程序</p>
+<p>eg:<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">zsr :: / % sh</span><br><span class="line">sh-3.2$ exit</span><br><span class="line">exit</span><br><span class="line">zsr :: / % bash</span><br><span class="line">bash-3.2$ exit</span><br><span class="line">exit</span><br></pre></td></tr></table></figure></p>
+<h3 id="shell的父子关系"><a href="#shell的父子关系" class="headerlink" title="shell的父子关系"></a>shell的父子关系</h3><p>shell也是需要程序来运行的，运行shell的程序就是父shell</p>
+<p>eg：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">zsr :: ~ ‹master*› % ps -f</span><br><span class="line">  UID   PID  PPID   C STIME   TTY           TIME CMD</span><br><span class="line">  501 68216   324   0 11:27上午 ttys000    0:00.04 /Applications/iTerm.app/Contents/MacOS/iTerm2 --server login -fp zsr</span><br><span class="line">  501 68218 68217   0 11:27上午 ttys000    0:00.48 -zsh</span><br><span class="line">zsr :: ~ ‹master*› % bash</span><br><span class="line">bash-3.2$ ps -f</span><br><span class="line">  UID   PID  PPID   C STIME   TTY           TIME CMD</span><br><span class="line">  501 68216   324   0 11:27上午 ttys000    0:00.04 /Applications/iTerm.app/Contents/MacOS/iTerm2 --server login -fp zsr</span><br><span class="line">  501 68218 68217   0 11:27上午 ttys000    0:00.48 -zsh</span><br><span class="line">  501 68553 68218   0 11:27上午 ttys000    0:00.01 bash</span><br><span class="line">bash-3.2$</span><br></pre></td></tr></table></figure><br>上面运行bash之后，在运行ps -f ，此时，使用zsh运行bash，zsh就是bash的父shell。<br>可循环创建子shell。</p>
+<h5 id="进程列表"><a href="#进程列表" class="headerlink" title="进程列表"></a>进程列表</h5><p>进程列表是一种命令分组。</p>
+<p>可以在一行中指定要依次运行的一系列命令。可以通过命令列表来实现，只需要在命令之间加入分号即可。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pwd; ls; pwd; ls; echo $BASH_SUBSHELL</span><br><span class="line">&#123;pwd; ls; pwd; ls; echo $BASH_SUBSHELL;&#125; # 花括号不会成为进程列表</span><br><span class="line">(pwd; ls; pwd; ls; echo $BASH_SUBSHELL;) # 将命令列表用括号起来能成为进程列表</span><br></pre></td></tr></table></figure>
+<p>在shell脚本中，经常使用子shell进行多shell处理。</p>
+<p><strong>后台模式</strong> 在后台模式中运行的命令可以在处理命令的同事让出CLI。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sleep 10 # 此命令会让进程等待10秒，在这个期间会话是不可用的</span><br><span class="line">sleep 10&amp; # 在命令后面加‘&amp;’，能让程序进入后台运行</span><br><span class="line">ps -f # 查看后台运行的进程</span><br><span class="line">jobs -l # 查看后台运行的进程 -l 参数显示更多信息</span><br><span class="line">coproc sleep 10 # 协程，1.在后台生成子shell；2.在子shell中执行命令</span><br><span class="line">coproc copname &#123; sleep 10; &#125; # copname，自定义协程名称，多个协程的时候用到</span><br></pre></td></tr></table></figure>
+<h5 id="SHELL内建命令"><a href="#SHELL内建命令" class="headerlink" title="SHELL内建命令"></a>SHELL内建命令</h5><p><strong>内建命令</strong> 已经和shell编译成了一体，作为shell工具的组成部分存在，不需要借助外部程序文件来运行。</p>
+<p><strong>外部命令</strong> 有时候也被称作文件系统命令，是存在于bash shell之外的程序。<br>它们并不是shell程序的一部分。<br>外部命令程序通常位于/bin、/usr/bin、/sbin 或 /usr/sbin中。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">which</span> ps <span class="comment"># 查看ps命令的位置</span></span></span><br><span class="line">/bin/ps # 输出路径，表示ps为外部命令</span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">type</span> ps <span class="comment"># 查看ps命令的类型</span></span></span><br><span class="line">ps is /bin/ps </span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">which</span> <span class="built_in">cd</span></span></span><br><span class="line">cd: shell built-in command # 表示cd为内部命令</span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">type</span> <span class="built_in">cd</span></span></span><br><span class="line">cd is a shell builtin # 表示cd为内部命令</span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">type</span> -a <span class="built_in">echo</span> <span class="comment"># echo命令既有内建命令，也有外部命令</span></span></span><br><span class="line">echo is a shell builtin</span><br><span class="line">echo is /bin/echo</span><br></pre></td></tr></table></figure>
+<p>当执行外部命令时，会创建出一个子进程。这种操作被称为衍生(forking)。<br>当进程必须执行衍生操作时，它需要花费时间和精力来设置子进程的环境。<br>所以，外部命令多少还是有些代价的。</p>
+<h5 id="history"><a href="#history" class="headerlink" title="history"></a>history</h5><p>history命令能够查看所有的shell命令历史<br>history 历史记录保存在隐藏文件.bash_history中，位于用户的主目录中。<br>需要注意的是，bash命令的历史记录是先保存在内存中的，当shell退出时才会写入到历史文件中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">history</span><br><span class="line">!100 # 可执行历史中命令号为100的命令</span><br><span class="line">!！ # 可执行历史中上一条命令</span><br></pre></td></tr></table></figure>
+<h5 id="alias"><a href="#alias" class="headerlink" title="alias"></a>alias</h5><p>alias命令可以为命令创建别名</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alias # 查看已经创建的别名</span><br><span class="line">alias ll=&#x27;ls -al&#x27; # 执行ll表示执行ls -al</span><br></pre></td></tr></table></figure>
+<p>别名只在当前的shell进程中有效，若是想全局设置，需要修改环境变量。</p>
+<p>环境变量请关注下一节。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.epoos.com/2018/06/10/linux3/" data-id="ckn1ji9o0000tfqvz589907d7" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/" rel="tag">shell</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/06/14/linux4/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Linux学习笔记(四)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/06/05/linux1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Linux学习笔记(一)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <span class="widget-date">2021-02-26</span>
+            <a href="/2021/02/26/compile/">前端编译</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-24</span>
+            <a href="/2021/02/24/weakSet/">weakSet与js内存回收</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-08</span>
+            <a href="/2021/02/08/react16/">react 学习笔记</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-04</span>
+            <a href="/2021/02/04/vue3/">Vue3 初探</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-01-30</span>
+            <a href="/2021/01/30/dynamic/">动态规划算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签索引</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AES/" style="font-size: 10px;">AES</a> <a href="/tags/CONTENTTYPE/" style="font-size: 10px;">CONTENTTYPE</a> <a href="/tags/MIMETYPE/" style="font-size: 10px;">MIMETYPE</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/apply/" style="font-size: 10px;">apply</a> <a href="/tags/async/" style="font-size: 10px;">async</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/bind/" style="font-size: 10px;">bind</a> <a href="/tags/brew/" style="font-size: 10px;">brew</a> <a href="/tags/browser/" style="font-size: 10px;">browser</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/call/" style="font-size: 10px;">call</a> <a href="/tags/child-process/" style="font-size: 10px;">child_process</a> <a href="/tags/chrome/" style="font-size: 10px;">chrome</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/commonjs/" style="font-size: 10px;">commonjs</a> <a href="/tags/compile/" style="font-size: 10px;">compile</a> <a href="/tags/create/" style="font-size: 10px;">create</a> <a href="/tags/csrf/" style="font-size: 10px;">csrf</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/defer/" style="font-size: 10px;">defer</a> <a href="/tags/dns/" style="font-size: 10px;">dns</a> <a href="/tags/dubbo/" style="font-size: 10px;">dubbo</a> <a href="/tags/es6Module/" style="font-size: 10px;">es6Module</a> <a href="/tags/event/" style="font-size: 10px;">event</a> <a href="/tags/fiber/" style="font-size: 10px;">fiber</a> <a href="/tags/flux/" style="font-size: 10px;">flux</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/http/" style="font-size: 11.25px;">http</a> <a href="/tags/http2/" style="font-size: 10px;">http2</a> <a href="/tags/http3/" style="font-size: 10px;">http3</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/instance/" style="font-size: 10px;">instance</a> <a href="/tags/ios%E6%A8%A1%E6%8B%9F%E5%99%A8/" style="font-size: 10px;">ios模拟器</a> <a href="/tags/iphonex/" style="font-size: 10px;">iphonex</a> <a href="/tags/item2/" style="font-size: 10px;">item2</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 16.25px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 11.25px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/nginx/" style="font-size: 11.25px;">nginx</a> <a href="/tags/nodejs/" style="font-size: 17.5px;">nodejs</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/npm-lock/" style="font-size: 10px;">npm-lock</a> <a href="/tags/object/" style="font-size: 11.25px;">object</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/proxy/" style="font-size: 11.25px;">proxy</a> <a href="/tags/react/" style="font-size: 11.25px;">react</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redux/" style="font-size: 10px;">redux</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/rsync/" style="font-size: 10px;">rsync</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sentinel/" style="font-size: 10px;">sentinel</a> <a href="/tags/set/" style="font-size: 10px;">set</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/simulator/" style="font-size: 10px;">simulator</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/ssr/" style="font-size: 10px;">ssr</a> <a href="/tags/svn/" style="font-size: 10px;">svn</a> <a href="/tags/terminal/" style="font-size: 10px;">terminal</a> <a href="/tags/thrift/" style="font-size: 10px;">thrift</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/virtualDom/" style="font-size: 10px;">virtualDom</a> <a href="/tags/vue/" style="font-size: 12.5px;">vue</a> <a href="/tags/vue-vuex/" style="font-size: 10px;">vue vuex</a> <a href="/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/tags/weakSet/" style="font-size: 10px;">weakSet</a> <a href="/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 11.25px;">web安全</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/xss/" style="font-size: 10px;">xss</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1/" style="font-size: 10px;">事件冒泡</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 10px;">事件循环</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%8D%95%E8%8E%B7/" style="font-size: 10px;">事件捕获</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%86%92%E6%B3%A1%E7%AE%97%E6%B3%95/" style="font-size: 10px;">冒泡算法</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">函数式编程</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BC%96%E8%AF%91/" style="font-size: 10px;">前端编译</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 10px;">动态规划</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 10px;">响应式</a> <a href="/tags/%E5%9B%9E%E6%96%87/" style="font-size: 10px;">回文</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 18.75px;">基础</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 10px;">安全</a> <a href="/tags/%E5%AF%B9%E8%B1%A1/" style="font-size: 11.25px;">对象</a> <a href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 11.25px;">小程序</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" style="font-size: 11.25px;">微信开发</a> <a href="/tags/%E5%BE%AE%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">微前端</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">快速算法</a> <a href="/tags/%E6%80%A7%E8%83%BD/" style="font-size: 10px;">性能</a> <a href="/tags/%E6%8F%92%E5%85%A5%E7%AE%97%E6%B3%95/" style="font-size: 10px;">插入算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12.5px;">数据库</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 10px;">数组</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF/" style="font-size: 10px;">服务端</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B8%B2%E6%9F%93/" style="font-size: 10px;">服务端渲染</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 10px;">浏览器</a> <a href="/tags/%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/" style="font-size: 10px;">硬件加速</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.75px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">线程</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%99%9A%E6%8B%9FDOM/" style="font-size: 10px;">虚拟DOM</a> <a href="/tags/%E8%AF%95%E9%A2%98/" style="font-size: 12.5px;">试题</a> <a href="/tags/%E8%AF%B7%E6%B1%82%E5%A4%B4/" style="font-size: 10px;">请求头</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" style="font-size: 10px;">软件安装</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10px;">进程</a> <a href="/tags/%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95/" style="font-size: 10px;">选择算法</a> <a href="/tags/%E9%95%BF%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">长连接</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12.5px;">面试</a> <a href="/tags/%E9%BD%90%E5%88%98%E6%B5%B7/" style="font-size: 10px;">齐刘海</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 zhoushirong&nbsp;|
+      <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备16019450号-1</a>&nbsp;|
+      <a href="https://github.com/zhoushirong" target="_blank">github</a>&nbsp;|
+      <a href="https://www.epoos.com" target="_blank">epoos.com</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="https://www.epoos.com" class="mobile-nav-link" target="_self">主站</a>
+  
+    <a href="/" class="mobile-nav-link" target="_self">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link" target="_self">列表</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

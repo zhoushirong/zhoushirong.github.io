@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-109295694-1', 'auto');
+ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+<!-- 百度统计 -->
+<script type="text/javascript">
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?e7c73fb59256f4428781ae50108da3bc";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+  
+  <title>小程序开发经验(一) | 邑司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="小程序开发对于前端开发者来说其实很简单，稍微看一下官方文档就能够上手了。但是，如果是第一次开发小程序，多多少少还是还是会遇到一些坑的。最近恰好开发了一个正式版本的小程序，下面是开发过程中的一些总结以及遇到了一些问题。 ps: 适合有一定前端基础的、首先大致看过小程序官方文档的同学观看。 小程序开发前期准备开发小程序，首先得申请账号：小程序账号类型分为个人账号和企业账号，“企业账号”相对于“个人账号">
+<meta property="og:type" content="article">
+<meta property="og:title" content="小程序开发经验(一)">
+<meta property="og:url" content="https://blog.epoos.com/2019/01/08/xcx/index.html">
+<meta property="og:site_name" content="邑司">
+<meta property="og:description" content="小程序开发对于前端开发者来说其实很简单，稍微看一下官方文档就能够上手了。但是，如果是第一次开发小程序，多多少少还是还是会遇到一些坑的。最近恰好开发了一个正式版本的小程序，下面是开发过程中的一些总结以及遇到了一些问题。 ps: 适合有一定前端基础的、首先大致看过小程序官方文档的同学观看。 小程序开发前期准备开发小程序，首先得申请账号：小程序账号类型分为个人账号和企业账号，“企业账号”相对于“个人账号">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-01-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-30T01:32:00.328Z">
+<meta property="article:author" content="zhoushirong">
+<meta property="article:tag" content="小程序">
+<meta property="article:tag" content="微信开发">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">邑司</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="https://www.epoos.com" target="_self">主站</a>
+        
+          <a class="main-nav-link" href="/" target="_self">首页</a>
+        
+          <a class="main-nav-link" href="/archives" target="_self">列表</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.epoos.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-xcx" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/08/xcx/" class="article-date">
+  <time datetime="2019-01-07T16:00:00.000Z" itemprop="datePublished">2019-01-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      小程序开发经验(一)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>小程序开发对于前端开发者来说其实很简单，稍微看一下官方文档就能够上手了。<br>但是，如果是第一次开发小程序，多多少少还是还是会遇到一些坑的。<br>最近恰好开发了一个正式版本的小程序，下面是开发过程中的一些总结以及遇到了一些问题。</p>
+<p>ps: 适合有一定前端基础的、首先大致看过小程序官方文档的同学观看。</p>
+<h3 id="小程序开发前期准备"><a href="#小程序开发前期准备" class="headerlink" title="小程序开发前期准备"></a>小程序开发前期准备</h3><p>开发小程序，首先得申请账号：<br>小程序账号类型分为个人账号和企业账号，“企业账号”相对于“个人账号”拥有更多的功能。</p>
+<p>账号申请成功之后就得申请并分配权限了：<br>小程序后台有各种权限，开发者权限(登录、体验、开发设置)、体验者权限、运营者权限、master。<br>可以预先给开发、测试、产品、UI等同学开相应的权限，以便后期测试、预览、体验。<br>申请权限地址： <a target="_blank" rel="noopener" href="http://kf.qq.com/faq/170302zeQryI170302beuEVn.html">http://kf.qq.com/faq/170302zeQryI170302beuEVn.html</a></p>
+<h3 id="开发阶段"><a href="#开发阶段" class="headerlink" title="开发阶段"></a>开发阶段</h3><p>有了权限之后，就可以新建项目了，过程中需要配置appid、域名等。</p>
+<p><strong>APPID 配置：</strong>在小程序后台获取到 appid，并配置在项目中，（ appid 就是小程序的身份证明，唯一固定的），就是根据这个来判断小程序是个人账号还是企业账号的。</p>
+<p><strong>域名配置：</strong>开发环境配置 - 服务器域名配置：request、socket、uploadFile、downloadFile<br>小程序不支持 javascript 原生的 ajax 请求，需要使用其内置的请求接口，不同的功能需要使用不同的接口。<br>要想在生产环境中使用这些接口，需要预先在小程序后台配置其域名。</p>
+<p><strong>开发环境配置 - 业务域名配置：</strong><br>小程序提供 webview 打开 h5 页面，统一需要预先在后台配置业务域名。<br>且该域名需要进行校验，其中一个校验方法就是下载其校验文件，将其配置在该域名的服务下面</p>
+<p>如：域名：<a target="_blank" rel="noopener" href="http://www.example.com">www.example.com</a>  校验文件：abcAbc.txt<br>只需要能够保证 <a target="_blank" rel="noopener" href="http://www.example.com/abcAbc.txt">www.example.com/abcAbc.txt</a> 能够正常拿到 abcAbc.txt 的文件内容即可。</p>
+<p><strong>mock 数据：</strong><br>前后端分离开发，本地 mock 数据是不可缺少的<br>同 h5 开发一样，我们可以本地启动一个 mock 服务，提供 mock 数据接口，如：127.0.0.1:8587/test1<br>可以使用 <a target="_blank" rel="noopener" href="https://github.com/zhoushirong/static-mock">https://github.com/zhoushirong/static-mock</a> 一键启动本地 mock 服务</p>
+<p>启动服务之后，需要在开发者工具中将域名合法校验等关闭，不然会出现请求不通的情况：<br>工具 —— 项目详情 —— 项目设置 —— 不校验合法域名、web-view 域名…</p>
+<p><strong>注意：</strong><br>连代理在真机上调试的时候需要开启调试模式。（打开小程序 — 点击微信右上角’…’ — 打开调试模式）<br>苹果开发 https 访问的时候，证书需要通过苹果 ATS 认证，不然访问不了，这意味着，自己做的证书不能用。<br>测试阶段建议使用 http，不要使用 https</p>
+<p>后端接口上线之后，可以开启https请求，并将域名校验重新打开。<br>打开之后如果还是会出现请求不通的情况，可以通过下面的命令进行检测。<br>如：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 下面命令是用来检测域名是否通过 ATS 认证的</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 仅适用于 MAC OS 系统。</span></span><br><span class="line">nscurl --ats-diagnostics --verbose https://www.epoos.com</span><br></pre></td></tr></table></figure></p>
+<h5 id="小程序路由"><a href="#小程序路由" class="headerlink" title="小程序路由"></a>小程序路由</h5><p>小程序路由可以通过如下方法进行跳转<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wx.navigateBack：返回</span><br><span class="line">wx.switchTab：切换 tab</span><br><span class="line">wx.navigateTo：跳转、保留原页面</span><br><span class="line">wx.redirectTo：跳转、不保留原页面</span><br><span class="line">wx.reLaunch：关闭当前页，重新打开网页（重要：不能返回）</span><br></pre></td></tr></table></figure></p>
+<p><strong>注意：</strong><br>在小程序中使用中我们会经常用到很多跳转，是不希望用户能够返回上一个页面的<br>如登录，登录成功之后就不能允许用户通过返回回到登录页面了。<br>之前在网上看到有人说通过 wx.redirectTo 打开能够阻止用户返回上一个页面，经测试发现不行。<br>此时，需要使用 wx.reLaunch，通过这种方式打开的小程序页面左上角就没有返回图标了。</p>
+<h5 id="小程序登录"><a href="#小程序登录" class="headerlink" title="小程序登录"></a>小程序登录</h5><p>1）登录过程<br>获取 code —— 换取 token —— 生成 cookie —— 存储 cookie<br>查看官方的登录文档即可。<br><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html">https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html</a></p>
+<p>2）登录态控制<br>对于登录态，一般情况下我们都是通过记录 cookie 来实现的。<br>但是，微信原生的 wx.request 不支持传统的 Cookie 读写，所以登录成功之后后端接口 response 写的 cookie 就不会成功。<br>原来我们的解决方案是将 cookie 信息通过请求内容来传输。</p>
+<p>好在，现在社区还是有一些大侠做了一些基础设施。<br>我们可以使用 weapp-cookie 这个库来实现传统 cookie 的功能<br>它号称一句代码实现浏览器的 cookie 功能，当然，经实践，确实挺好用。<br>它将自动代理 wx.request 接口的访问，通过模拟的方式将cookie 存在 storage 来实现传统 cookie 的功能<br>使用凡是，可以查看其 github 文档<br><a target="_blank" rel="noopener" href="https://github.com/charleslo1/weapp-cookie">https://github.com/charleslo1/weapp-cookie</a></p>
+<p><strong>注意：</strong><br>1.小程序原生支持 npm node_module 直接引入，但是，此组件通过 require 直接使用 node_module 中的组件之后，代码混淆之后会出现引入不成功的问题。因此，还是需要安装此组件官方推荐的方式，将其拷贝到其它目录下，然后再引入。</p>
+<p>2.此组件只代理了 wx.request，并未代理 wx.uploadFile 等其它接口<br>因此，在 wx.uploadFile 调用的时候如果后端接口有校验用户身份，需要手动将 cookie 写入 header 中。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> cookie = app.cookies.get(<span class="string">&#x27;XXX_SESSION_KEY&#x27;</span>)</span><br><span class="line"><span class="keyword">let</span> uploadTask = wx.uploadFile(&#123;</span><br><span class="line">  url: url,</span><br><span class="line">  filePath: self.tempFilePaths,</span><br><span class="line">  header: &#123;</span><br><span class="line">    <span class="string">&#x27;Cookie&#x27;</span>: <span class="string">`XXX_SESSION_KEY=<span class="subst">$&#123;cookie&#125;</span>`</span> <span class="comment">// 手动添加 cookie</span></span><br><span class="line">  &#125;,</span><br><span class="line">  name: <span class="string">&#x27;file&#x27;</span>,</span><br><span class="line">  success (res) &#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<h5 id="小程序兼容性"><a href="#小程序兼容性" class="headerlink" title="小程序兼容性"></a>小程序兼容性</h5><p>小程序在开发之前就应该确定好兼容的范围，然后根据此范围，在开发的时候来确定哪些 api 是否可用。<br>如：基础库<br>基础库决定了小程序支持哪些功能，不同的微信版本都有着对应的基础库版本，开发之前需要与产品人员商议、做好功能与用户体验的平衡，最低兼容到哪个微信版本。<br>关于基础库官方文档：<br><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/minigame/dev/framework/client-lib/">https://developers.weixin.qq.com/minigame/dev/framework/client-lib/</a></p>
+<p>ES6 兼容情况：<br>小程序支持 ES6 很多常用的预发，但是并不是所有的都支持，具体可参考文档<br>关于 ES6 官方文档：<br><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/details.html">https://developers.weixin.qq.com/miniprogram/dev/framework/details.html</a></p>
+<p>CSS3 兼容情况：<br>小程序不直接使用 css3，而是 wxss ，不过 css3 常用的动画、flex 布局都能够支持。<br>若是需要兼容低版本的手机系统，则需要开启 ES6 转 ES5;<br>上传代码时，样式自动补全（工具 - 项目详情 - 项目设置）</p>
+<h5 id="小程序更新"><a href="#小程序更新" class="headerlink" title="小程序更新"></a>小程序更新</h5><p>小程序启动分为热启动、冷启动，冷启动的时候会触发小程序更新<br>除了微信冷启动自动更新之外，我们也可以自动检测小程序的更新 updateManager<br>在开发过程中，可以通过微信开发者工具，配置’编译‘模式，触发小程序模拟更新。<br>如无特殊要求，小程序自己的冷启动更新机制就能够满足更新要求了。<br>具体可查看官方文档：<br><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/operating-mechanism.html">https://developers.weixin.qq.com/miniprogram/dev/framework/operating-mechanism.html</a></p>
+<h5 id="小程序性能与优化"><a href="#小程序性能与优化" class="headerlink" title="小程序性能与优化"></a>小程序性能与优化</h5><p>大小限制与分包下载：小程序原先限制了包大小为 1M，后面改为了 2M，这个在开发者工具 —— 项目详情 可以看得到。<br>小程序太大一般原因是因为图片太多，可以尽可能的减少图片的使用，然后对图片进行压缩。<br>如果真的必须要超过 2M，可以使用分包加载。分包加载不得超过 8M。<br>为了能够更快的下载小程序，小程序的包还是越小越好。</p>
+<p>性能：</p>
+<p>1.打开性能窗口可以看到小程序的性能参数，开发版本能看到更多的信息。<br>体验版本和线上版本可以先通过开发打开调试，然后在打开体验版本和线上版本，能看到部分信息。</p>
+<p>2.页面栈不要超过 5 层限制，超过之后会导致打不开页面，解决办法，可以使用 wx.redirect 或者 wx.reLaunch</p>
+<p>3.网络状态小程序还是很重要的，可以通过获取网络状态来优化小程序的一些操作。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 可以根据不同的网络做相应的事情</span></span><br><span class="line">wx.getNetworkType(&#123;</span><br><span class="line">  success: <span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// networkType字段的有效值：</span></span><br><span class="line">    <span class="comment">// wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)</span></span><br><span class="line">    <span class="keyword">if</span> (res.networkType == <span class="string">&#x27;wifi&#x27;</span>) &#123;&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>4.另外，小程序开发者工具还有一个体验评分功能。<br>使用方式为：控制台 —— Audits（和 console、network 在同一排）<br>开启之后录制即可，一试便知。</p>
+<p>5).小程序数据上报与监控<br>小程序自己本身后台有做很多数据的统计<br>除此之外还可以自己上报一些 自定义数据，自定义数据 value 为 number 类型，不得超过 128 个。<br>如果还不能满足，则可以自己做埋点，然后通过 wx.request 接口做数据上报。<br>官方文档：<br><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/wx.reportMonitor.html">https://developers.weixin.qq.com/miniprogram/dev/api/wx.reportMonitor.html</a></p>
+<h5 id="小程序二维码与分享"><a href="#小程序二维码与分享" class="headerlink" title="小程序二维码与分享"></a>小程序二维码与分享</h5><p>小程序生成二维码，生成分享链接是必不可少的功能。<br>我们可以在小程序二维码生成需要小程序上线之后，通过后端接口请求小程序的接口来生成分享的二维码。<br>官方文档：<br><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/qr-code.html">https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/qr-code.html</a></p>
+<p>小程序的分享只能针对页面做配置，不能全局配置，详情可以查阅官方文档。</p>
+<p>小程序模板与数据双向绑定（待续）</p>
+<h3 id="测试阶段"><a href="#测试阶段" class="headerlink" title="测试阶段"></a>测试阶段</h3><p>开发提测之后，我们需要给测试人员测试，有两种方式提测，各有优劣。<br>测试方法一：在开发者工具将小程序上传 — 在后台将上传的小程序设为体验版 — 测试人员用体验版进行测试<br>测试方法二：给测试人员开启开发者权限，开启代码权限，让他们自己拉代码，自己发布体验版进行测试。</p>
+<p><strong>注意：</strong><br>未发布之前，自签证书 ios 可能会验证会通不过，https 接口调不通，因此、开发测试阶段使用 http 进行测试。<br>真机测试需开启调试模式。<br>测试阶段开发者工具需要设置不校验 https 证书</p>
+<h3 id="踩坑指南"><a href="#踩坑指南" class="headerlink" title="踩坑指南"></a>踩坑指南</h3><p>以上是开发过程中的个人觉得比较不容易发觉但是又绕不过去的一些情形。<br>下面是开发过程中遇到的一些坑，稍微了解一下有助于走的更顺畅。</p>
+<p>1.开发环境请求不通<br>原因：<br>1.自签证书 https 不通<br>2.真机上未开启调试模式。<br>解决办法：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">开发者工具设置不检验合法域名</span><br><span class="line">真机开启调试模式</span><br></pre></td></tr></table></figure></p>
+<p>2.线上(预发)环境 https 不通<br>场景：<br>预发环境 https 接口不通，真机，微信小程序体验版 ios 调接口不通，android 可以调通；<br>后验证相同域名下 H5 页面，发现 ios safari 不通、微信扫一扫打开 不通。<br>线上正常。<br>检测：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nscurl --ats-diagnostics --verbose https://xxx.xxx.xxx # 苹果电脑上 ATS 检测</span><br></pre></td></tr></table></figure><br>结果：<br>检测之后发现预发环境的 ATS 测试通不过<br>线上检测能通过。</p>
+<p>解决：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">检查并修改预发环境的 nginx 与证书配置，使之能够通过 ATS 检测</span><br></pre></td></tr></table></figure></p>
+<p>3.textarea ios 真机有默认内边距，导致对不齐，android 正常<br>原因：<br>搜了一下，别人也遇到过类似情况，微信官方未给出解决方案。<br>解决：<br>获取系统信息，根据系统型号对 ios 设置 class，针对 class 做样式特殊处理。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> isIos = <span class="regexp">/ios/i</span>.test(app.system.system)</span><br><span class="line"><span class="keyword">if</span> (isIos) &#123;</span><br><span class="line">  <span class="built_in">this</span>.setData(&#123;</span><br><span class="line">    isIos: <span class="literal">true</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;c-textarea-box &#123;&#123;isIos ? &#x27;c-textarea-box-ios&#x27; : &#x27;&#x27;&#125;&#125;&quot;</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">textarea</span>&gt;</span><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure><br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.c-textarea-box-ios</span> &#123;</span><br><span class="line">  <span class="attribute">padding-top</span>: <span class="number">16</span>rpx;</span><br><span class="line">  <span class="attribute">margin-left</span>: -<span class="number">8</span>rpx;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>4.分别设置 loading 和 toast 蒙层的 mask 为 true 和 false<br>两个分别调用之后会导致蒙层属性干扰，蒙层不可穿透功能失效<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wx.showLoading(&#123;</span><br><span class="line">  title: <span class="string">&#x27;loading...&#x27;</span>,</span><br><span class="line">  mask: <span class="literal">true</span></span><br><span class="line">&#125;)</span><br><span class="line">wx.showToast(&#123;</span><br><span class="line">  title: <span class="string">&#x27;toast...&#x27;</span>,</span><br><span class="line">  mask: <span class="literal">false</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure><br>解决办法：两个都设置为 true。</p>
+<p>5.文件上传的时候后端获取不到用户登录态 cookie<br>原因：weapp-cookie 组件只代理了 wx.request，并未代理 wx.uploadFile 等其它接口。<br>解决办法：在 wx.uploadFile 调用的时候如果后端接口有校验用户身份，需要手动将 cookie 写入 header 中。</p>
+<p>6.获取手机号码失败<br>用户注册之前获取手机号码密文，然后拿到服务端解密，会出现偶现的解密失败的情况<br>原因：获取微信登录 code 不能放在获取手机密文的回调里面<br>解决办法：预先获取微信登录 code</p>
+<p>7.微信获取的用户头像是方形的<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">open-data</span> <span class="attr">class</span>=<span class="string">&quot;user-logo&quot;</span> <span class="attr">type</span>=<span class="string">&quot;userAvatarUrl&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">open-data</span>&gt;</span></span><br></pre></td></tr></table></figure><br>通过上述方法获取到的用户头像是方形的，如果要展示圆形头像，直接通过 user-logo class 设置样式无效<br>解决办法：加一层父标签，然后对父标签设置绝对定位、并且设置 border-radius，设置 overflow: hidden;<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;fbox&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">open-data</span> <span class="attr">class</span>=<span class="string">&quot;user-logo&quot;</span> <span class="attr">type</span>=<span class="string">&quot;userAvatarUrl&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">open-data</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>8.button disabled 样式不生效<br>解决办法：重写 disabled 样式加上 ! important 属性</p>
+<p>9.checkbox 样式修改不了<br>解决办法：不知道哪来的黑科技，使用如下选择器即可<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">checkbox</span> &#123;</span><br><span class="line"> <span class="attribute">vertical-align</span>: top;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 未选中的 背景样式 */</span></span><br><span class="line"><span class="selector-tag">checkbox</span> <span class="selector-class">.wx-checkbox-input</span> &#123;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">2</span>rpx;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">28</span>rpx;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">28</span>rpx;</span><br><span class="line">  <span class="attribute">line-height</span>: <span class="number">28</span>rpx;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">margin-top</span>: -<span class="number">2</span>rpx;</span><br><span class="line">  <span class="attribute">text-align</span>: center;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 选中后的 背景样式 （红色背景 无边框 可根据UI需求自己修改） */</span></span><br><span class="line"><span class="selector-tag">checkbox</span> <span class="selector-class">.wx-checkbox-input</span><span class="selector-class">.wx-checkbox-input-checked</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#0064ff</span>;</span><br><span class="line">  <span class="attribute">border-color</span>: <span class="number">#0064ff</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 选中后的 对勾样式 （白色对勾 可根据UI需求自己修改） */</span></span><br><span class="line"><span class="selector-tag">checkbox</span> <span class="selector-class">.wx-checkbox-input</span><span class="selector-class">.wx-checkbox-input-checked</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>:<span class="number">26</span>rpx;</span><br><span class="line">  <span class="attribute">color</span>:<span class="number">#fff</span>; <span class="comment">/* 对勾颜色 白色 */</span></span><br><span class="line">  <span class="attribute">background</span>: transparent;</span><br><span class="line">  <span class="attribute">transform</span>:<span class="built_in">translate</span>(-<span class="number">50%</span>, -<span class="number">50%</span>) <span class="built_in">scale</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>10.1px 像素问题<br>同 H5 一样，也存在 1px 像素问题。<br>解决办法同 H5 css3，通过 transform 变换设置 1px 像素<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 实线</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="selector-class">.border-1px</span><span class="selector-pseudo">:after</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute; </span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">bottom</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">1px</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#e6e6e6</span>;</span><br><span class="line">  <span class="attribute">-webkit-transform</span>: <span class="built_in">scale</span>(<span class="number">1</span>, <span class="number">0.5</span>);</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">1</span>, <span class="number">0.5</span>);</span><br><span class="line">  <span class="attribute">-webkit-transform-origin</span>: center bottom;</span><br><span class="line">  <span class="attribute">transform-origin</span>: center bottom;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 虚线</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="selector-class">.dashed-line-1px</span> &#123;</span><br><span class="line">  <span class="attribute">border-bottom</span>: <span class="number">1px</span> dashed <span class="number">#e0e0e0</span>;</span><br><span class="line">  <span class="attribute">-webkit-transform</span>: <span class="built_in">scale</span>(<span class="number">1</span>, <span class="number">0.5</span>);</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">1</span>, <span class="number">0.5</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>11.组件样式继承<br>全局样式对组件不生效。<br>原因：除了继承样式（如：font、color）在组件外面页面中 或者 全局定义的样式不会被组件内部继承。<br>两个解决办法：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1).在组件内部再引入一次全局样式。</span><br><span class="line">2).激活 addGlobalClass 选项。options.addGlobalClass: true (基础库 2.2.3 开始支持)</span><br></pre></td></tr></table></figure></p>
+<p>12.事件冒泡<br>要想事件触发不会冒泡到上一次父节点，需要使用 catch+event 的组合（如：catchtap）<br>bind 会触发事件冒泡、catch 不会触发事件冒泡<br>即 原来的 bindtab=”tabEvent”<br>改为： catchtab=”tabEvent” 即可</p>
+<p>13.上传图片会触发 onShow 事件<br>如果需要在onShow上做一些事件触发，得注意当前页面有没有文件或者图片上传，如果有，则需要注意</p>
+<p>14.jpg格式图片上传，真机上的file/content-type为image/jpg，这是非标准的MIME头，正常的应该是image/jpeg，开发者工具是正确的，这个应该是微信的bug。</p>
+<h3 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h3><p>appId：小程序ID，每个小程序都有唯一的一个 appid，在小程序后台就可以查到<br>openId：用户唯一标识，每个用户在每个应用（小程序、订阅号、服务号）中的 openId 都是不一样的，需要用户登录小程序后，后台拿着 code 去微信接口获取<br>unionId: 如果开发者拥有多个移动应用、网站应用、和公众帐号（包括小程序），可通过 UnionID 来区分用户的唯一性，因为只要是同一个微信开放平台帐号下的移动应用、网站应用和公众帐号（包括小程序），用户的 UnionID 是唯一的。换句话说，同一用户，对同一个微信开放平台下的不同应用，unionid是相同的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.epoos.com/2019/01/08/xcx/" data-id="ckn1ji9p80022fqvzauih5htm" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="tag">小程序</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" rel="tag">微信开发</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/01/08/iphonex/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          iphoneX 兼容
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/11/24/csrf/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Web安全</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <span class="widget-date">2021-02-26</span>
+            <a href="/2021/02/26/compile/">前端编译</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-24</span>
+            <a href="/2021/02/24/weakSet/">weakSet与js内存回收</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-08</span>
+            <a href="/2021/02/08/react16/">react 学习笔记</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-04</span>
+            <a href="/2021/02/04/vue3/">Vue3 初探</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-01-30</span>
+            <a href="/2021/01/30/dynamic/">动态规划算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签索引</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AES/" style="font-size: 10px;">AES</a> <a href="/tags/CONTENTTYPE/" style="font-size: 10px;">CONTENTTYPE</a> <a href="/tags/MIMETYPE/" style="font-size: 10px;">MIMETYPE</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/apply/" style="font-size: 10px;">apply</a> <a href="/tags/async/" style="font-size: 10px;">async</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/bind/" style="font-size: 10px;">bind</a> <a href="/tags/brew/" style="font-size: 10px;">brew</a> <a href="/tags/browser/" style="font-size: 10px;">browser</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/call/" style="font-size: 10px;">call</a> <a href="/tags/child-process/" style="font-size: 10px;">child_process</a> <a href="/tags/chrome/" style="font-size: 10px;">chrome</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/commonjs/" style="font-size: 10px;">commonjs</a> <a href="/tags/compile/" style="font-size: 10px;">compile</a> <a href="/tags/create/" style="font-size: 10px;">create</a> <a href="/tags/csrf/" style="font-size: 10px;">csrf</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/defer/" style="font-size: 10px;">defer</a> <a href="/tags/dns/" style="font-size: 10px;">dns</a> <a href="/tags/dubbo/" style="font-size: 10px;">dubbo</a> <a href="/tags/es6Module/" style="font-size: 10px;">es6Module</a> <a href="/tags/event/" style="font-size: 10px;">event</a> <a href="/tags/fiber/" style="font-size: 10px;">fiber</a> <a href="/tags/flux/" style="font-size: 10px;">flux</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/http/" style="font-size: 11.25px;">http</a> <a href="/tags/http2/" style="font-size: 10px;">http2</a> <a href="/tags/http3/" style="font-size: 10px;">http3</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/instance/" style="font-size: 10px;">instance</a> <a href="/tags/ios%E6%A8%A1%E6%8B%9F%E5%99%A8/" style="font-size: 10px;">ios模拟器</a> <a href="/tags/iphonex/" style="font-size: 10px;">iphonex</a> <a href="/tags/item2/" style="font-size: 10px;">item2</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 16.25px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 11.25px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/nginx/" style="font-size: 11.25px;">nginx</a> <a href="/tags/nodejs/" style="font-size: 17.5px;">nodejs</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/npm-lock/" style="font-size: 10px;">npm-lock</a> <a href="/tags/object/" style="font-size: 11.25px;">object</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/proxy/" style="font-size: 11.25px;">proxy</a> <a href="/tags/react/" style="font-size: 11.25px;">react</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redux/" style="font-size: 10px;">redux</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/rsync/" style="font-size: 10px;">rsync</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sentinel/" style="font-size: 10px;">sentinel</a> <a href="/tags/set/" style="font-size: 10px;">set</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/simulator/" style="font-size: 10px;">simulator</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/ssr/" style="font-size: 10px;">ssr</a> <a href="/tags/svn/" style="font-size: 10px;">svn</a> <a href="/tags/terminal/" style="font-size: 10px;">terminal</a> <a href="/tags/thrift/" style="font-size: 10px;">thrift</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/virtualDom/" style="font-size: 10px;">virtualDom</a> <a href="/tags/vue/" style="font-size: 12.5px;">vue</a> <a href="/tags/vue-vuex/" style="font-size: 10px;">vue vuex</a> <a href="/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/tags/weakSet/" style="font-size: 10px;">weakSet</a> <a href="/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 11.25px;">web安全</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/xss/" style="font-size: 10px;">xss</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1/" style="font-size: 10px;">事件冒泡</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 10px;">事件循环</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%8D%95%E8%8E%B7/" style="font-size: 10px;">事件捕获</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%86%92%E6%B3%A1%E7%AE%97%E6%B3%95/" style="font-size: 10px;">冒泡算法</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">函数式编程</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BC%96%E8%AF%91/" style="font-size: 10px;">前端编译</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 10px;">动态规划</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 10px;">响应式</a> <a href="/tags/%E5%9B%9E%E6%96%87/" style="font-size: 10px;">回文</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 18.75px;">基础</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 10px;">安全</a> <a href="/tags/%E5%AF%B9%E8%B1%A1/" style="font-size: 11.25px;">对象</a> <a href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 11.25px;">小程序</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" style="font-size: 11.25px;">微信开发</a> <a href="/tags/%E5%BE%AE%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">微前端</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">快速算法</a> <a href="/tags/%E6%80%A7%E8%83%BD/" style="font-size: 10px;">性能</a> <a href="/tags/%E6%8F%92%E5%85%A5%E7%AE%97%E6%B3%95/" style="font-size: 10px;">插入算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12.5px;">数据库</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 10px;">数组</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF/" style="font-size: 10px;">服务端</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B8%B2%E6%9F%93/" style="font-size: 10px;">服务端渲染</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 10px;">浏览器</a> <a href="/tags/%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/" style="font-size: 10px;">硬件加速</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.75px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">线程</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%99%9A%E6%8B%9FDOM/" style="font-size: 10px;">虚拟DOM</a> <a href="/tags/%E8%AF%95%E9%A2%98/" style="font-size: 12.5px;">试题</a> <a href="/tags/%E8%AF%B7%E6%B1%82%E5%A4%B4/" style="font-size: 10px;">请求头</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" style="font-size: 10px;">软件安装</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10px;">进程</a> <a href="/tags/%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95/" style="font-size: 10px;">选择算法</a> <a href="/tags/%E9%95%BF%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">长连接</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12.5px;">面试</a> <a href="/tags/%E9%BD%90%E5%88%98%E6%B5%B7/" style="font-size: 10px;">齐刘海</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 zhoushirong&nbsp;|
+      <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备16019450号-1</a>&nbsp;|
+      <a href="https://github.com/zhoushirong" target="_blank">github</a>&nbsp;|
+      <a href="https://www.epoos.com" target="_blank">epoos.com</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="https://www.epoos.com" class="mobile-nav-link" target="_self">主站</a>
+  
+    <a href="/" class="mobile-nav-link" target="_self">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link" target="_self">列表</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-109295694-1', 'auto');
+ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+<!-- 百度统计 -->
+<script type="text/javascript">
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?e7c73fb59256f4428781ae50108da3bc";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+  
+  <title>Linux学习笔记(四) | 邑司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="接下来一段时间打算学一下linux学习来源书本《Linux命令行与shell脚本编程大全 第三版》 一、SHELL环境变量bash shell用一个叫做环境变量(environment variable)的特性来存储有关shell会话和工作环境的信息。（这也是它们被称作环境变量的原因）。这项特性允许你在内存中存储数据，以便程序或shell中运行的脚本能够轻松访问到它们。这也是存储持久数据的一种简便">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux学习笔记(四)">
+<meta property="og:url" content="https://blog.epoos.com/2018/06/14/linux4/index.html">
+<meta property="og:site_name" content="邑司">
+<meta property="og:description" content="接下来一段时间打算学一下linux学习来源书本《Linux命令行与shell脚本编程大全 第三版》 一、SHELL环境变量bash shell用一个叫做环境变量(environment variable)的特性来存储有关shell会话和工作环境的信息。（这也是它们被称作环境变量的原因）。这项特性允许你在内存中存储数据，以便程序或shell中运行的脚本能够轻松访问到它们。这也是存储持久数据的一种简便">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-06-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-30T01:32:00.320Z">
+<meta property="article:author" content="zhoushirong">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="shell">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">邑司</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="https://www.epoos.com" target="_self">主站</a>
+        
+          <a class="main-nav-link" href="/" target="_self">首页</a>
+        
+          <a class="main-nav-link" href="/archives" target="_self">列表</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.epoos.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="default-linux4" class="article article-type-default" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/14/linux4/" class="article-date">
+  <time datetime="2018-06-13T16:00:00.000Z" itemprop="datePublished">2018-06-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Linux学习笔记(四)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>接下来一段时间打算学一下linux<br>学习来源书本《Linux命令行与shell脚本编程大全 第三版》</p>
+<h3 id="一、SHELL环境变量"><a href="#一、SHELL环境变量" class="headerlink" title="一、SHELL环境变量"></a>一、SHELL环境变量</h3><p>bash shell用一个叫做环境变量(environment variable)的特性来存储有关shell会话和工作环境的信息。（这也是它们被称作环境变量的原因）。这项特性允许你在内存中存储数据，以便程序或shell中运行的脚本能够轻松访问到它们。这也是存储持久数据的一种简便方法。</p>
+<p>在bash shell中，环境变量分为两类：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">全局变量：对于shell会话和所有生成的子shell都是可见的。可用来进行父子shell程序通信。</span><br><span class="line">局部变量：只对创建它们的shell可见。</span><br></pre></td></tr></table></figure></p>
+<h4 id="全局环境变量"><a href="#全局环境变量" class="headerlink" title="全局环境变量"></a>全局环境变量</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">env # 打印出所有的全局变量</span><br><span class="line">printenv # 同上</span><br><span class="line">printenv &#123;变量名&#125; # 打印出特定环境变量</span><br><span class="line">echo $&#123;变量名&#125; # 同上</span><br></pre></td></tr></table></figure>
+<p>ps：在echo命令中，在变量名前加 $ 不仅能够显示变量当前的值，还能让变量作为命令行参数。</p>
+<p>eg:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo $HOME # 打印出HOME的值</span><br><span class="line">ls $HOME # ls HOME值目录下的文件列表</span><br></pre></td></tr></table></figure>
+<h4 id="局部环境变量"><a href="#局部环境变量" class="headerlink" title="局部环境变量"></a>局部环境变量</h4><p>Linux系统默认定义了标准的局部环境变量。<br>除此之外，用户也可以定义自己的局部变量，这些变量被称为 <strong>用户定义局部变量</strong>。</p>
+<p>和全局变量不一样，Linux系统没有一个只显示局部环境变量的命令。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">set # 会显示某个特定进程设置的所有环境变量（包括全局、局部、用户定义局部变量）</span><br><span class="line">somekey=somevalue # 定义用户局部变量。注意:等号两边不能有空格、不能再子shell中引用</span><br></pre></td></tr></table></figure>
+<h4 id="用户自定义全局环境变量"><a href="#用户自定义全局环境变量" class="headerlink" title="用户自定义全局环境变量"></a>用户自定义全局环境变量</h4><p>很显然系统自带的全局环境变量、自带的局部环境变量以及用户定义局部变量并不能满足父子shell进程之间的通讯<br>因此，linux还允许用户设置自定义全局变量。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">somekey=somevalue # 先创建一个局部环境变量</span><br><span class="line">export somekey # 再通过export将其导入到全局变量变量。注意：不需要$符号。</span><br><span class="line"></span><br><span class="line">export somekey=somevalue # 一键创建全局环境变量</span><br></pre></td></tr></table></figure>
+<p>特别注意：<br>1.在父进程中修改的全局变量会影响子进程中的该变量；<br>2.但是在子进程中修改该变量不会影响到父进程中的该变量。即使再通过export导出也不会影响父进程，只会影响当前子进程的子进程。</p>
+<p>删除环境变量<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unset somekey # 删除环境变量。注意：不需要$符号</span><br></pre></td></tr></table></figure></p>
+<p>注意：同创建环境变量一样，子进程中删除在父进程中export导出的全局环境变量不会影响到父进程。</p>
+<h4 id="设置PATH环境变量"><a href="#设置PATH环境变量" class="headerlink" title="设置PATH环境变量"></a>设置PATH环境变量</h4><p>当在shell命令行界面中输入一个外部命令时，shell必须搜索系统来找到对应的程序。<br>PATH环境变量定义了用于进行命令和程序查找的目录。</p>
+<p>eg:<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">echo</span> <span class="variable">$PATH</span> <span class="comment"># 输出系统环境变量</span></span></span><br><span class="line">/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Wireshark.app/Contents/MacOS:/usr/local/mysql/bin</span><br></pre></td></tr></table></figure><br>执行某个命令的时候，系统会依次从上面输出的6个目录中，查找可执行命令的程序。如果找不到就会报错。</p>
+<p>用户添加自己的命令到系统环境变量中只需要使用如下命令，将可执行文件目录添加到原有的系统环境变量PATH后面。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> PATH=<span class="variable">$PATH</span>:/home/xxx/scripts/bin</span></span><br></pre></td></tr></table></figure>
+<h4 id="可持续使用的自定义系统环境变量"><a href="#可持续使用的自定义系统环境变量" class="headerlink" title="可持续使用的自定义系统环境变量"></a>可持续使用的自定义系统环境变量</h4><p>自定义变量的方法可以按照前面说的定义用户局部系统变量、或者用export导出为全局系统变量。<br>但是，这种方式创建的变量是临时的，当前shell进程结束之后就会失效。</p>
+<p>要想永久的保存自定义变量，可以根据shell的启动过程，修改其启动时需要读取命令的文件。<br>如下面几个文件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/etc/profile # 系统默认的bash shell主启动文件，系统上每个用户登录都会执行此文件</span><br><span class="line">~/.bash_profile</span><br><span class="line">~/.bashrc</span><br><span class="line">~/.bash_login</span><br><span class="line">~/.profile</span><br></pre></td></tr></table></figure>
+<p>shell会按照下列顺序，运行第一个被找到的问题件，找到之后则忽略后面的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">~/.bash_profile</span><br><span class="line">~/.bash_login</span><br><span class="line">~/.profile</span><br></pre></td></tr></table></figure>
+<p>注意：这个列表中没有~/.bashrc文件，这是因为该文件往往是在其它文件(如：.profile，也可能是.bash_profile)中被执行的。</p>
+<h4 id="交互式shell进程"><a href="#交互式shell进程" class="headerlink" title="交互式shell进程"></a>交互式shell进程</h4><p>如果你的bash shell不是登录系统时启动的，那么你启动的shell叫做交互式shell。<br>交互式shell不会像登录shell一样运行，但它依然提供了命令行提示符来输入命令。<br>通俗来说，就是在终端，shell等待用户输入，然后执行用户输入的命令。</p>
+<h4 id="非交互式shell"><a href="#非交互式shell" class="headerlink" title="非交互式shell"></a>非交互式shell</h4><p>系统执行shell脚本时用的就是非交互式shell。不同于交互式shell的地方在于它没有命令行提示符。<br>这种模式下，shell不会与用户进行交互，执行完shell script脚本 shell也就终止了。</p>
+<p><strong>交互式shell和非交互式shell的区别在于：</strong><br>如果bash是作为交互式shell启动的，它就不会访问/etc/profile文件，只会检查用户HOME目录中的.bashrc文件。<br>非交互式shell，当启动进程时，它会检查这个BASH_SHELL环境变量，读取的是环境变量所指定的配置文件。<br>（BASH_SHELL这个环境变量默认情况下并未设置）</p>
+<h4 id="login-bash"><a href="#login-bash" class="headerlink" title="login bash"></a>login bash</h4><p>登录shell可以让用户与计算机交流</p>
+<h4 id="no-login-bash"><a href="#no-login-bash" class="headerlink" title="no login bash"></a>no login bash</h4><p>非登录shell不可用让用户与计算机交流。<br>比如用linux服务器搭建一个ftl服务器，并且创建了很多用户，那么可以将这些用户设置为nologin shell。<br>这样，这些用户仅仅可以使用ftl服务，不能用来登录Linux主机，保证了安全性。</p>
+<p>关于用户的默认登录shell是在 /etc/passwd 文件中记录的。此文件中每一行就是一个用户，每行以冒号分割字段，其中最后一个字段表示的是用户默认登录使用的shell。</p>
+<h4 id="环境变量持久保存两个方法。"><a href="#环境变量持久保存两个方法。" class="headerlink" title="环境变量持久保存两个方法。"></a>环境变量持久保存两个方法。</h4><p>1.将个人环境变量设置放在/etc/profile.d目录中，创建一个.sh结尾的文件，将所有新的或者修改过的全局环境变量设置放在这个文件中。<br>2.放在~/.bashrc文件中。</p>
+<h4 id="数组变量"><a href="#数组变量" class="headerlink" title="数组变量"></a>数组变量</h4><p>环境变量可作为数组使用。<br>数组是能够存储多个值的变量。<br>这些值可以单独引用，也可以作为整个数组来引用。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> somekey=(one two three four five)</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">echo</span> <span class="variable">$somekey</span></span></span><br><span class="line">one two three four five</span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">echo</span> <span class="variable">$&#123;somekey[2]&#125;</span></span></span><br><span class="line">three # 这里有问题，mac上输出的是‘two’ ！！！，linux虚拟机上输出是‘three’！！！</span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">echo</span> <span class="variable">$&#123;somekey[*]&#125;</span> <span class="comment"># 输出全部，mac上可以不用&#123;&#125;，用此属性需谨慎。</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="附录-默认环境变量"><a href="#附录-默认环境变量" class="headerlink" title="附录 - 默认环境变量"></a>附录 - 默认环境变量</h3><h5 id="bash-shell-支持的Bourne变量"><a href="#bash-shell-支持的Bourne变量" class="headerlink" title="bash shell 支持的Bourne变量"></a>bash shell 支持的Bourne变量</h5><table>
+<thead>
+<tr>
+<th>变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CDPATH</td>
+<td>冒号分隔的目录列表，作为cd命令的搜索</td>
+</tr>
+<tr>
+<td>HOME</td>
+<td>当前用户的主目录</td>
+</tr>
+<tr>
+<td>IFS</td>
+<td>sell用来将文本字符串分割成字段的一系列字符</td>
+</tr>
+<tr>
+<td>MAIL</td>
+<td>当前用户收件箱的文件名(bash shell会检查这个文件，看看有没有新的邮件）</td>
+</tr>
+<tr>
+<td>MAILPATH</td>
+<td>冒号分隔的当前用户收件箱的文件名列表(bash shell会检查列表中的每个文件，看看有没有新邮件）</td>
+</tr>
+<tr>
+<td>OPTARG</td>
+<td>getopts命令处理的最后一个选项参数值</td>
+</tr>
+<tr>
+<td>OPTIND</td>
+<td>getopts命令处理的最后一个选项参数的索引号</td>
+</tr>
+<tr>
+<td>PATH</td>
+<td>shell查找命令的目录列表，由冒号分隔</td>
+</tr>
+<tr>
+<td>PS1</td>
+<td>shell命令行界面的主提示符</td>
+</tr>
+<tr>
+<td>PS2</td>
+<td>sell命令行界面的次提示符</td>
+</tr>
+</tbody>
+</table>
+<h5 id="bash-shell环境变量"><a href="#bash-shell环境变量" class="headerlink" title="bash shell环境变量"></a>bash shell环境变量</h5><p>除了默认的Bourme的环境变量，bash shell还提供一此 自有的变量</p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BASH</td>
+<td>当前shel实例的全路径名</td>
+</tr>
+<tr>
+<td>BASH_ALIASES</td>
+<td>含有当前已设置别名的关联数组</td>
+</tr>
+<tr>
+<td>BASH_ARGC</td>
+<td>含有传入子函数或shel脚本的参数总数的数组变量 </td>
+</tr>
+<tr>
+<td>BASH_ARCV</td>
+<td>含有传入子函数或shell脚本的参数的数组变量 </td>
+</tr>
+<tr>
+<td>BASH_CMDS</td>
+<td>关联数组，包含shell执行过的命令的所在位置 </td>
+</tr>
+<tr>
+<td>BASH_COMMAND</td>
+<td>shell正在执行的命令或马上就执行的命令 </td>
+</tr>
+<tr>
+<td>BASH_ENV</td>
+<td>设置了的话，每个bash脚本会在运行前先尝试运行该变量定义的启动文件 </td>
+</tr>
+<tr>
+<td>BASH_EXECUTION_STRING</td>
+<td>使用bash -c选项传递过来的命令 </td>
+</tr>
+<tr>
+<td>BASH_LINENO</td>
+<td>含有当前执行的shell函数的源代码行号的数组变量 </td>
+</tr>
+<tr>
+<td>BASH_REMATCH</td>
+<td>只读数组，在使用正则表达式的比较运算符=~进行肯定匹配(positive match)时， 包含了匹配到的模式和子模式 </td>
+</tr>
+<tr>
+<td>BASH_SOURCE</td>
+<td>含有当前正在执行的hel函数所在源文件名的数组变量 </td>
+</tr>
+<tr>
+<td>BASH_SUBSHELL</td>
+<td>当前子shell环境的嵌套级别(初始值是0) </td>
+</tr>
+<tr>
+<td>BASH_VERSINFO</td>
+<td>含有当前运行的bash shell的主版本号和次版本号的数组变量 </td>
+</tr>
+<tr>
+<td>BASH_VERSION</td>
+<td>当前运行的bash shell的版本号 </td>
+</tr>
+<tr>
+<td>BASH_XTRACEFD</td>
+<td>若设置成了有效的文件描述符(0,1,2)则’set -x’ 调试选项生成的跟踪输出可被重定向。通常用来将跟踪输出到一个文件中 </td>
+</tr>
+<tr>
+<td>BASHOPTS</td>
+<td>当前启用的bash shell选项的列表 </td>
+</tr>
+<tr>
+<td>BASHPID</td>
+<td>当前bash进程的PID </td>
+</tr>
+<tr>
+<td>COLUMNS</td>
+<td>当前bash shell实例所用终端的宽度 </td>
+</tr>
+<tr>
+<td>COMP_CWORD</td>
+<td>COMP_WORDS变量的索引值，后者含有当前光标的位置 </td>
+</tr>
+<tr>
+<td>COMP_LINE</td>
+<td>当前命令行 </td>
+</tr>
+<tr>
+<td>COMP_POINT</td>
+<td>当前光标位置相对于当前命令起始的索引 </td>
+</tr>
+<tr>
+<td>COMP_KEY</td>
+<td>用来调用shell函数补全功能的最后一个键 </td>
+</tr>
+<tr>
+<td>COMP_TYPE</td>
+<td>一个整数值，表示所尝试的补全类型，用以完成shell函数补全 </td>
+</tr>
+<tr>
+<td>COMP_WORDBREAKS</td>
+<td>Readline库中用于单词补全的词分隔字符 </td>
+</tr>
+<tr>
+<td>COMP_WORDS</td>
+<td>含有当前命令行所有单词的数组变量 </td>
+</tr>
+<tr>
+<td>COMPREPLY</td>
+<td>含有由shell函数生成的可能填充代码的数组变量 </td>
+</tr>
+<tr>
+<td>COPROC</td>
+<td>占用未命名的协进程的I/O文件描述符的数组变量 </td>
+</tr>
+<tr>
+<td>DIRSTACK</td>
+<td>含有目录栈当前内容的数组变量 </td>
+</tr>
+<tr>
+<td>EMACS</td>
+<td>设置为’t’ 时，表明emacs shell缓冲区正在工作，而行编辑功能被禁止 </td>
+</tr>
+<tr>
+<td>ENV</td>
+<td>如果设置了该环境变量，在bash shell脚本运行之前会先执行已定义的启动文件(仅用于当bash shell以IPOSIX模式被调用时) </td>
+</tr>
+<tr>
+<td>EUID</td>
+<td>当前用户的有效用户ID (数字形式) </td>
+</tr>
+<tr>
+<td>FCEDIT</td>
+<td>供fc命令使用的默认编辑器 </td>
+</tr>
+<tr>
+<td>FIGNORE</td>
+<td>在进行文件名补全时可以忽略后缀名列表，由冒号分隔 </td>
+</tr>
+<tr>
+<td>FUNCNAME</td>
+<td>当前执行的shell函数的名称</td>
+</tr>
+</tbody>
+</table>
+<p><strong>续</strong></p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FUNCNEST</td>
+<td>当设置成非零值时，表示所允许的最大函数嵌套级数(一旦超出，当前命令即被终止）</td>
+</tr>
+<tr>
+<td>GLOBIGNORE</td>
+<td>冒号分隔的模式列表，定义了在进行文件名扩展时可以忽略的一组文件名</td>
+</tr>
+<tr>
+<td>GROUPS</td>
+<td>含有当前用户属组列表的数组变量</td>
+</tr>
+<tr>
+<td>histchars</td>
+<td>控制历史记录扩展，最多可有3个字符</td>
+</tr>
+<tr>
+<td>HISTCMD</td>
+<td>当前命令在历史记录中的编号</td>
+</tr>
+<tr>
+<td>HISICONTROL</td>
+<td>控制哪些命令留在历史记录列表中</td>
+</tr>
+<tr>
+<td>HISTFILE</td>
+<td>保存shell历史记录列表的文件名(默认是bash history)</td>
+</tr>
+<tr>
+<td>hISTFILESIZe</td>
+<td>最多在历史文件中存多少行</td>
+</tr>
+<tr>
+<td>HISTTIMEFORMAT</td>
+<td>如果设置了且非空，就用作格式化字符串，以显示bash历史中每条命令的时间戳</td>
+</tr>
+<tr>
+<td>HISTIGNORE</td>
+<td>由冒号分隔的模式列表，用来决定历史文件中哪些命令会被忽略</td>
+</tr>
+<tr>
+<td>HISTSIZE</td>
+<td>最多在历史文件中存多少条命令</td>
+</tr>
+<tr>
+<td>HOSTFILE</td>
+<td>shell在补全主机名时读取的文件名称</td>
+</tr>
+<tr>
+<td>HOSTNAME</td>
+<td>当前主机的名称</td>
+</tr>
+<tr>
+<td>HOSTTYPE</td>
+<td>当前运行bash shell的机器</td>
+</tr>
+<tr>
+<td>IGNOREEOF</td>
+<td>sell在退出前必须收到连续的BOF字符的数量(如果这个值不存在，默认是1)</td>
+</tr>
+<tr>
+<td>INPUTRC</td>
+<td>Readline 初始化文件名(默认是.inputrc)</td>
+</tr>
+<tr>
+<td>LANG</td>
+<td>shell的语言环境类别</td>
+</tr>
+<tr>
+<td>LC_ALL</td>
+<td>定义了一个语言环境类别，能够覆盖LANG变量</td>
+</tr>
+<tr>
+<td>LC_COLLATE</td>
+<td>设置对字符串排序时用的排序规则</td>
+</tr>
+<tr>
+<td>LC_CTYPE</td>
+<td>决定如何解释出现在文件名扩展和模式匹配中的字符</td>
+</tr>
+<tr>
+<td>LC_MESSAGES</td>
+<td>在解释前面带有S的双引号字符串时，该环境变量决定了所采用的语言环境设置</td>
+</tr>
+<tr>
+<td>LC_NUMERIC</td>
+<td>决定着格式化数字时采用的语言环境设置</td>
+</tr>
+<tr>
+<td>LINENO</td>
+<td>当前执行的脚本的行号</td>
+</tr>
+<tr>
+<td>LINES</td>
+<td>定义了终端上可见的行数</td>
+</tr>
+<tr>
+<td>MACHTYPE</td>
+<td>用“CPU-公司-系统”(CPU-company-system) 格式定义的系统类利</td>
+</tr>
+<tr>
+<td>MAPFILE</td>
+<td>一个数组变量， 当mapfile命令未指定数组变量作为参数时，它存储了了mapfile所读入的文本</td>
+</tr>
+<tr>
+<td>MAILCHECK</td>
+<td>shell查看新邮件的频率(以秒为单位，默认值是60)</td>
+</tr>
+<tr>
+<td>OLDPWD</td>
+<td>shell之前的工作目录</td>
+</tr>
+<tr>
+<td>OPTERR</td>
+<td>设置为1时，bash sell会显示getopts命令产生的错误</td>
+</tr>
+<tr>
+<td>OSTYPE</td>
+<td>定义shell所在的操作系统</td>
+</tr>
+<tr>
+<td>PIPESTATUS</td>
+<td>含有前台进程的退出状态列表的数组变量</td>
+</tr>
+<tr>
+<td>POSIXLY_CORRECT</td>
+<td>设置了的话，bas会以POSsx模式启动</td>
+</tr>
+<tr>
+<td>PPID</td>
+<td>bash sell父进程的PID</td>
+</tr>
+<tr>
+<td>PROMPT_COMMAND</td>
+<td>设置了的话，在命令行主提示符显示之前会执行这条命令</td>
+</tr>
+<tr>
+<td>PROMPT_DIRTRIM</td>
+<td>用来定义当启用了\w或\W提示符字符串转义时显示的尾部目录名的数量。被删除的目录名会用一组英文句点替换</td>
+</tr>
+<tr>
+<td>PS3</td>
+<td>select命令的提示符</td>
+</tr>
+<tr>
+<td>PS4</td>
+<td>如果使用了bash的一x选项，在命令行之前显示的提示信息</td>
+</tr>
+<tr>
+<td>PWD</td>
+<td>当前工作目录</td>
+</tr>
+<tr>
+<td>RANDOM</td>
+<td>返回一个0~ 32767的随机数(对其的赋值可作为随机数生成器的种子)</td>
+</tr>
+<tr>
+<td>READLINE_LINE</td>
+<td>当使用bind -x命令时，存储Readline缓冲区的内容</td>
+</tr>
+<tr>
+<td>READLINE_POINT</td>
+<td>当使用bind -x命 令时，表示Readine缓冲区内容插人点的当前位置</td>
+</tr>
+<tr>
+<td>REPLY</td>
+<td>read命令的默认变量</td>
+</tr>
+<tr>
+<td>SECONDS</td>
+<td>自从shell启动到现在的秒数(对其赋值将会重置计数器)</td>
+</tr>
+<tr>
+<td>SHELL</td>
+<td>bash shell的全路径名</td>
+</tr>
+<tr>
+<td>SHELLOPTS</td>
+<td>已启用bash shell选项列表，列表项之间以冒号分隔</td>
+</tr>
+<tr>
+<td>SHLVL</td>
+<td>shell的层级;每次启动一个新bash shell,该值增加1</td>
+</tr>
+<tr>
+<td>TIMEFORMAT</td>
+<td>指定了shell的时间显示格式</td>
+</tr>
+<tr>
+<td>TMOUT</td>
+<td>select和read命令在没输人的情况下等待多久(以秒为单位)。默认值为0，表示无限长</td>
+</tr>
+<tr>
+<td>TMPDIR</td>
+<td>目录名，保存bash shell创建的临时文件</td>
+</tr>
+<tr>
+<td>UID</td>
+<td>当前用户的真实用户ID (数字形式)</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.epoos.com/2018/06/14/linux4/" data-id="ckn1ji9o0000ufqvzae7r52th" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/" rel="tag">shell</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/31/rpc/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          rpc与thrift简介
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/06/10/linux3/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Linux学习笔记(三)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <span class="widget-date">2021-02-26</span>
+            <a href="/2021/02/26/compile/">前端编译</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-24</span>
+            <a href="/2021/02/24/weakSet/">weakSet与js内存回收</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-08</span>
+            <a href="/2021/02/08/react16/">react 学习笔记</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-04</span>
+            <a href="/2021/02/04/vue3/">Vue3 初探</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-01-30</span>
+            <a href="/2021/01/30/dynamic/">动态规划算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签索引</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AES/" style="font-size: 10px;">AES</a> <a href="/tags/CONTENTTYPE/" style="font-size: 10px;">CONTENTTYPE</a> <a href="/tags/MIMETYPE/" style="font-size: 10px;">MIMETYPE</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/apply/" style="font-size: 10px;">apply</a> <a href="/tags/async/" style="font-size: 10px;">async</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/bind/" style="font-size: 10px;">bind</a> <a href="/tags/brew/" style="font-size: 10px;">brew</a> <a href="/tags/browser/" style="font-size: 10px;">browser</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/call/" style="font-size: 10px;">call</a> <a href="/tags/child-process/" style="font-size: 10px;">child_process</a> <a href="/tags/chrome/" style="font-size: 10px;">chrome</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/commonjs/" style="font-size: 10px;">commonjs</a> <a href="/tags/compile/" style="font-size: 10px;">compile</a> <a href="/tags/create/" style="font-size: 10px;">create</a> <a href="/tags/csrf/" style="font-size: 10px;">csrf</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/defer/" style="font-size: 10px;">defer</a> <a href="/tags/dns/" style="font-size: 10px;">dns</a> <a href="/tags/dubbo/" style="font-size: 10px;">dubbo</a> <a href="/tags/es6Module/" style="font-size: 10px;">es6Module</a> <a href="/tags/event/" style="font-size: 10px;">event</a> <a href="/tags/fiber/" style="font-size: 10px;">fiber</a> <a href="/tags/flux/" style="font-size: 10px;">flux</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/http/" style="font-size: 11.25px;">http</a> <a href="/tags/http2/" style="font-size: 10px;">http2</a> <a href="/tags/http3/" style="font-size: 10px;">http3</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/instance/" style="font-size: 10px;">instance</a> <a href="/tags/ios%E6%A8%A1%E6%8B%9F%E5%99%A8/" style="font-size: 10px;">ios模拟器</a> <a href="/tags/iphonex/" style="font-size: 10px;">iphonex</a> <a href="/tags/item2/" style="font-size: 10px;">item2</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 16.25px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 11.25px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/nginx/" style="font-size: 11.25px;">nginx</a> <a href="/tags/nodejs/" style="font-size: 17.5px;">nodejs</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/npm-lock/" style="font-size: 10px;">npm-lock</a> <a href="/tags/object/" style="font-size: 11.25px;">object</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/proxy/" style="font-size: 11.25px;">proxy</a> <a href="/tags/react/" style="font-size: 11.25px;">react</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redux/" style="font-size: 10px;">redux</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/rsync/" style="font-size: 10px;">rsync</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sentinel/" style="font-size: 10px;">sentinel</a> <a href="/tags/set/" style="font-size: 10px;">set</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/simulator/" style="font-size: 10px;">simulator</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/ssr/" style="font-size: 10px;">ssr</a> <a href="/tags/svn/" style="font-size: 10px;">svn</a> <a href="/tags/terminal/" style="font-size: 10px;">terminal</a> <a href="/tags/thrift/" style="font-size: 10px;">thrift</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/virtualDom/" style="font-size: 10px;">virtualDom</a> <a href="/tags/vue/" style="font-size: 12.5px;">vue</a> <a href="/tags/vue-vuex/" style="font-size: 10px;">vue vuex</a> <a href="/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/tags/weakSet/" style="font-size: 10px;">weakSet</a> <a href="/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 11.25px;">web安全</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/xss/" style="font-size: 10px;">xss</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1/" style="font-size: 10px;">事件冒泡</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 10px;">事件循环</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%8D%95%E8%8E%B7/" style="font-size: 10px;">事件捕获</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%86%92%E6%B3%A1%E7%AE%97%E6%B3%95/" style="font-size: 10px;">冒泡算法</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">函数式编程</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BC%96%E8%AF%91/" style="font-size: 10px;">前端编译</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 10px;">动态规划</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 10px;">响应式</a> <a href="/tags/%E5%9B%9E%E6%96%87/" style="font-size: 10px;">回文</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 18.75px;">基础</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 10px;">安全</a> <a href="/tags/%E5%AF%B9%E8%B1%A1/" style="font-size: 11.25px;">对象</a> <a href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 11.25px;">小程序</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" style="font-size: 11.25px;">微信开发</a> <a href="/tags/%E5%BE%AE%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">微前端</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">快速算法</a> <a href="/tags/%E6%80%A7%E8%83%BD/" style="font-size: 10px;">性能</a> <a href="/tags/%E6%8F%92%E5%85%A5%E7%AE%97%E6%B3%95/" style="font-size: 10px;">插入算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12.5px;">数据库</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 10px;">数组</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF/" style="font-size: 10px;">服务端</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B8%B2%E6%9F%93/" style="font-size: 10px;">服务端渲染</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 10px;">浏览器</a> <a href="/tags/%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/" style="font-size: 10px;">硬件加速</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.75px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">线程</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%99%9A%E6%8B%9FDOM/" style="font-size: 10px;">虚拟DOM</a> <a href="/tags/%E8%AF%95%E9%A2%98/" style="font-size: 12.5px;">试题</a> <a href="/tags/%E8%AF%B7%E6%B1%82%E5%A4%B4/" style="font-size: 10px;">请求头</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" style="font-size: 10px;">软件安装</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10px;">进程</a> <a href="/tags/%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95/" style="font-size: 10px;">选择算法</a> <a href="/tags/%E9%95%BF%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">长连接</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12.5px;">面试</a> <a href="/tags/%E9%BD%90%E5%88%98%E6%B5%B7/" style="font-size: 10px;">齐刘海</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 zhoushirong&nbsp;|
+      <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备16019450号-1</a>&nbsp;|
+      <a href="https://github.com/zhoushirong" target="_blank">github</a>&nbsp;|
+      <a href="https://www.epoos.com" target="_blank">epoos.com</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="https://www.epoos.com" class="mobile-nav-link" target="_self">主站</a>
+  
+    <a href="/" class="mobile-nav-link" target="_self">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link" target="_self">列表</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

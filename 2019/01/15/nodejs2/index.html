@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-109295694-1', 'auto');
+ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+<!-- 百度统计 -->
+<script type="text/javascript">
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?e7c73fb59256f4428781ae50108da3bc";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+  
+  <title>NODEJS开发经验 | 邑司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前段时间做了一个 nodejs 应用，项目架构是 前端 vue 单页应用，后端 nodejs其实有考虑 ssr，但是因开发时间比较紧张，就没能使用。下面是开发过程中的一些经验以及遇到的一些问题。 一、技术架构 具体项目技术栈如下：client端: vue 全家桶、history-routerserver端: koa、koa-router、redis+sentinel、msyql、java (jav">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NODEJS开发经验">
+<meta property="og:url" content="https://blog.epoos.com/2019/01/15/nodejs2/index.html">
+<meta property="og:site_name" content="邑司">
+<meta property="og:description" content="前段时间做了一个 nodejs 应用，项目架构是 前端 vue 单页应用，后端 nodejs其实有考虑 ssr，但是因开发时间比较紧张，就没能使用。下面是开发过程中的一些经验以及遇到的一些问题。 一、技术架构 具体项目技术栈如下：client端: vue 全家桶、history-routerserver端: koa、koa-router、redis+sentinel、msyql、java (jav">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zhoushirong.github.io/img/nodejs.png">
+<meta property="og:image" content="http://zhoushirong.github.io/img/request1.png">
+<meta property="og:image" content="http://zhoushirong.github.io/img/request2.png">
+<meta property="og:image" content="http://zhoushirong.github.io/img/onion.png">
+<meta property="og:image" content="http://zhoushirong.github.io/img/routerpath.png">
+<meta property="article:published_time" content="2019-01-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-30T01:32:00.322Z">
+<meta property="article:author" content="zhoushirong">
+<meta property="article:tag" content="nodejs">
+<meta property="article:tag" content="服务端">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://zhoushirong.github.io/img/nodejs.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">邑司</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="https://www.epoos.com" target="_self">主站</a>
+        
+          <a class="main-nav-link" href="/" target="_self">首页</a>
+        
+          <a class="main-nav-link" href="/archives" target="_self">列表</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.epoos.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="default-nodejs2" class="article article-type-default" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/15/nodejs2/" class="article-date">
+  <time datetime="2019-01-14T16:00:00.000Z" itemprop="datePublished">2019-01-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      NODEJS开发经验
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前段时间做了一个 nodejs 应用，项目架构是 前端 vue 单页应用，后端 nodejs<br>其实有考虑 ssr，但是因开发时间比较紧张，就没能使用。<br>下面是开发过程中的一些经验以及遇到的一些问题。</p>
+<h3 id="一、技术架构"><a href="#一、技术架构" class="headerlink" title="一、技术架构"></a>一、技术架构</h3><p><img src="http://zhoushirong.github.io/img/nodejs.png" alt="koa洋葱模型" width="860px" /></p>
+<p>具体项目技术栈如下：<br>client端: vue 全家桶、history-router<br>server端: koa、koa-router、redis+sentinel、msyql、java (java后端组同学开发)</p>
+<h3 id="二、项目目录"><a href="#二、项目目录" class="headerlink" title="二、项目目录"></a>二、项目目录</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">client/ # 所有的前端文件</span><br><span class="line">- node_module/ # 前端文件依赖包</span><br><span class="line">- src/ # 前端代码源码</span><br><span class="line">- webpack/ # 构建工具</span><br><span class="line">- package.json # 前端依赖包文件</span><br><span class="line">mock/ # mock数据，</span><br><span class="line">- api/ #对后端的mock（接口数据）</span><br><span class="line">- index.js #mock入口文件</span><br><span class="line">node_modules/ # 项目启动开发工具依赖包</span><br><span class="line">server/ # 服务端代码</span><br><span class="line">- channel/ # 数据渠道、来源（java http、java dubbo、数据库、redis）</span><br><span class="line">- config/ # 网站配置文件（环境配置、数据库、redis 配置等）</span><br><span class="line">- middleware/ # 中间件</span><br><span class="line">- model # 数据库数据模型层</span><br><span class="line">- node_modules/ # 服务端依赖包</span><br><span class="line">- router/ # 路由（controler层）</span><br><span class="line">- tools/ # 一些常用工具函数</span><br><span class="line">- app.js # 服务入口</span><br><span class="line">- autoRouter.js #路由入口</span><br><span class="line">- package.json # 后端依赖包文件</span><br><span class="line">package.json # 公共项目依赖包文件</span><br></pre></td></tr></table></figure>
+<h3 id="三、技术要点"><a href="#三、技术要点" class="headerlink" title="三、技术要点"></a>三、技术要点</h3><h5 id="promise、async-await"><a href="#promise、async-await" class="headerlink" title="promise、async await"></a>promise、async await</h5><p>promise、async、await都属于javascript基础，这里略过。</p>
+<h5 id="client-端的请求"><a href="#client-端的请求" class="headerlink" title="client 端的请求"></a>client 端的请求</h5><p>请求类型大概分为如下几类，以及各个类别对应的 koa 处理中间件模块</p>
+<p>1.页面请求 —— history-router</p>
+<p>2.静态资源请求 —— koa-static</p>
+<p>3.favicon请求 —— koa-favicon</p>
+<p>4.接口请求 —— koa-router</p>
+<h5 id="NODEJS-请求过程"><a href="#NODEJS-请求过程" class="headerlink" title="NODEJS 请求过程"></a>NODEJS 请求过程</h5><p><img src="http://zhoushirong.github.io/img/request1.png" alt="请求流程" width="560px" /></p>
+<p><img src="http://zhoushirong.github.io/img/request2.png" alt="请求接口模型" width="560px" /></p>
+<h5 id="koa-中间件、node端路由"><a href="#koa-中间件、node端路由" class="headerlink" title="koa 中间件、node端路由"></a>koa 中间件、node端路由</h5><p>中间件：中间件在请求和响应的过程中给我们一个修改数据的机会</p>
+<p>中间件的功能包括：<br>1.执行任何代码。<br>2.修改请求和响应对象。<br>3.终结请求 - 响应循环。<br>4.调用堆栈中的下一个中间件</p>
+<p>中间件是koa的核心，中间件return一个中间件函数，最好是用一个函数给封装起来，以便于传参和可扩展性。<br>本项目几乎所有路由处理都是通过中间件完成的。</p>
+<p>中间件操作分为同步操作和异步操作。<br>同步操作很简单，处理完事务之后直接 await next() 到下一个中间件即可。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">middleFunction</span>(<span class="params">param1, param2</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">middle1</span>(<span class="params">ctx, next</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="string">&#x27;/middle1&#x27;</span> == ctx.path) &#123;</span><br><span class="line">      ctx.body = &#123; <span class="attr">data</span>: param1 + param2 &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">await</span> next();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>异步中间件，也很好理解，就是在中间件内部进行处理的是一个异步流程。<br>我们可以借助 async 和 await 来处理异步事务。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">middleFunction</span>(<span class="params">param1, param2</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">middle3</span>(<span class="params">ctx, next</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="string">&#x27;/middle3&#x27;</span> == ctx.path) &#123;</span><br><span class="line">      <span class="comment">// 对于异步操作，await 必须等待一个promise对象</span></span><br><span class="line">	  ctx.body = <span class="keyword">await</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">          resolve(param1 + param2)</span><br><span class="line">        &#125;, <span class="number">3000</span>)</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">await</span> next()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>koa 中中间件是最核心的操作，因此往往会有很多中间件，中间件多意味着管理上需要花费更多的精力。<br>因此，koa 也提供了一些很方便的管理工具，如：用 koa-compose 组合中间件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> compose = <span class="built_in">require</span>(<span class="string">&#x27;koa-compose&#x27;</span>)</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">middle1</span>(<span class="params">ctx, next</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="string">&#x27;/middle1&#x27;</span> == ctx.path) &#123;</span><br><span class="line">    ctx.body = &#123; <span class="attr">data</span>: <span class="string">&#x27;middle1&#x27;</span> &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> next();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">middle2</span>(<span class="params">ctx, next</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="string">&#x27;/middle2&#x27;</span> == ctx.path) &#123;</span><br><span class="line">    ctx.body = &#123; <span class="attr">data</span>: <span class="string">&#x27;middle2&#x27;</span> &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> next()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">const</span> middles = compose([middle1, middle2, <span class="comment">/*...*/</span>])</span><br><span class="line">app.use(middles)</span><br></pre></td></tr></table></figure>
+<p>多个中间件如何执行？执行顺序如何？<br>koa 中间件执行过程是一层一层的执行的，由外而内，再由内向外。<br>网上流传着很广泛的“洋葱模型”很好的诠释了这顺序，如下图所示：</p>
+<p><img src="http://zhoushirong.github.io/img/onion.png" alt="koa洋葱模型" width="360px" /></p>
+<p>等同于下面的这张图。<br><img src="http://zhoushirong.github.io/img/routerpath.png" alt="koa洋葱模型2" width="600px" /></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Koa = <span class="built_in">require</span>(<span class="string">&#x27;koa&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> Koa()</span><br><span class="line">app.use(<span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">1</span>)</span><br><span class="line">  <span class="keyword">await</span> next()</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">2</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">app.use(<span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">3</span>)</span><br><span class="line">  <span class="keyword">await</span> next()</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">4</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">app.use(<span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">5</span>)</span><br><span class="line">  ctx.body = <span class="string">&#x27;Hello World&#x27;</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">6</span>)</span><br><span class="line">&#125;)</span><br><span class="line">app.listen(<span class="number">3000</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// curl localhost:3000 输出：</span></span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line"><span class="comment">// 3</span></span><br><span class="line"><span class="comment">// 5</span></span><br><span class="line"><span class="comment">// 6</span></span><br><span class="line"><span class="comment">// 4</span></span><br><span class="line"><span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+<p>其执行顺序等同于下面的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">func1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>)</span><br><span class="line">    func2()</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">2</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">func2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">3</span>)</span><br><span class="line">    func3()</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">4</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">func3</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">5</span>)</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">6</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func1()</span><br><span class="line"></span><br><span class="line"><span class="comment">// node index.js 执行结果如下：</span></span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line"><span class="comment">// 3</span></span><br><span class="line"><span class="comment">// 5</span></span><br><span class="line"><span class="comment">// 6</span></span><br><span class="line"><span class="comment">// 4</span></span><br><span class="line"><span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+<p>理解了上面两段代码也就大概理解了 koa 的中间件的执行了。</p>
+<h5 id="整个系统执行中间件过程如下"><a href="#整个系统执行中间件过程如下" class="headerlink" title="整个系统执行中间件过程如下"></a>整个系统执行中间件过程如下</h5><p>koa-compress &gt; koa-bodyparser &gt; koa2-connect-history-api-fallback &gt; koa-favicon &gt; koa-static &gt; commonRouter -&gt; koa-router</p>
+<p>其中 commonRouter 为自定义的中间件，内部路由过程如下：<br>记录开始时间 &gt; 判断登录态 &gt; 执行后续路由 &gt; 回来执行记录结束时间 &gt; 打日志(日志需要有请求时间)</p>
+<h5 id="容错、错误码"><a href="#容错、错误码" class="headerlink" title="容错、错误码"></a>容错、错误码</h5><p>容错是程序的必要操作，尤其是后端项目，尤其重要，因为一旦报错很可能导致整个系统崩溃。<br>影响范围极大，为了更好的管理错误，我们最好能做到统一出口、入口，以便能够对错误进行更好的监控，以及异常处理。<br>可以借助于中间件来完成。</p>
+<h5 id="日志-引入log4-gt-日志埋点上报-gt-logsearch-kibana查看"><a href="#日志-引入log4-gt-日志埋点上报-gt-logsearch-kibana查看" class="headerlink" title="日志(引入log4 -&gt; 日志埋点上报 -&gt; logsearch|kibana查看)"></a>日志(引入log4 -&gt; 日志埋点上报 -&gt; logsearch|kibana查看)</h5><p>日志也是后端项目必不可少的，nodejs 项目目前比较流行的日志框架有很多<br>log4js 是目前用的比较多的，其格式也跟其它语言的日志类似。（如 java 的log4j）<br>log4js：可以做日志收集、写入文件，在服务器直接指定固定目录/data/nodejs/log</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">data/nodejs/access.log</span><br><span class="line">data/nodejs/other.log</span><br><span class="line">data/nodejs/server.log</span><br></pre></td></tr></table></figure>
+<h5 id="本地调试"><a href="#本地调试" class="headerlink" title="本地调试"></a>本地调试</h5><p>断点调试是一个很好的习惯，nodejs 最简单快捷的方式就是 console.log 直接控制台查看。<br>但是，对于复杂的情形，我们也会有需要用到断点调试的时候。<br>使用 vscode开发，并启动nodejs服务，可以很方便的进行断点 debug。</p>
+<h5 id="数据-mock"><a href="#数据-mock" class="headerlink" title="数据 mock"></a>数据 mock</h5><p>对于 nodejs 数据 mock 可以有很多方式：<br>方式一：是用第三方 mock 服务，启动一个mock数据端口<a target="_blank" rel="noopener" href="https://github.com/zhoushirong/static-mock">static-mock</a><br>方式二：利用 webpack 的插件<a target="_blank" rel="noopener" href="https://www.npmjs.com/package/webpack-api-mocker">webpack-api-mocker</a></p>
+<p>开发此项目的时候用的是方法二，好处是可以少启动一个端口，mock 可以和 client 的 webpack-dev-server 共享端口。</p>
+<h5 id="用到的主要第三方中间件"><a href="#用到的主要第三方中间件" class="headerlink" title="用到的主要第三方中间件"></a>用到的主要第三方中间件</h5><p><strong><em>koa-static</em></strong>：将静态目录映射为路由可访问的路径<br><strong><em>koa-favicon</em></strong>：将favicon.ico路径映射为可访问路径并设置max-age缓存头<br><strong><em>koa-compress</em></strong>：对请求进行开启gzip压缩，效果很明显（nginx也可以做压缩），压缩之后<br>response-headers会有这个属性  Content-Encoding:gzip<br><strong><em>koa-bodyparser</em></strong>：对于POST请求的处理，koa-bodyparser中间件可以把 koa2 上下文的 formData 数据解析到          ctx.request.body中<br><strong><em>koa2-connect-history-api-fallback</em></strong>：对vue history路由做处理，默认将非.xxx后缀请求跳到默认index.html页面</p>
+<h5 id="安全-xss、csrf、sql注入"><a href="#安全-xss、csrf、sql注入" class="headerlink" title="安全 xss、csrf、sql注入"></a>安全 xss、csrf、sql注入</h5><p>koa-helmet：9个安全中间件的集合、帮助app抵御常见的一些web安全隐患<br>koa-limit：防止DOS攻击<br>koa-csrf：防止CSRF攻击<br>sql注入：对参数进行过滤（见后面附录1）</p>
+<p>除此之外，还用到了如下工具：</p>
+<h5 id="启动工具-pm2、nodemon、配置、部署、健康检查"><a href="#启动工具-pm2、nodemon、配置、部署、健康检查" class="headerlink" title="启动工具 pm2、nodemon、配置、部署、健康检查"></a>启动工具 pm2、nodemon、配置、部署、健康检查</h5><h5 id="redis、sentinels、Medis图形化工具"><a href="#redis、sentinels、Medis图形化工具" class="headerlink" title="redis、sentinels、Medis图形化工具"></a>redis、sentinels、Medis图形化工具</h5><h5 id="mysql、mysql连接池、navicat图形化工具"><a href="#mysql、mysql连接池、navicat图形化工具" class="headerlink" title="mysql、mysql连接池、navicat图形化工具"></a>mysql、mysql连接池、navicat图形化工具</h5><h4 id="四、踩过的坑"><a href="#四、踩过的坑" class="headerlink" title="四、踩过的坑"></a>四、踩过的坑</h4><p>1.favicon.ico 不出来：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.use(favicon(path.join(__dirname, <span class="string">&#x27;favicon.ico&#x27;</span>)))</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;shortcut icon&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/favicon.ico&quot;</span> <span class="attr">type</span>=<span class="string">&quot;image/x-icon&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>2.直接用浏览器打开接口失败</p>
+<p>原因：koa2-connect-history-api-fallback 中间件做了强制跳转</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// /server/node_modules/koa2-connect-history-api-fallback/lib/connect-history-api-fallback.js</span></span><br><span class="line"><span class="comment">// koa2-connect-history-api-fallback 中间件在此处做了强制跳转</span></span><br><span class="line"><span class="keyword">if</span> (parsedUrl.pathname.indexOf(<span class="string">&#x27;.&#x27;</span>) !== -<span class="number">1</span> &amp;&amp; options.disableDotRule !== <span class="literal">true</span>) &#123;</span><br><span class="line">  logger(<span class="string">&#x27;Not rewriting&#x27;</span>, ctx.method, ctx.url, <span class="string">&#x27;because the path includes a dot (.) character.&#x27;</span>);</span><br><span class="line">  <span class="keyword">return</span> next();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>解决办法：设置白名单</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.use(historyApiFallback(&#123; <span class="attr">whiteList</span>: [<span class="string">&#x27;/api/&#x27;</span>] &#125;))</span><br></pre></td></tr></table></figure>
+<p>3.ndp环境变量首次设置之后生效，后面修改不生效，不生效</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ndp -&gt; 配置 -&gt; 发布配置 -&gt; NODE_ENV </span><br></pre></td></tr></table></figure>
+<p>原因：怀疑是ndp本身的bug，未确定。</p>
+<p>解决办法：手动杀掉服务器上pm2进程，重新启动。</p>
+<p>4.发布之后进程没有杀死，有一个错误的进程将服务器cpu跑满了。</p>
+<p>原因：可能是早期服务代码不完善，报错导致pm2管理失败，后续未重现</p>
+<p>解决办法：手动杀掉服务器进程</p>
+<p>5.日志打印报错，log4js 本地能写日志文件，服务器上写不了。</p>
+<p>原因：</p>
+<p>本地开发启动NODE服务的时候只启动一个进程。(需理解进程的概念)</p>
+<p>而通过ndp发布之后，自动通过pm2启动，用的是cluster模式，启动了多个进程。</p>
+<p>log4js，对于单进程和多进程需要做不同的配置。</p>
+<p>解决办法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 文档地址： https://log4js-node.github.io/log4js-node/api.html</span></span><br><span class="line">log4js.configure(&#123;</span><br><span class="line">  disableClustering: <span class="literal">true</span>, <span class="comment">// 不启动日志的集群模式</span></span><br><span class="line">  <span class="comment">// pm2: true, // 或者使用pm2，此模式需要服务端安装 pm2 install pm2-intercom</span></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>6.测试、后端登录我们的项目的时候登录偶尔登录不上，切接口数据更新不及时</p>
+<p>原因：配置nginx的时候配置了缓存6min</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> location / &#123;</span><br><span class="line">  proxy_pass http://node_server;</span><br><span class="line">  expires 10m; # 这个不需要</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>解决办法：</p>
+<p>去掉nginx缓存配置 expires选项。</p>
+<p>7.每次到一个新的环境，第一次构建都会报模块找不到的错误，重试N次之后正常。</p>
+<p>可能原因：</p>
+<p>执行build.sh的时候执行的是npm install client &amp;&amp; npm install server 安装的总命令</p>
+<p>总命令下的子命令 npm install client 等才是真正的安装npm依赖模块</p>
+<p>而执行build.sh的时候脚本是同步的，但是只针对脚本内的总命令，不包括子命令</p>
+<p>导致npm安装变成异步执行了，在npm未安装完成的情况下执行npm run build导致报错</p>
+<p>解决办法：将总命令拆开分别执行安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">registry=https://registry.npm.taobao.org</span><br><span class="line">npm install --prefix  ./client --registry=$registry</span><br><span class="line">npm install --prefix ./server --registry=$registry</span><br><span class="line">npm run build</span><br></pre></td></tr></table></figure>
+<p>8.经过 Nginx 的静态资源和接口返回的数据被截掉了一部分，返回的数据不完整。</p>
+<p>问题原因：</p>
+<p>新的预发环境nginx配置了缓冲，缓冲过小的时候nginx会将数据写入硬盘，而此时如果没有硬盘文件夹的读取权限，就会出现请求数据被截断的情况。</p>
+<p> 解决办法：增大缓冲</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 在预发环境 和 线上环境的location / 下面配置 proxy_buffers 缓存大小</span></span><br><span class="line">location / &#123;</span><br><span class="line">  proxy_buffer_size 64k; # 请求头缓冲大小</span><br><span class="line">  proxy_buffers 4 512k; # 请求内容缓冲大小 4 * 512kb</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="传送门："><a href="#传送门：" class="headerlink" title="传送门："></a>传送门：</h3><p>1.mac 靠谱的安装mysql教程地址：</p>
+<p><a target="_blank" rel="noopener" href="https://gist.github.com/nrollr/3f57fc15ded7dddddcc4e82fe137b58e">https://gist.github.com/nrollr/3f57fc15ded7dddddcc4e82fe137b58e</a></p>
+<p>2.redis命令教程地址</p>
+<p><a target="_blank" rel="noopener" href="http://redisdoc.com/">http://redisdoc.com/</a></p>
+<p>3.redis sentinels学习配置教程</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/men_wen/article/details/72724406">https://blog.csdn.net/men_wen/article/details/72724406</a></p>
+<p>4.上次分享的nodejs架构基础参考</p>
+<p><a target="_blank" rel="noopener" href="http://doc.hz.netease.com/pages/viewpage.action?pageId=117468038">http://doc.hz.netease.com/pages/viewpage.action?pageId=117468038</a></p>
+<p>5.koa安全中间件简介</p>
+<p><a target="_blank" rel="noopener" href="https://cnodejs.org/topic/5a502debafa0a121784a89c3">https://cnodejs.org/topic/5a502debafa0a121784a89c3</a></p>
+<h3 id="附录1："><a href="#附录1：" class="headerlink" title="附录1："></a>附录1：</h3><p>node-mysql中防止SQL注入四种常用方法：</p>
+<p>方法一：</p>
+<p>使用 escape 方法对参数进行编码，如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql.escape(param); </span><br><span class="line">connection.escape(param);</span><br><span class="line">poll.escape(param)</span><br></pre></td></tr></table></figure>
+<p>escape()方法编码规则：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Numbers不进行转换；</span><br><span class="line"></span><br><span class="line">Booleans转换为true/false；</span><br><span class="line"></span><br><span class="line">Date对象转换为’YYYY-mm-dd HH:ii:ss’字符串；</span><br><span class="line"></span><br><span class="line">Buffers转换为hex字符串，如X’0fa5’；</span><br><span class="line"></span><br><span class="line">Strings进行安全转义；</span><br><span class="line"></span><br><span class="line">Arrays转换为列表，如[‘a’, ‘b’]会转换为’a’, ‘b’；</span><br><span class="line"></span><br><span class="line">多维数组转换为组列表，如[[‘a’, ‘b’], [‘c’, ‘d’]]会转换为’a’, ‘b’), (‘c’, ‘d’)；</span><br><span class="line"></span><br><span class="line">Objects会转换为key=value键值对的形式。嵌套的对象转换为字符串；</span><br><span class="line"></span><br><span class="line">undefined/null会转换为NULL；</span><br><span class="line"></span><br><span class="line">MySQL不支持NaN/Infinity，并且会触发MySQL错误。</span><br></pre></td></tr></table></figure>
+<p>方法二：</p>
+<p>使用connection.query()的查询参数占位符</p>
+<p>使用？作为查询参数占位符。</p>
+<p>在使用查询参数占位符的时候，在其内部自动调用 connection.escape() 方法对其传入的参数进行编码，如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> post  = &#123; <span class="attr">name</span>: <span class="string">&#x27;namestring&#x27;</span> &#125;</span><br><span class="line"><span class="keyword">let</span> query = connection.query(<span class="string">&#x27;SELECT * FROM users WHERE ?&#x27;</span>, post, <span class="function">(<span class="params">err, results</span>) =&gt;</span> &#123;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(query.sql); <span class="comment">// SELECT * FROM users WHERE name = &#x27;namestring&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>方法三：</p>
+<p>使用escapedId()编码SQL查询标识符。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql.escapedId(identifier)</span><br><span class="line">connection.escapeId(identifier)</span><br><span class="line">pool.escapeId(identifier)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 多用于排序，如：</span></span><br><span class="line"><span class="keyword">let</span> sorter = <span class="string">&#x27;date&#x27;</span></span><br><span class="line"><span class="keyword">let</span> sql = <span class="string">&#x27;SELECT * FROM posts ORDER BY &#x27;</span> + connection.escapeId(sorter)</span><br></pre></td></tr></table></figure>
+<p>方法四：</p>
+<p>使用mysql.format()转义参数。</p>
+<p>准备查询，此方法用于准备查询语句，该函数会自动选择合适的转义参数。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.epoos.com/2019/01/15/nodejs2/" data-id="ckn1ji9o70012fqvz3qxv7a14" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nodejs/" rel="tag">nodejs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF/" rel="tag">服务端</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/01/16/nodejs3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          node与dubbo接口
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/01/09/event/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">事件冒泡与事件捕获</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <span class="widget-date">2021-02-26</span>
+            <a href="/2021/02/26/compile/">前端编译</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-24</span>
+            <a href="/2021/02/24/weakSet/">weakSet与js内存回收</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-08</span>
+            <a href="/2021/02/08/react16/">react 学习笔记</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-04</span>
+            <a href="/2021/02/04/vue3/">Vue3 初探</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-01-30</span>
+            <a href="/2021/01/30/dynamic/">动态规划算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签索引</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AES/" style="font-size: 10px;">AES</a> <a href="/tags/CONTENTTYPE/" style="font-size: 10px;">CONTENTTYPE</a> <a href="/tags/MIMETYPE/" style="font-size: 10px;">MIMETYPE</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/apply/" style="font-size: 10px;">apply</a> <a href="/tags/async/" style="font-size: 10px;">async</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/bind/" style="font-size: 10px;">bind</a> <a href="/tags/brew/" style="font-size: 10px;">brew</a> <a href="/tags/browser/" style="font-size: 10px;">browser</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/call/" style="font-size: 10px;">call</a> <a href="/tags/child-process/" style="font-size: 10px;">child_process</a> <a href="/tags/chrome/" style="font-size: 10px;">chrome</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/commonjs/" style="font-size: 10px;">commonjs</a> <a href="/tags/compile/" style="font-size: 10px;">compile</a> <a href="/tags/create/" style="font-size: 10px;">create</a> <a href="/tags/csrf/" style="font-size: 10px;">csrf</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/defer/" style="font-size: 10px;">defer</a> <a href="/tags/dns/" style="font-size: 10px;">dns</a> <a href="/tags/dubbo/" style="font-size: 10px;">dubbo</a> <a href="/tags/es6Module/" style="font-size: 10px;">es6Module</a> <a href="/tags/event/" style="font-size: 10px;">event</a> <a href="/tags/fiber/" style="font-size: 10px;">fiber</a> <a href="/tags/flux/" style="font-size: 10px;">flux</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/http/" style="font-size: 11.25px;">http</a> <a href="/tags/http2/" style="font-size: 10px;">http2</a> <a href="/tags/http3/" style="font-size: 10px;">http3</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/instance/" style="font-size: 10px;">instance</a> <a href="/tags/ios%E6%A8%A1%E6%8B%9F%E5%99%A8/" style="font-size: 10px;">ios模拟器</a> <a href="/tags/iphonex/" style="font-size: 10px;">iphonex</a> <a href="/tags/item2/" style="font-size: 10px;">item2</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 16.25px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 11.25px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/nginx/" style="font-size: 11.25px;">nginx</a> <a href="/tags/nodejs/" style="font-size: 17.5px;">nodejs</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/npm-lock/" style="font-size: 10px;">npm-lock</a> <a href="/tags/object/" style="font-size: 11.25px;">object</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/proxy/" style="font-size: 11.25px;">proxy</a> <a href="/tags/react/" style="font-size: 11.25px;">react</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redux/" style="font-size: 10px;">redux</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/rsync/" style="font-size: 10px;">rsync</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sentinel/" style="font-size: 10px;">sentinel</a> <a href="/tags/set/" style="font-size: 10px;">set</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/simulator/" style="font-size: 10px;">simulator</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/ssr/" style="font-size: 10px;">ssr</a> <a href="/tags/svn/" style="font-size: 10px;">svn</a> <a href="/tags/terminal/" style="font-size: 10px;">terminal</a> <a href="/tags/thrift/" style="font-size: 10px;">thrift</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/virtualDom/" style="font-size: 10px;">virtualDom</a> <a href="/tags/vue/" style="font-size: 12.5px;">vue</a> <a href="/tags/vue-vuex/" style="font-size: 10px;">vue vuex</a> <a href="/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/tags/weakSet/" style="font-size: 10px;">weakSet</a> <a href="/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 11.25px;">web安全</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/xss/" style="font-size: 10px;">xss</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1/" style="font-size: 10px;">事件冒泡</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 10px;">事件循环</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%8D%95%E8%8E%B7/" style="font-size: 10px;">事件捕获</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%86%92%E6%B3%A1%E7%AE%97%E6%B3%95/" style="font-size: 10px;">冒泡算法</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">函数式编程</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BC%96%E8%AF%91/" style="font-size: 10px;">前端编译</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 10px;">动态规划</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 10px;">响应式</a> <a href="/tags/%E5%9B%9E%E6%96%87/" style="font-size: 10px;">回文</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 18.75px;">基础</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 10px;">安全</a> <a href="/tags/%E5%AF%B9%E8%B1%A1/" style="font-size: 11.25px;">对象</a> <a href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 11.25px;">小程序</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" style="font-size: 11.25px;">微信开发</a> <a href="/tags/%E5%BE%AE%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">微前端</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">快速算法</a> <a href="/tags/%E6%80%A7%E8%83%BD/" style="font-size: 10px;">性能</a> <a href="/tags/%E6%8F%92%E5%85%A5%E7%AE%97%E6%B3%95/" style="font-size: 10px;">插入算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12.5px;">数据库</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 10px;">数组</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF/" style="font-size: 10px;">服务端</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B8%B2%E6%9F%93/" style="font-size: 10px;">服务端渲染</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 10px;">浏览器</a> <a href="/tags/%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/" style="font-size: 10px;">硬件加速</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.75px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">线程</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%99%9A%E6%8B%9FDOM/" style="font-size: 10px;">虚拟DOM</a> <a href="/tags/%E8%AF%95%E9%A2%98/" style="font-size: 12.5px;">试题</a> <a href="/tags/%E8%AF%B7%E6%B1%82%E5%A4%B4/" style="font-size: 10px;">请求头</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" style="font-size: 10px;">软件安装</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10px;">进程</a> <a href="/tags/%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95/" style="font-size: 10px;">选择算法</a> <a href="/tags/%E9%95%BF%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">长连接</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12.5px;">面试</a> <a href="/tags/%E9%BD%90%E5%88%98%E6%B5%B7/" style="font-size: 10px;">齐刘海</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 zhoushirong&nbsp;|
+      <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备16019450号-1</a>&nbsp;|
+      <a href="https://github.com/zhoushirong" target="_blank">github</a>&nbsp;|
+      <a href="https://www.epoos.com" target="_blank">epoos.com</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="https://www.epoos.com" class="mobile-nav-link" target="_self">主站</a>
+  
+    <a href="/" class="mobile-nav-link" target="_self">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link" target="_self">列表</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

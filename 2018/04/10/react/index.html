@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-109295694-1', 'auto');
+ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+<!-- 百度统计 -->
+<script type="text/javascript">
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?e7c73fb59256f4428781ae50108da3bc";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+  
+  <title>React、Flux以及Redux小结 | 邑司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="React和Vue是当下前端最流行的Javascript框架。作为一名现代化前端工程师，学习这两个框架已经成为了标配。本人学习这两个框架已经有很长一段时间了，当下对其做一些基本概念梳理总结，利人利己。 FluxFlux是什么Flux是一种架构思想，专门解决软件结构问题，它和MVC是同一种东西。 facebook flux官网描述12345Flux is the application archit">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React、Flux以及Redux小结">
+<meta property="og:url" content="https://blog.epoos.com/2018/04/10/react/index.html">
+<meta property="og:site_name" content="邑司">
+<meta property="og:description" content="React和Vue是当下前端最流行的Javascript框架。作为一名现代化前端工程师，学习这两个框架已经成为了标配。本人学习这两个框架已经有很长一段时间了，当下对其做一些基本概念梳理总结，利人利己。 FluxFlux是什么Flux是一种架构思想，专门解决软件结构问题，它和MVC是同一种东西。 facebook flux官网描述12345Flux is the application archit">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.ruanyifeng.com/blogimg/asset/2016/bg2016011503.png">
+<meta property="article:published_time" content="2018-04-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-30T01:32:00.325Z">
+<meta property="article:author" content="zhoushirong">
+<meta property="article:tag" content="js">
+<meta property="article:tag" content="react">
+<meta property="article:tag" content="flux">
+<meta property="article:tag" content="redux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.ruanyifeng.com/blogimg/asset/2016/bg2016011503.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">邑司</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="https://www.epoos.com" target="_self">主站</a>
+        
+          <a class="main-nav-link" href="/" target="_self">首页</a>
+        
+          <a class="main-nav-link" href="/archives" target="_self">列表</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.epoos.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-react" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/10/react/" class="article-date">
+  <time datetime="2018-04-09T16:00:00.000Z" itemprop="datePublished">2018-04-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      React、Flux以及Redux小结
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>React和Vue是当下前端最流行的Javascript框架。作为一名现代化前端工程师，学习这两个框架已经成为了标配。<br>本人学习这两个框架已经有很长一段时间了，当下对其做一些基本概念梳理总结，利人利己。</p>
+<h3 id="Flux"><a href="#Flux" class="headerlink" title="Flux"></a>Flux</h3><h5 id="Flux是什么"><a href="#Flux是什么" class="headerlink" title="Flux是什么"></a>Flux是什么</h5><p>Flux是一种架构思想，专门解决软件结构问题，它和MVC是同一种东西。</p>
+<h5 id="facebook-flux官网描述"><a href="#facebook-flux官网描述" class="headerlink" title="facebook flux官网描述"></a>facebook flux官网描述</h5><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Flux is the application architecture that Facebook uses for building client-side web applications. </span><br><span class="line">It complements React&#x27;s composable view components by utilizing a unidirectional data flow. </span><br><span class="line">It&#x27;s more of a pattern rather than a formal framework, and you can start using Flux immediately without a lot of new code.</span><br><span class="line"></span><br><span class="line">（Flux是Facebook用来构建客户端应用程序的web应用程序架构。它是React单向数据流view组件的补充。它更向是一种模式，而不是一种框架，你只需要使用一点点代码就能立即使用它）</span><br></pre></td></tr></table></figure>
+<h5 id="Flux结构组成"><a href="#Flux结构组成" class="headerlink" title="Flux结构组成"></a>Flux结构组成</h5><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">View 视图层</span><br><span class="line"></span><br><span class="line">Action 动作 比如视图层发出的消息（比如mouseClick）</span><br><span class="line"></span><br><span class="line">Dispatcher 派发器 接受Actions，执行回调函数</span><br><span class="line"></span><br><span class="line">Store 数据层 用来存放应用状态 Store变动的时候，会触发View更新</span><br></pre></td></tr></table></figure>
+<h5 id="Flux最大的特点就是“数据的单向流动”"><a href="#Flux最大的特点就是“数据的单向流动”" class="headerlink" title="Flux最大的特点就是“数据的单向流动”"></a>Flux最大的特点就是“数据的单向流动”</h5><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1.用户访问View</span><br><span class="line"></span><br><span class="line">2.用户触发View发起Action</span><br><span class="line"></span><br><span class="line">3.Dispather接收到用户的Action，要求Store进行相应更新</span><br><span class="line"></span><br><span class="line">4.Store更新之后通知view更新</span><br></pre></td></tr></table></figure>
+<p>如图所示：（图片来源:<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/）">http://www.ruanyifeng.com/）</a></p>
+<p><img src="http://www.ruanyifeng.com/blogimg/asset/2016/bg2016011503.png" alt="avatar"></p>
+<h5 id="Flux的应用"><a href="#Flux的应用" class="headerlink" title="Flux的应用"></a>Flux的应用</h5><p>Flux是一种架构思想，使用flux就是使用flux的这种思想模式构建程序代码。<br>使用flux模式构建的代码能够更容易阅读，修改维护更为简单。<br>当然，通其它结构思想一样（如MVC）引入flux模式必然会需要引入一些其它的代码，一定程度上提升了代码的复杂度。<br>因此，如果不是项目到达一定的规模，如果不是觉得不用框架开发起来很艰难，那就不需要使用flux框架。</p>
+<hr>
+<h3 id="React"><a href="#React" class="headerlink" title="React"></a>React</h3><p>React是一个View层框架，用来渲染视图，不直接操作View，想要操作view只能通过修改state来实现<br>state的改变主要来自两个方面，一个是服务端，另一个是用户行为，其中用户行为占很大一部分。<br>React每个组件都有一个setState方法用来修改当前的state，所以一般把修改state操作都放在各自的组件中。<br>但是，随着项目的扩大，业务逻辑越来越复杂，一个state的变化往往对应着多个组件，这样很可能导致混乱。<br>此时，我们需要一个对state进行统一管理，这也就是Flux出现的原因了。</p>
+<h5 id="React使用Flux"><a href="#React使用Flux" class="headerlink" title="React使用Flux"></a>React使用Flux</h5><p>Flux在React中主要用来集中管理引起state变化的情况，Flux维护着一个或多个Store，（MVC中的Model），Store中存储着应用用到的所有数据。<br>当Action触发的时候，Flux根据Action在对应Store中经过一系列逻辑处理，更新Store。<br>当Store发生变化的时候，通常根组件（也可以不是根组件）会去获取新的store，然后更新state，然后利用React的单项数据流的特点一层层的向下传递state以更新view。</p>
+<h5 id="Redux"><a href="#Redux" class="headerlink" title="Redux"></a>Redux</h5><p>Redux的作用和Flux相同，可以看作是Flux的一种实现</p>
+<p>当然，Redux既然独立存在，肯定是有其独特之处，同Flux相比，Redux有以下不同。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1.Redux没有 Dispatcher，只有Reducer，Reducer是一个纯函数，它接受两个参数(previousState、action)，返回一个新的state；</span><br><span class="line">  Redux中含有多个reducer，多个reducer通过combineReducers方法合并为一个根reducer，这个根reducer负责维护完整的state；</span><br><span class="line">  当action发起的时候，store会调用dispatch方法，向某个特定的reducer纯函数传递该action，以更新state。</span><br><span class="line"></span><br><span class="line">2.Flux有多个store；在store中完成新的state的推导；每一个store都只对对应的view，每次更新都只通知对应的view</span><br><span class="line">  Redux只有一个store；Redux的更新逻辑也不在store中执行，而是放在reducer中；Redux中所有reducer都由根Reducer统一管理，对应一个根View。</span><br></pre></td></tr></table></figure></p>
+<h5 id="Redux-Store-以及-Redux-State"><a href="#Redux-Store-以及-Redux-State" class="headerlink" title="Redux Store 以及 Redux State"></a>Redux Store 以及 Redux State</h5><p>Store保存所有的数据，可以将其看做是一个容器。整个应用只能有一个Store<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;createStore&#125; <span class="keyword">from</span> <span class="string">&quot;redux&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store = createStore(fn);</span><br></pre></td></tr></table></figure></p>
+<p>如果想得到某个时点的数据，就要对Store生成快照。这种时点的数据集合就叫做State<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;createStore&#125; <span class="keyword">from</span> <span class="string">&quot;redux&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store = createStore(fn);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> state = store.getState();</span><br></pre></td></tr></table></figure></p>
+<p>Redux规定，一个State对应一个View。只要State相同，View就相同。<br>知道State就能知道View是什么样，反之亦然。</p>
+<h5 id="Redux-Action"><a href="#Redux-Action" class="headerlink" title="Redux Action"></a>Redux Action</h5><p>Action为View发出的通知，表示State将要发生变化<br>Action描述当前发生的事情。改变State的唯一办法就是通过Action将数据运送到Store<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> action = &#123;</span><br><span class="line">  type: <span class="string">&quot;ADD_TODO&quot;</span>, <span class="comment">// Action的名称</span></span><br><span class="line">  payload: <span class="string">&quot;LEARN Redux&quot;</span> <span class="comment">// Action携带的字符串信息</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h4 id="Redux-Action-Creater"><a href="#Redux-Action-Creater" class="headerlink" title="Redux Action Creater"></a>Redux Action Creater</h4><p>定义一个函数，用来自动生成Action，这个函数就叫做Action Creator</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ADD_TODO = <span class="string">&quot;添加 TODO&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addToDo</span>(<span class="params">text</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        type: ADD_TODO,</span><br><span class="line">        text</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> action = addToDo(Learn Redux);</span><br></pre></td></tr></table></figure>
+<h4 id="Redux-store-dispatch"><a href="#Redux-store-dispatch" class="headerlink" title="Redux store.dispatch()"></a>Redux store.dispatch()</h4><p>store.dispatch()是View唯一发出Action的方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;createStore&#125; form <span class="string">&quot;redux&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store = createStore(fn);</span><br><span class="line"></span><br><span class="line">store.dispatch(&#123;</span><br><span class="line">  type: <span class="string">&quot;ADD_TODO&quot;</span>,</span><br><span class="line">  payload: <span class="string">&quot;Learn Redux&quot;</span>,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>store.dispatch接受一个Action对象作为参数，将它发送出去</p>
+<p>结合Action Creater</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">store.dispatch(addToDo(<span class="string">&quot;Learn Redux&quot;</span>));</span><br></pre></td></tr></table></figure>
+<h5 id="Redux-Reducer"><a href="#Redux-Reducer" class="headerlink" title="Redux Reducer"></a>Redux Reducer</h5><p>Store收到一个Action之后必须给出一个新的State，这样View才会发生变化。<br>这种State的计算过程就叫做Reducer，Reducer是一个纯函数，它接受Action和当前的State作为参数，返回一个新的State<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Reducer = <span class="function"><span class="keyword">function</span>(<span class="params">state, action</span>)</span>&#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="keyword">return</span> new_state;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="Redux-subscribe"><a href="#Redux-subscribe" class="headerlink" title="Redux subscribe()"></a>Redux subscribe()</h5><p>Store允许使用Store.subscribe方法设置监听函数，一旦State发生变化就自动执行这个函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;createStore&#125; <span class="keyword">from</span> <span class="string">&quot;redux&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> store = createStore(reducer);</span><br><span class="line"></span><br><span class="line">store.subscribe(listener);</span><br></pre></td></tr></table></figure>
+<p>解除监听，store.subscribe方法返回一个函数，调用这个函数即可解除监听</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> unsubscribe = store.subscribe(<span class="function">() =&gt;</span> </span><br><span class="line">    <span class="built_in">console</span>.log(store.getState());</span><br><span class="line">);</span><br><span class="line">unsubscribe();</span><br></pre></td></tr></table></figure>
+<h5 id="Redux-Store的实现"><a href="#Redux-Store的实现" class="headerlink" title="Redux Store的实现"></a>Redux Store的实现</h5><p>Store提供了三个方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">store.getState();</span><br><span class="line"></span><br><span class="line">store.dispatch();</span><br><span class="line"></span><br><span class="line">store.subscribe();</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;createStore&#125; <span class="keyword">from</span> <span class="string">&quot;redux&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> &#123;subscribe, dispatch, getState&#125; = createStore(reducer);</span><br></pre></td></tr></table></figure>
+<h5 id="Reducer拆分"><a href="#Reducer拆分" class="headerlink" title="Reducer拆分"></a>Reducer拆分</h5><p>Reducer负责生成State，由于一个项目只有一个State，导致这个State会非常庞大。<br>所以，Redux提供了解决方案，那就是将其拆分开来，同时Redux又提供了一个combineReducers方法<br>用这个方法可以将各个子Reducer合并成一个大的Reducer。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;combineReducers&#125; form <span class="string">&quot;redux&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> chatReducer = <span class="function"><span class="title">combineReducers</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    chatLog,</span><br><span class="line">    statusMessage,</span><br><span class="line">    userName</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> todoApp;</span><br></pre></td></tr></table></figure>
+<p>可以将所有的子Reducer放在一个文件里面，然后统一引入</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;combineReducers&#125; form <span class="string">&quot;redux&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> reducers <span class="keyword">from</span> <span class="string">&quot;./reducers&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> reducer = combineReducers(reducers); </span><br></pre></td></tr></table></figure>
+<h5 id="Reducer工作流程"><a href="#Reducer工作流程" class="headerlink" title="Reducer工作流程"></a>Reducer工作流程</h5><p>1.用户发出action<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">store.dispatch(actioin);</span><br></pre></td></tr></table></figure></p>
+<p>2.Store自动调用Reducer，并传入两个参数（当前State和Action）。Reducer会返回新的State<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> nextState = todoApp(previousState, action);</span><br></pre></td></tr></table></figure></p>
+<p>3.State出现变化之后，Store调用监听函数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">store.subscribe(listener);</span><br></pre></td></tr></table></figure><br>listener可以通过store.getState()获取当前状态。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">listener</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> newState = store.getState();</span><br><span class="line">  component.setState(newState);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="传送门"><a href="#传送门" class="headerlink" title="传送门"></a>传送门</h3><h4 id="babel官网"><a href="#babel官网" class="headerlink" title="babel官网"></a>babel官网</h4><p><a href="https://babeljs.io/" target="_blank">https://babeljs.io/</a></p>
+<h4 id="react官网"><a href="#react官网" class="headerlink" title="react官网"></a>react官网</h4><p><a href="https://facebook.github.io/react/" target="_blank">https://facebook.github.io/react/</a></p>
+<h4 id="redux中文文档"><a href="#redux中文文档" class="headerlink" title="redux中文文档"></a>redux中文文档</h4><p><a href="http://cn.redux.js.org/" target="_blank">http://cn.redux.js.org/</a></p>
+<h4 id="redux介绍（segmentfault）"><a href="#redux介绍（segmentfault）" class="headerlink" title="redux介绍（segmentfault）"></a>redux介绍（segmentfault）</h4><p><a href="https://segmentfault.com/a/1190000003503338?_ea=323420" target="_blank">https://segmentfault.com/a/1190000003503338?_ea=323420</a></p>
+<h4 id="react入门实践"><a href="#react入门实践" class="headerlink" title="react入门实践"></a>react入门实践</h4><p><a href="http://www.jianshu.com/p/808bb43b3744" target="_blank">http://www.jianshu.com/p/808bb43b3744</a></p>
+<h4 id="阮一峰react系列教程"><a href="#阮一峰react系列教程" class="headerlink" title="阮一峰react系列教程"></a>阮一峰react系列教程</h4><p><a href="http://www.ruanyifeng.com/blog/2016/09/react-technology-stack.html" target="_blank" >http://www.ruanyifeng.com/blog/2016/09/react-technology-stack.html</a></p>
+<h4 id="imwebRedux文章"><a href="#imwebRedux文章" class="headerlink" title="imwebRedux文章"></a>imwebRedux文章</h4><p><a href="http://imweb.io/topic/57711e37f0a5487b05f325b5" target="_blank">http://imweb.io/topic/57711e37f0a5487b05f325b5</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.epoos.com/2018/04/10/react/" data-id="ckn1ji9og001kfqvzeot0g91b" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/flux/" rel="tag">flux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/" rel="tag">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/react/" rel="tag">react</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redux/" rel="tag">redux</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/05/21/proxy-error/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          一个localhost引发的血案。
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/03/20/getrect/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">getBoundingClientReact方法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <span class="widget-date">2021-02-26</span>
+            <a href="/2021/02/26/compile/">前端编译</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-24</span>
+            <a href="/2021/02/24/weakSet/">weakSet与js内存回收</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-08</span>
+            <a href="/2021/02/08/react16/">react 学习笔记</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-04</span>
+            <a href="/2021/02/04/vue3/">Vue3 初探</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-01-30</span>
+            <a href="/2021/01/30/dynamic/">动态规划算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签索引</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AES/" style="font-size: 10px;">AES</a> <a href="/tags/CONTENTTYPE/" style="font-size: 10px;">CONTENTTYPE</a> <a href="/tags/MIMETYPE/" style="font-size: 10px;">MIMETYPE</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/apply/" style="font-size: 10px;">apply</a> <a href="/tags/async/" style="font-size: 10px;">async</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/bind/" style="font-size: 10px;">bind</a> <a href="/tags/brew/" style="font-size: 10px;">brew</a> <a href="/tags/browser/" style="font-size: 10px;">browser</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/call/" style="font-size: 10px;">call</a> <a href="/tags/child-process/" style="font-size: 10px;">child_process</a> <a href="/tags/chrome/" style="font-size: 10px;">chrome</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/commonjs/" style="font-size: 10px;">commonjs</a> <a href="/tags/compile/" style="font-size: 10px;">compile</a> <a href="/tags/create/" style="font-size: 10px;">create</a> <a href="/tags/csrf/" style="font-size: 10px;">csrf</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/defer/" style="font-size: 10px;">defer</a> <a href="/tags/dns/" style="font-size: 10px;">dns</a> <a href="/tags/dubbo/" style="font-size: 10px;">dubbo</a> <a href="/tags/es6Module/" style="font-size: 10px;">es6Module</a> <a href="/tags/event/" style="font-size: 10px;">event</a> <a href="/tags/fiber/" style="font-size: 10px;">fiber</a> <a href="/tags/flux/" style="font-size: 10px;">flux</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/http/" style="font-size: 11.25px;">http</a> <a href="/tags/http2/" style="font-size: 10px;">http2</a> <a href="/tags/http3/" style="font-size: 10px;">http3</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/instance/" style="font-size: 10px;">instance</a> <a href="/tags/ios%E6%A8%A1%E6%8B%9F%E5%99%A8/" style="font-size: 10px;">ios模拟器</a> <a href="/tags/iphonex/" style="font-size: 10px;">iphonex</a> <a href="/tags/item2/" style="font-size: 10px;">item2</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 16.25px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 11.25px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/nginx/" style="font-size: 11.25px;">nginx</a> <a href="/tags/nodejs/" style="font-size: 17.5px;">nodejs</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/npm-lock/" style="font-size: 10px;">npm-lock</a> <a href="/tags/object/" style="font-size: 11.25px;">object</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/proxy/" style="font-size: 11.25px;">proxy</a> <a href="/tags/react/" style="font-size: 11.25px;">react</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redux/" style="font-size: 10px;">redux</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/rsync/" style="font-size: 10px;">rsync</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sentinel/" style="font-size: 10px;">sentinel</a> <a href="/tags/set/" style="font-size: 10px;">set</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/simulator/" style="font-size: 10px;">simulator</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/ssr/" style="font-size: 10px;">ssr</a> <a href="/tags/svn/" style="font-size: 10px;">svn</a> <a href="/tags/terminal/" style="font-size: 10px;">terminal</a> <a href="/tags/thrift/" style="font-size: 10px;">thrift</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/virtualDom/" style="font-size: 10px;">virtualDom</a> <a href="/tags/vue/" style="font-size: 12.5px;">vue</a> <a href="/tags/vue-vuex/" style="font-size: 10px;">vue vuex</a> <a href="/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/tags/weakSet/" style="font-size: 10px;">weakSet</a> <a href="/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 11.25px;">web安全</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/xss/" style="font-size: 10px;">xss</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1/" style="font-size: 10px;">事件冒泡</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 10px;">事件循环</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%8D%95%E8%8E%B7/" style="font-size: 10px;">事件捕获</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%86%92%E6%B3%A1%E7%AE%97%E6%B3%95/" style="font-size: 10px;">冒泡算法</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">函数式编程</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BC%96%E8%AF%91/" style="font-size: 10px;">前端编译</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 10px;">动态规划</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 10px;">响应式</a> <a href="/tags/%E5%9B%9E%E6%96%87/" style="font-size: 10px;">回文</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 18.75px;">基础</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 10px;">安全</a> <a href="/tags/%E5%AF%B9%E8%B1%A1/" style="font-size: 11.25px;">对象</a> <a href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 11.25px;">小程序</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" style="font-size: 11.25px;">微信开发</a> <a href="/tags/%E5%BE%AE%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">微前端</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">快速算法</a> <a href="/tags/%E6%80%A7%E8%83%BD/" style="font-size: 10px;">性能</a> <a href="/tags/%E6%8F%92%E5%85%A5%E7%AE%97%E6%B3%95/" style="font-size: 10px;">插入算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12.5px;">数据库</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 10px;">数组</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF/" style="font-size: 10px;">服务端</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B8%B2%E6%9F%93/" style="font-size: 10px;">服务端渲染</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 10px;">浏览器</a> <a href="/tags/%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/" style="font-size: 10px;">硬件加速</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.75px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">线程</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%99%9A%E6%8B%9FDOM/" style="font-size: 10px;">虚拟DOM</a> <a href="/tags/%E8%AF%95%E9%A2%98/" style="font-size: 12.5px;">试题</a> <a href="/tags/%E8%AF%B7%E6%B1%82%E5%A4%B4/" style="font-size: 10px;">请求头</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" style="font-size: 10px;">软件安装</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10px;">进程</a> <a href="/tags/%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95/" style="font-size: 10px;">选择算法</a> <a href="/tags/%E9%95%BF%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">长连接</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12.5px;">面试</a> <a href="/tags/%E9%BD%90%E5%88%98%E6%B5%B7/" style="font-size: 10px;">齐刘海</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 zhoushirong&nbsp;|
+      <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备16019450号-1</a>&nbsp;|
+      <a href="https://github.com/zhoushirong" target="_blank">github</a>&nbsp;|
+      <a href="https://www.epoos.com" target="_blank">epoos.com</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="https://www.epoos.com" class="mobile-nav-link" target="_self">主站</a>
+  
+    <a href="/" class="mobile-nav-link" target="_self">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link" target="_self">列表</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

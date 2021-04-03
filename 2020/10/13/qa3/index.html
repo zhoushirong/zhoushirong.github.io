@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-109295694-1', 'auto');
+ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+<!-- 百度统计 -->
+<script type="text/javascript">
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?e7c73fb59256f4428781ae50108da3bc";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+  
+  <title>关于js的二叉树 | 邑司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1.将二叉树的顺序存储数组转换为链表结构123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于js的二叉树">
+<meta property="og:url" content="https://blog.epoos.com/2020/10/13/qa3/index.html">
+<meta property="og:site_name" content="邑司">
+<meta property="og:description" content="1.将二叉树的顺序存储数组转换为链表结构123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-30T01:32:00.324Z">
+<meta property="article:author" content="zhoushirong">
+<meta property="article:tag" content="基础">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="二叉树">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">邑司</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="https://www.epoos.com" target="_self">主站</a>
+        
+          <a class="main-nav-link" href="/" target="_self">首页</a>
+        
+          <a class="main-nav-link" href="/archives" target="_self">列表</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.epoos.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-qa3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/10/13/qa3/" class="article-date">
+  <time datetime="2020-10-12T16:00:00.000Z" itemprop="datePublished">2020-10-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      关于js的二叉树
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1.将二叉树的顺序存储数组转换为链表结构<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 输入</span></span><br><span class="line"><span class="keyword">var</span> arr = [<span class="number">3</span>, <span class="number">9</span>, <span class="number">20</span>, <span class="literal">null</span>, <span class="literal">null</span>, <span class="number">15</span>, <span class="number">7</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 仅适用于完全二叉树</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">toBeLink1</span>(<span class="params">arr, x, obj</span>) </span>&#123;</span><br><span class="line">  obj = obj || &#123;&#125;</span><br><span class="line">  x = x || <span class="number">0</span></span><br><span class="line">  obj.value = arr[x]</span><br><span class="line">  <span class="keyword">var</span> lIndex = <span class="number">2</span> * x + <span class="number">1</span> <span class="comment">// 左侧子节点序是父节点序列的2倍（下标从0开始，所以未 2*x + 1）</span></span><br><span class="line">  <span class="keyword">var</span> rIndex = <span class="number">2</span> * x + <span class="number">2</span> <span class="comment">// 右侧子节点序是父节点序列的2倍+1（下标从0开始，所以未 2*x + 2）</span></span><br><span class="line">  <span class="keyword">if</span> (arr[lIndex] === <span class="number">0</span> || arr[lIndex]) &#123;</span><br><span class="line">    toBeLink(arr, lIndex, obj.left = &#123;&#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (arr[rIndex] === <span class="number">0</span> || arr[rIndex]) &#123;</span><br><span class="line">    toBeLink(arr, rIndex, obj.right = &#123;&#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> obj</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 适用所有二叉树 - 方法1</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">value</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.value = value</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">insert</span>(<span class="params">values</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!values.length) <span class="keyword">return</span> <span class="built_in">this</span></span><br><span class="line">    <span class="keyword">const</span> queue = [<span class="built_in">this</span>]</span><br><span class="line">    <span class="keyword">let</span> i = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> (queue.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> current = queue.shift()</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">let</span> side <span class="keyword">of</span> [<span class="string">&#x27;left&#x27;</span>, <span class="string">&#x27;right&#x27;</span>]) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!current[side]) &#123;</span><br><span class="line">          <span class="keyword">if</span> (values[i] !== <span class="literal">null</span>) &#123;</span><br><span class="line">            current[side] = <span class="keyword">new</span> TreeNode(values[i])</span><br><span class="line">          &#125;</span><br><span class="line">          i++</span><br><span class="line">          <span class="keyword">if</span> (i &gt;= values.length) <span class="keyword">return</span> <span class="built_in">this</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (current[side]) queue.push(current[side])</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">toBeLink</span>(<span class="params">arr</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (arr.length === <span class="number">0</span>) <span class="keyword">return</span> &#123;&#125;</span><br><span class="line">  <span class="keyword">const</span> myTree = <span class="keyword">new</span> TreeNode(arr[<span class="number">0</span>])</span><br><span class="line">  myTree.insert(arr.slice(<span class="number">1</span>))</span><br><span class="line">  <span class="keyword">return</span> myTree</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 适用所有二叉树 - 方法2</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">toBeLink</span>(<span class="params">arr, obj = &#123;&#125;, queue = []</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!arr || arr[<span class="number">0</span>] === <span class="literal">null</span> || arr[<span class="number">0</span>] === <span class="string">&#x27;&#x27;</span> || arr[<span class="number">0</span>] === <span class="literal">undefined</span>) <span class="keyword">return</span> obj</span><br><span class="line">  <span class="comment">// 根节点初始化</span></span><br><span class="line">  obj.value = arr[<span class="number">0</span>]</span><br><span class="line">  queue.push(obj)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> i = <span class="number">1</span></span><br><span class="line">  <span class="function"><span class="title">while</span>(<span class="params">i &lt;= arr.length</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> current = queue.shift()</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> side <span class="keyword">of</span> [<span class="string">&#x27;left&#x27;</span>, <span class="string">&#x27;right&#x27;</span>]) &#123;</span><br><span class="line">      <span class="keyword">const</span> arri = arr[i]</span><br><span class="line">      i++</span><br><span class="line">      <span class="built_in">console</span>.log(i, arr.length)</span><br><span class="line">      <span class="keyword">if</span> (i &gt; arr.length) <span class="keyword">return</span> obj</span><br><span class="line">      <span class="keyword">if</span> (arri === <span class="literal">null</span>) <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">      current[side] = &#123; <span class="attr">value</span>: arri &#125;</span><br><span class="line">      <span class="keyword">if</span> (arri !== <span class="literal">undefined</span>) &#123;</span><br><span class="line">        queue.push(current[side])</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 适用所有二叉树 - 方法2 - 纯 es5 版本</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">toBeLink</span>(<span class="params">arr</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (arr.length === <span class="number">0</span> || arr[<span class="number">0</span>] === <span class="literal">null</span>) <span class="keyword">return</span> &#123;&#125;</span><br><span class="line">  <span class="keyword">var</span> obj = &#123; <span class="attr">value</span>: arr[<span class="number">0</span>] &#125;</span><br><span class="line">  <span class="keyword">var</span> queue = [obj]</span><br><span class="line">  <span class="keyword">var</span> i = <span class="number">1</span></span><br><span class="line">  <span class="keyword">var</span> sideArr = [<span class="string">&#x27;left&#x27;</span>, <span class="string">&#x27;right&#x27;</span>]</span><br><span class="line">  <span class="keyword">while</span> (i &lt;= arr.length) &#123;</span><br><span class="line">    <span class="keyword">var</span> current = queue.shift()</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>; j &lt; sideArr.length; j++) &#123;</span><br><span class="line">      <span class="keyword">var</span> arri = arr[i]</span><br><span class="line">      <span class="keyword">var</span> side = sideArr[j]</span><br><span class="line">      i++</span><br><span class="line">      <span class="keyword">if</span> (i &gt; arr.length) <span class="keyword">return</span> obj</span><br><span class="line">      <span class="keyword">if</span> (arri === <span class="literal">null</span>) <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">      current[side] = &#123; <span class="attr">value</span>: arri &#125;</span><br><span class="line">      queue.push(current[side])</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出</span></span><br><span class="line"><span class="keyword">var</span> root = &#123;</span><br><span class="line">  value: <span class="number">3</span>,</span><br><span class="line">  left: &#123;</span><br><span class="line">    value: <span class="number">9</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  right: &#123;</span><br><span class="line">    value: <span class="number">20</span>,</span><br><span class="line">    left: &#123;</span><br><span class="line">      value: <span class="number">15</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    right: &#123;</span><br><span class="line">      value: <span class="number">7</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2.给定一个二叉树，找出其最大深度。<br>二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。<br>说明: 叶子节点是指没有子节点的节点。<br>示例：给定二叉树 [3,9,20,null,null,15,7]<br>最大深度是 3<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> maxDepth = <span class="function"><span class="keyword">function</span>(<span class="params">root</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(!root) <span class="keyword">return</span> <span class="number">0</span> </span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span> + <span class="built_in">Math</span>.max(maxDepth(root.left), maxDepth(root.right))</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> root = toBeLink(arr)</span><br><span class="line">maxDepth(root) <span class="comment">// 3</span></span><br></pre></td></tr></table></figure></p>
+<p>5.返回二叉树前序遍历(根左右)、中序遍历(左跟右)、后序遍历(左右跟)<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>, <span class="literal">null</span>, <span class="number">2</span>, <span class="number">3</span>] <span class="comment">// return [1, 2, 3]</span></span><br><span class="line"><span class="keyword">var</span> root = toBeLink(arr)</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 前序遍历</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getTreeLeft</span>(<span class="params">root, stack = []</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (root.value === <span class="literal">undefined</span>) <span class="keyword">return</span> stack</span><br><span class="line">  stack.push(root.value)</span><br><span class="line">  getTreeLeft(root.left, stack)</span><br><span class="line">  getTreeLeft(root.right, stack)</span><br><span class="line">  <span class="keyword">return</span> stack</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 中序遍历</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getTreeCenter</span>(<span class="params">root, stack = []</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (root.value === <span class="literal">undefined</span>) <span class="keyword">return</span> stack</span><br><span class="line">  getTreeCenter(root.left, stack)</span><br><span class="line">  stack.push(root.value)</span><br><span class="line">  getTreeCenter(root.right, stack)</span><br><span class="line">  <span class="keyword">return</span> stack</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 后序遍历</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getTreeRight</span>(<span class="params">root, stack = []</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (root.value === <span class="literal">undefined</span>) <span class="keyword">return</span> stack</span><br><span class="line">  getTreeRight(root.right, stack)</span><br><span class="line">  stack.push(root.value)</span><br><span class="line">  getTreeRight(root.left, stack)</span><br><span class="line">  <span class="keyword">return</span> stack</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">getTreeLeft(root)</span><br></pre></td></tr></table></figure></p>
+<p>3.获取二叉树的所有叶子节点的路径<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">findAllPath</span>(<span class="params">root</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> paths = []</span><br><span class="line">  <span class="keyword">var</span> genPath = <span class="function">(<span class="params">root, path</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!root.value) <span class="keyword">return</span> path</span><br><span class="line"></span><br><span class="line">    path += <span class="string">&#x27;&gt;&#x27;</span> + root.value</span><br><span class="line">    <span class="keyword">if</span> (root.left === <span class="literal">undefined</span> &amp;&amp; root.right === <span class="literal">undefined</span>) &#123;</span><br><span class="line">      paths.push(path)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      genPath(root.left, path)</span><br><span class="line">      genPath(root.right, path)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  genPath(root, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">  <span class="keyword">return</span> paths</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>4.找到路径和为 target 的二叉树路径<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">findAllPath</span>(<span class="params">root, target</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> paths = []</span><br><span class="line">  <span class="keyword">let</span> genPath = <span class="function">(<span class="params">root, path</span>) =&gt;</span> &#123;</span><br><span class="line">    path = <span class="built_in">Object</span>.assign(&#123;&#125;, path)</span><br><span class="line">    path.str = path.str ? path.str + <span class="string">&#x27;-&gt;&#x27;</span> + root.value : root.value</span><br><span class="line">    path.sum = path.sum ? path.sum + root.value : root.value</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (path.sum === target) &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">&#x27;target path is &#x27;</span>, path)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (root.left === <span class="literal">undefined</span> &amp;&amp; root.right === <span class="literal">undefined</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> paths.push(path)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (root.left !== <span class="literal">undefined</span>) &#123;</span><br><span class="line">      genPath(root.left, path)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (root.right !== <span class="literal">undefined</span>) &#123;</span><br><span class="line">      genPath(root.right, path)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  genPath(root, &#123;&#125;)</span><br><span class="line">  <span class="keyword">return</span> paths</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.epoos.com/2020/10/13/qa3/" data-id="ckn1ji9oe001ffqvz05g20csn" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag">二叉树</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/10/14/qa4/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          JS数组操作
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/10/12/brew/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">brew使用文档</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <span class="widget-date">2021-02-26</span>
+            <a href="/2021/02/26/compile/">前端编译</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-24</span>
+            <a href="/2021/02/24/weakSet/">weakSet与js内存回收</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-08</span>
+            <a href="/2021/02/08/react16/">react 学习笔记</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-04</span>
+            <a href="/2021/02/04/vue3/">Vue3 初探</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-01-30</span>
+            <a href="/2021/01/30/dynamic/">动态规划算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签索引</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AES/" style="font-size: 10px;">AES</a> <a href="/tags/CONTENTTYPE/" style="font-size: 10px;">CONTENTTYPE</a> <a href="/tags/MIMETYPE/" style="font-size: 10px;">MIMETYPE</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/apply/" style="font-size: 10px;">apply</a> <a href="/tags/async/" style="font-size: 10px;">async</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/bind/" style="font-size: 10px;">bind</a> <a href="/tags/brew/" style="font-size: 10px;">brew</a> <a href="/tags/browser/" style="font-size: 10px;">browser</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/call/" style="font-size: 10px;">call</a> <a href="/tags/child-process/" style="font-size: 10px;">child_process</a> <a href="/tags/chrome/" style="font-size: 10px;">chrome</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/commonjs/" style="font-size: 10px;">commonjs</a> <a href="/tags/compile/" style="font-size: 10px;">compile</a> <a href="/tags/create/" style="font-size: 10px;">create</a> <a href="/tags/csrf/" style="font-size: 10px;">csrf</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/defer/" style="font-size: 10px;">defer</a> <a href="/tags/dns/" style="font-size: 10px;">dns</a> <a href="/tags/dubbo/" style="font-size: 10px;">dubbo</a> <a href="/tags/es6Module/" style="font-size: 10px;">es6Module</a> <a href="/tags/event/" style="font-size: 10px;">event</a> <a href="/tags/fiber/" style="font-size: 10px;">fiber</a> <a href="/tags/flux/" style="font-size: 10px;">flux</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/http/" style="font-size: 11.25px;">http</a> <a href="/tags/http2/" style="font-size: 10px;">http2</a> <a href="/tags/http3/" style="font-size: 10px;">http3</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/instance/" style="font-size: 10px;">instance</a> <a href="/tags/ios%E6%A8%A1%E6%8B%9F%E5%99%A8/" style="font-size: 10px;">ios模拟器</a> <a href="/tags/iphonex/" style="font-size: 10px;">iphonex</a> <a href="/tags/item2/" style="font-size: 10px;">item2</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 16.25px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 11.25px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/nginx/" style="font-size: 11.25px;">nginx</a> <a href="/tags/nodejs/" style="font-size: 17.5px;">nodejs</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/npm-lock/" style="font-size: 10px;">npm-lock</a> <a href="/tags/object/" style="font-size: 11.25px;">object</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/proxy/" style="font-size: 11.25px;">proxy</a> <a href="/tags/react/" style="font-size: 11.25px;">react</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redux/" style="font-size: 10px;">redux</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/rsync/" style="font-size: 10px;">rsync</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sentinel/" style="font-size: 10px;">sentinel</a> <a href="/tags/set/" style="font-size: 10px;">set</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/simulator/" style="font-size: 10px;">simulator</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/ssr/" style="font-size: 10px;">ssr</a> <a href="/tags/svn/" style="font-size: 10px;">svn</a> <a href="/tags/terminal/" style="font-size: 10px;">terminal</a> <a href="/tags/thrift/" style="font-size: 10px;">thrift</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/virtualDom/" style="font-size: 10px;">virtualDom</a> <a href="/tags/vue/" style="font-size: 12.5px;">vue</a> <a href="/tags/vue-vuex/" style="font-size: 10px;">vue vuex</a> <a href="/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/tags/weakSet/" style="font-size: 10px;">weakSet</a> <a href="/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 11.25px;">web安全</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/xss/" style="font-size: 10px;">xss</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1/" style="font-size: 10px;">事件冒泡</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 10px;">事件循环</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%8D%95%E8%8E%B7/" style="font-size: 10px;">事件捕获</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%86%92%E6%B3%A1%E7%AE%97%E6%B3%95/" style="font-size: 10px;">冒泡算法</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">函数式编程</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BC%96%E8%AF%91/" style="font-size: 10px;">前端编译</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 10px;">动态规划</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 10px;">响应式</a> <a href="/tags/%E5%9B%9E%E6%96%87/" style="font-size: 10px;">回文</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 18.75px;">基础</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 10px;">安全</a> <a href="/tags/%E5%AF%B9%E8%B1%A1/" style="font-size: 11.25px;">对象</a> <a href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 11.25px;">小程序</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" style="font-size: 11.25px;">微信开发</a> <a href="/tags/%E5%BE%AE%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">微前端</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">快速算法</a> <a href="/tags/%E6%80%A7%E8%83%BD/" style="font-size: 10px;">性能</a> <a href="/tags/%E6%8F%92%E5%85%A5%E7%AE%97%E6%B3%95/" style="font-size: 10px;">插入算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12.5px;">数据库</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 10px;">数组</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF/" style="font-size: 10px;">服务端</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B8%B2%E6%9F%93/" style="font-size: 10px;">服务端渲染</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 10px;">浏览器</a> <a href="/tags/%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/" style="font-size: 10px;">硬件加速</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.75px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">线程</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%99%9A%E6%8B%9FDOM/" style="font-size: 10px;">虚拟DOM</a> <a href="/tags/%E8%AF%95%E9%A2%98/" style="font-size: 12.5px;">试题</a> <a href="/tags/%E8%AF%B7%E6%B1%82%E5%A4%B4/" style="font-size: 10px;">请求头</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" style="font-size: 10px;">软件安装</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10px;">进程</a> <a href="/tags/%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95/" style="font-size: 10px;">选择算法</a> <a href="/tags/%E9%95%BF%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">长连接</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12.5px;">面试</a> <a href="/tags/%E9%BD%90%E5%88%98%E6%B5%B7/" style="font-size: 10px;">齐刘海</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 zhoushirong&nbsp;|
+      <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备16019450号-1</a>&nbsp;|
+      <a href="https://github.com/zhoushirong" target="_blank">github</a>&nbsp;|
+      <a href="https://www.epoos.com" target="_blank">epoos.com</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="https://www.epoos.com" class="mobile-nav-link" target="_self">主站</a>
+  
+    <a href="/" class="mobile-nav-link" target="_self">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link" target="_self">列表</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

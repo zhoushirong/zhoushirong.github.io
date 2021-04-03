@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-109295694-1', 'auto');
+ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+<!-- 百度统计 -->
+<script type="text/javascript">
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?e7c73fb59256f4428781ae50108da3bc";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+  
+  <title>Mysql入门(二) | 邑司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="字段类型与合理的选择字段类型转载自：https:&#x2F;&#x2F;www.kancloud.cn&#x2F;thinkphp&#x2F;mysql-design-optimalize&#x2F;39325 字段类型数值MySQL 的数值数据类型可以大致划分为两个类别，一个是整数，另一个是浮点数或小数。许多不同的子类型对这些类别中的每一个都是可用的，每个子类型支持不同大小的数据，并且 MySQL 允许我们指定数值字段中的值是否有正负之分(UN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql入门(二)">
+<meta property="og:url" content="https://blog.epoos.com/2019/02/13/mysql2/index.html">
+<meta property="og:site_name" content="邑司">
+<meta property="og:description" content="字段类型与合理的选择字段类型转载自：https:&#x2F;&#x2F;www.kancloud.cn&#x2F;thinkphp&#x2F;mysql-design-optimalize&#x2F;39325 字段类型数值MySQL 的数值数据类型可以大致划分为两个类别，一个是整数，另一个是浮点数或小数。许多不同的子类型对这些类别中的每一个都是可用的，每个子类型支持不同大小的数据，并且 MySQL 允许我们指定数值字段中的值是否有正负之分(UN">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zhoushirong.github.io/img/mysql1.png">
+<meta property="og:image" content="http://zhoushirong.github.io/img/mysql1.png">
+<meta property="og:image" content="http://zhoushirong.github.io/img/mysql3.png">
+<meta property="article:published_time" content="2019-02-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-30T01:32:00.321Z">
+<meta property="article:author" content="zhoushirong">
+<meta property="article:tag" content="mysql">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="sql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://zhoushirong.github.io/img/mysql1.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">邑司</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="https://www.epoos.com" target="_self">主站</a>
+        
+          <a class="main-nav-link" href="/" target="_self">首页</a>
+        
+          <a class="main-nav-link" href="/archives" target="_self">列表</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.epoos.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-mysql2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/02/13/mysql2/" class="article-date">
+  <time datetime="2019-02-12T16:00:00.000Z" itemprop="datePublished">2019-02-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Mysql入门(二)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="字段类型与合理的选择字段类型"><a href="#字段类型与合理的选择字段类型" class="headerlink" title="字段类型与合理的选择字段类型"></a>字段类型与合理的选择字段类型</h3><p>转载自：<br><a target="_blank" rel="noopener" href="https://www.kancloud.cn/thinkphp/mysql-design-optimalize/39325">https://www.kancloud.cn/thinkphp/mysql-design-optimalize/39325</a></p>
+<h3 id="字段类型"><a href="#字段类型" class="headerlink" title="字段类型"></a>字段类型</h3><h4 id="数值"><a href="#数值" class="headerlink" title="数值"></a>数值</h4><p>MySQL 的数值数据类型可以大致划分为两个类别，一个是整数，另一个是浮点数或小数。<br>许多不同的子类型对这些类别中的每一个都是可用的，每个子类型支持不同大小的数据，并且 MySQL 允许我们指定数值字段中的值是否有正负之分(UNSIGNED)或者用零填补(ZEROFILL)。</p>
+<p><img src="http://zhoushirong.github.io/img/mysql1.png" alt="mysql" width="867" height="684"></p>
+<ul>
+<li>INT<br>在 MySQL 中支持的 5 个主要整数类型是 TINYINT，SMALLINT，MEDIUMINT，INT 和 BIGINT。这些类型在很大程度上是相同的，只有它们存储的值的大小是不相同的。</li>
+</ul>
+<p>MySQL 以一个可选的显示宽度指示器的形式对 SQL 标准进行扩展(如 INT(6),6即是其宽度指示器,<strong>该宽度指示器并不会影响int列存储字段的大小,也就是说,超过6位它不会自动截取,依然会存储,只有超过它本身的存储范围才会截取;此处宽度指示器的作用在于该字段是否有zerofill,如果有就未满足6位的部分就会用0来填充)</strong>，这样当从数据库检索一个值时，可以把这个值加长到指定的长度。例如，指定一个字段的类型为 INT(6)，就可以保证所包含数字少于 6 个的值从数据库中检索出来时能够自动地用空格填充。需要注意的是，使用一个宽度指示器不会影响字段的大小和它可以存储的值的范围。</p>
+<p>万一我们需要对一个字段存储一个超出许可范围的数字，MySQL 会根据允许范围最接近它的一端截短后再进行存储。还有一个比较特别的地方是，MySQL 会在不合规定的值插入表前自动修改为 0。</p>
+<ul>
+<li>unsigned 和 zerofill<br>UNSIGNED 修饰符规定字段只保存正值,即无符号,而mysql字段默认是有符号的。因为不需要保存数字的正、负符号，可以在储时节约一个”位”的空间(即翻一倍)。从而增大这个字段可以存储的值的范围。注意这个修饰符要紧跟在数值类型后面;<br>ZEROFILL 修饰符规定 0（不是空格）可以用来真补输出的值。使用这个修饰符可以阻止 MySQL 数据库存储负值,如果某列设置为zerofill,那它自动就unsigned。这个值要配合int,tinyint,smallint,midiumint等字段的宽度指示器来用;XXint(M),如果没有zerofill,这个M的宽度指示器是没有意义的.(注意,测试前导0的时候,还是去黑窗口测试;)</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">为什么mysql存储的值要分有符号和无符号呢?因为一个字节,占8bit;也就1个bit有0和1两种可能,8个bit就是2^8 = 256种可能,也就是0~255;但如果是有符号的话,就得拿一个1bit来存储这个负号,本来8bit只剩7bit,2^7 = 128,也就是-128~127(正数部分包含一个0);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>FLOAT、DOUBLE 和 DECIMAL 类型<br>MySQL 支持的三个浮点类型是 FLOAT、DOUBLE 和 DECIMAL 类型。FLOAT 数值类型用于表示单精度浮点数值，而 DOUBLE 数值类型用于表示双精度浮点数值。<br>与整数一样，这些类型也带有附加参数：一个显示宽度指示器和一个小数点指示器(必须要带有指示器,要不然会查不到结果,<strong>并且宽度指示器和XXint类型的宽度指示器不同,这里是有实际限制宽度的)。</strong>比如语句 FLOAT(7,3) 规定显示的值不会超过 7 位数字(包括小数位)，小数点后面带有 3 位数字。对于小数点后面的位数超过允许范围的值，MySQL 会自动将它四舍五入为最接近它的值，再插入它。<br>DECIMAL 数据类型用于精度要求非常高的计算中，这种类型允许指定数值的精度和计数方法作为选择参数。精度在这里指为这个值保存的有效数字的总个数，而计数方法表示小数点后数字的位数。比如语句 DECIMAL(7,3) 规定了存储的值不会超过 7 位数字，并且小数点后不超过 3 位。<br>FLOAT 类型在长度比较高比如 float(10,2)和 decimal(10,2)同时插入一个符合(10,2)宽度的数值,float 就会出现最后小数点出现一些出入;<br>UNSIGNED 和 ZEROFILL 修饰符也可以被 FLOAT、DOUBLE 和 DECIMAL 数据类型使用。并且效果与 INT 数据类型相同。</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">关于flaot和double</span><br><span class="line">在这里我建议,干脆忘记mysql有double这个数据类型。至于why？就不要管它了</span><br></pre></td></tr></table></figure>
+<h4 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a>字符串类型</h4><p>MySQL 提供了 8 个基本的字符串类型，可以存储的范围从简单的一个字符到巨大的文本块或二进制字符串数据。</p>
+<p><img src="http://zhoushirong.github.io/img/mysql1.png" alt="mysql" width="895" height="523"></p>
+<ul>
+<li>BINARY<br>BINARY不是函数，是类型转换运算符，它用来强制它后面的字符串为一个二进制字符串，可以理解为在字符串比较的时候区分大小写<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">BINARY</span> <span class="string">&#x27;ABCD&#x27;</span> = <span class="string">&#x27;abcd&#x27;</span> <span class="keyword">as</span> COM1,<span class="string">&#x27;ABCD&#x27;</span> = <span class="string">&#x27;abcd&#x27;</span> <span class="keyword">as</span> COM2; <span class="comment">-- COM1输出为0,COM2输出为1;</span></span><br></pre></td></tr></table></figure></li>
+<li>CHAR 和 VARCHAR 类型<br>CHAR 类型用于定长字符串，并且必须在圆括号内用一个大小修饰符来定义。这个大小修饰符的范围从 0-255。比指定长度大的值将被截短，而比指定长度小的值将会用空格作填补。</li>
+</ul>
+<p>CHAR 类型可以使用 BINARY 修饰符。当用于比较运算时，这个修饰符使 CHAR 以二进制方式参于运算，而不是以传统的区分大小写的方式。</p>
+<p>CHAR 类型的一个变体是 VARCHAR 类型。它是一种可变长度的字符串类型，并且也必须带有一个范围在 0-255 之间的指示器。</p>
+<p>CHAR 和 VARCHGAR 不同之处在于 MYSQL 数据库处理这个指示器的方式：CHAR 把这个大小视为值的大小，不长度不足的情况下就用空格补足。而 VARCHAR 类型把它视为最大值并且只使用存储字符串实际需要的长度（增加一个额外字节来存储字符串本身的长度）来存储值。所以短于指示器长度的 VARCHAR 类型不会被空格填补，但长于指示器的值仍然会被截短。</p>
+<p>因为 VARCHAR 类型可以根据实际内容动态改变存储值的长度，所以在不能确定字段需要多少字符时使用 VARCHAR 类型可以大大地节约磁盘空间、提高存储效率。<strong>但如果确切知道字符串长度,比如就在50~55之间,那就用 CHAR 因为 CHAR 类型由于本身定长的特性使其性能要高于 VARCHAR;</strong></p>
+<p>VARCHAR 类型在使用 BINARY 修饰符时与 CHAR 类型完全相同。</p>
+<ul>
+<li>TEXT 和 BLOB 类型<br>对于字段长度要求超过 255 个的情况下，MySQL 提供了 TEXT 和 BLOB 两种类型。根据存储数据的大小，它们都有不同的子类型。这些大型的数据用于存储文本块或图像、声音文件等二进制数据类型。</li>
+</ul>
+<p>TEXT 和 BLOB 类型在分类和比较上存在区别。BLOB 类型区分大小写，而 TEXT 不区分大小写。大小修饰符不用于各种 BLOB 和 TEXT 子类型。比指定类型支持的最大范围大的值将被自动截短。</p>
+<h4 id="时间类型"><a href="#时间类型" class="headerlink" title="时间类型"></a>时间类型</h4><p>在处理日期和时间类型的值时，MySQL 带有 5 个不同的数据类型可供选择。</p>
+<p><img src="http://zhoushirong.github.io/img/mysql3.png" alt="mysql" width="868" height="320"></p>
+<ul>
+<li>DATE、TIME 和 YEAR 类型<br>MySQL 用 DATE 和 YEAR 类型存储简单的日期值，使用 TIME 类型存储时间值。这些类型可以描述为字符串或不带分隔符的整数序列。如果描述为字符串，DATE 类型的值应该使用连字号作为分隔符分开，而 TIME 类型的值应该使用冒号作为分隔符分开。</li>
+</ul>
+<p><strong>需要注意的是，没有冒号分隔符的 TIME 类型值，将会被 MySQL 理解为持续的时间，而不是时间戳。</strong><br>MySQL 还对日期的年份中的两个数字的值，或是 SQL 语句中为 YEAR 类型输入的两个数字进行最大限度的通译。因为所有 YEAR 类型的值必须用 4 个数字存储。MySQL 试图将 2 个数字的年份转换为 4 个数字的值。把在 00-69 范围内的值转换到 2000-2069 范围内。把 70-99 范围内的值转换到 1970-1979 之内。如果 MySQL 自动转换后的值并不符合我们的需要，请输入 4 个数字表示的年份。</p>
+<ul>
+<li>DATETIME 和 TIMESTAMP 类型<br>除了日期和时间数据类型，MySQL 还支持 DATETIME 和 TIMESTAMP 这两种混合类型。它们可以把日期和时间作为单个的值进行存储。这两种类型通常用于自动存储包含当前日期和时间的时间戳，并可在需要执行大量数据库事务和需要建立一个调试和审查用途的审计跟踪的应用程序中发挥良好作用。</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如果我们对 TIMESTAMP 类型的字段没有明确赋值，或是被赋与了 null 值。MySQL 会自动使用系统当前的日期和时间来填充它。</span><br></pre></td></tr></table></figure>
+<h4 id="复合类型"><a href="#复合类型" class="headerlink" title="复合类型"></a>复合类型</h4><p>MySQL 还支持两种复合数据类型 ENUM 和 SET，它们扩展了 SQL 规范。虽然这些类型在技术上是字符串类型，但是可以被视为不同的数据类型。一个 ENUM 类型只允许从一个集合中取得一个值；而 SET 类型允许从一个集合中取得任意多个值。</p>
+<ul>
+<li>ENUM 类型<br>ENUM 类型因为只允许在集合中取得一个值，有点类似于单选项。在处理相互排拆的数据时容易让人理解，比如人类的性别。ENUM 类型字段可以从集合中取得一个值或使用 null 值，除此之外的输入将会使 MySQL 在这个字段中插入一个空字符串。另外如果插入值的大小写与集合中值的大小写不匹配，MySQL 会自动使用插入值的大小写转换成与集合中大小写一致的值。</li>
+</ul>
+<p>ENUM 类型在系统内部可以存储为数字，并且从 1 开始用数字做索引。一个 ENUM 类型最多可以包含 65536 个元素，其中一个元素被 MySQL 保留，用来存储错误信息，这个错误值用索引 0 或者一个空字符串表示。</p>
+<p>MySQL 认为 ENUM 类型集合中出现的值是合法输入，除此之外其它任何输入都将失败。这说明通过搜索包含空字符串或对应数字索引为 0 的行就可以很容易地找到错误记录的位置。</p>
+<ul>
+<li>SET 类型<br>SET 类型与 ENUM 类型相似但不相同。SET 类型可以从预定义的集合中取得任意数量的值。并且与 ENUM 类型相同的是任何试图在 SET 类型字段中插入非预定义的值都会使 MySQL 插入一个空字符串。<strong>如果插入一个即有合法的元素又有非法的元素的记录，MySQL 将会保留合法的元素，除去非法的元素。</strong><br>一个 SET 类型最多可以包含 64 项元素。还去除了重复的元素，所以 SET 类型中不可能包含两个相同的元素。<br>希望从 SET 类型字段中找出非法的记录只需查找包含空字符串或二进制值为 0 的行。</li>
+</ul>
+<h3 id="字段类型总结"><a href="#字段类型总结" class="headerlink" title="字段类型总结"></a>字段类型总结</h3><p>1.虽然上面列出了很多字段类型,但最常用也就是 varchar(255),char(255),text,tinyint(4),smallint(6),mediumint,int(11)几种。<br>2.复合类型我们一般用tinyint,更快的时间更省的空间以及更容易扩展<br>3.关于手机号，推荐用char(11),char(11)在查询上更有效率，因为手机号是一个活跃字段参与逻辑会很多。<br>4.一些常用字段举例<br>姓名：char(20)<br>价格：DECIMAL(7, 3)<br>产品序列号：SMALLINT(5) unsigned<br>文章内容: TEXT<br>MD5: CHAR(32)<br>ip: char(15)<br>time: int(10)<br>email char(32)</p>
+<h3 id="合理的选择数据类型"><a href="#合理的选择数据类型" class="headerlink" title="合理的选择数据类型"></a>合理的选择数据类型</h3><ul>
+<li><p>选择合理范围内最小的<br>我们应该选择最小的数据范围，因为这样可以大大减少磁盘空间及磁盘I/0读写开销，减少内存占用，减少CPU的占用率。</p>
+</li>
+<li><p>选择相对简单的数据类型<br>数字类型相对字符串类型要简单的多，尤其是在比较运算时，所以我们应该选择最简单的数据类型，比如说在保存时间时，因为PHP可以良好的处理LINUX时间戳所以我们可以将日期存为int(10)要方便、合适、快速的多。</p>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">但是，工作中随着项目越做越多，业务逻辑的处理越来越难以后，我发现时间类型还是用时间类型本身的字段类型要好一些，因为mysql有着丰富的时间函数供我使用，方便我完成很多与时间相关的逻辑，比如月排行榜，周排行榜，当日热门，生日多少天等等逻辑</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>不要使用null<br>为什么这么说呢，因为MYSQL对NULL字段索引优化不佳，增加更多的计算难度，同时在保存与处理NULL类形时，也会做更多的工作，所以从效率上来说，不建议用过多的NULL。有些值他确实有可能没有值，怎么办呢？解决方法是数值弄用整数0，字符串用空来定义默认值即可。</p>
+</li>
+<li><p>字符串类型的使用<br>字符串数据类型是一个万能数据类型，可以储存数值、字符串、日期等。<br>保存数值类型最好不要用字符串数据类型，这样存储的空间显然是会更大，而且在排序时字符串的9是大于22的，其实如果进行运算时mysql会将字符串转换为数值类型，大大降低效果，而且这种转换是不会走原有的索引的。<br>如果明确数据在一个完整的集合中如男，女，那么可以使用set或enum数据类型，这种数据类型在运算及储存时以数值方式操作，所以效率要比字符串更好，同时空间占用更少。</p>
+</li>
+<li><p>VARCHAR与CHAR<br>VARCHAR是可变长度字符串类型，那么即然长度是可变的就会使用1，2个字节来保存字符的长度，如果长度在255内使用1个字节来保存字符长度，否则使用2个字符来保存长度。由于varchar是根据储存的值来保存数据，所以可以大大节约磁盘空间。<br>如果数据经常被执行更新操作，由于VARCHAR是根据内容来进行储存的，所以mysql将做更多的工作来完成更新操作，如果新数据长度大于老数据长度一些存储引擎会进行拆分操作处理。同时varchar会完全保留内部所有数据，最典型的说明就是尾部的空格。<br>CHAR固定长度的字符串保存类型，CHAR会去掉尾部的空格。在数据长度相近时使用char类型比较合适，比如md5加密的密码用户名等。<br>如果数据经常进行更新修改操作，那么CHAR更好些，因为char长度固定，性能上要快。</p>
+</li>
+<li><p>数值类型的选择<br>数值数据类型要比字符串执行更快，区间小的数据类型占用空间更少，处理速度更快，如tinyint可比bigint要快的多<br>选择数据类型时要考虑内容长度，比如是保存毫米单位还是米而选择不同的数值类型</p>
+</li>
+</ul>
+<h5 id="整数"><a href="#整数" class="headerlink" title="整数"></a>整数</h5><p>整数类型很多比如tinyint、int、smallint、bigint等，那么我们要根据自己需要存储的数据长度决定使用的类型，同时tinyint(10)与tinyint(100)在储存与计算上并无任何差别，区别只是显示层面上，但是我们也要选择适合合适的数据类型长度。可以通过指定zerofill属性查看显示时区别。</p>
+<h5 id="浮点数与精度数值"><a href="#浮点数与精度数值" class="headerlink" title="浮点数与精度数值"></a>浮点数与精度数值</h5><p>浮点数float在储存空间及运行效率上要优于精度数值类型decimal，但float与double会有舍入错误而decimal则可以提供更加准确的小数级精确运算不会有错误产生计算更精确，适用于金融类型数据的存储。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.epoos.com/2019/02/13/mysql2/" data-id="ckn1ji9o5000zfqvzeuon4mfr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sql/" rel="tag">sql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/03/25/oracle/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          用Nodejs连接Oracle数据库
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/01/17/webpack/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Webpack 学习整理</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <span class="widget-date">2021-02-26</span>
+            <a href="/2021/02/26/compile/">前端编译</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-24</span>
+            <a href="/2021/02/24/weakSet/">weakSet与js内存回收</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-08</span>
+            <a href="/2021/02/08/react16/">react 学习笔记</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-04</span>
+            <a href="/2021/02/04/vue3/">Vue3 初探</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-01-30</span>
+            <a href="/2021/01/30/dynamic/">动态规划算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签索引</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AES/" style="font-size: 10px;">AES</a> <a href="/tags/CONTENTTYPE/" style="font-size: 10px;">CONTENTTYPE</a> <a href="/tags/MIMETYPE/" style="font-size: 10px;">MIMETYPE</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/apply/" style="font-size: 10px;">apply</a> <a href="/tags/async/" style="font-size: 10px;">async</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/bind/" style="font-size: 10px;">bind</a> <a href="/tags/brew/" style="font-size: 10px;">brew</a> <a href="/tags/browser/" style="font-size: 10px;">browser</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/call/" style="font-size: 10px;">call</a> <a href="/tags/child-process/" style="font-size: 10px;">child_process</a> <a href="/tags/chrome/" style="font-size: 10px;">chrome</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/commonjs/" style="font-size: 10px;">commonjs</a> <a href="/tags/compile/" style="font-size: 10px;">compile</a> <a href="/tags/create/" style="font-size: 10px;">create</a> <a href="/tags/csrf/" style="font-size: 10px;">csrf</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/defer/" style="font-size: 10px;">defer</a> <a href="/tags/dns/" style="font-size: 10px;">dns</a> <a href="/tags/dubbo/" style="font-size: 10px;">dubbo</a> <a href="/tags/es6Module/" style="font-size: 10px;">es6Module</a> <a href="/tags/event/" style="font-size: 10px;">event</a> <a href="/tags/fiber/" style="font-size: 10px;">fiber</a> <a href="/tags/flux/" style="font-size: 10px;">flux</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/http/" style="font-size: 11.25px;">http</a> <a href="/tags/http2/" style="font-size: 10px;">http2</a> <a href="/tags/http3/" style="font-size: 10px;">http3</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/instance/" style="font-size: 10px;">instance</a> <a href="/tags/ios%E6%A8%A1%E6%8B%9F%E5%99%A8/" style="font-size: 10px;">ios模拟器</a> <a href="/tags/iphonex/" style="font-size: 10px;">iphonex</a> <a href="/tags/item2/" style="font-size: 10px;">item2</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 16.25px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 11.25px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/nginx/" style="font-size: 11.25px;">nginx</a> <a href="/tags/nodejs/" style="font-size: 17.5px;">nodejs</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/npm-lock/" style="font-size: 10px;">npm-lock</a> <a href="/tags/object/" style="font-size: 11.25px;">object</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/proxy/" style="font-size: 11.25px;">proxy</a> <a href="/tags/react/" style="font-size: 11.25px;">react</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redux/" style="font-size: 10px;">redux</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/rsync/" style="font-size: 10px;">rsync</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sentinel/" style="font-size: 10px;">sentinel</a> <a href="/tags/set/" style="font-size: 10px;">set</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/simulator/" style="font-size: 10px;">simulator</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/ssr/" style="font-size: 10px;">ssr</a> <a href="/tags/svn/" style="font-size: 10px;">svn</a> <a href="/tags/terminal/" style="font-size: 10px;">terminal</a> <a href="/tags/thrift/" style="font-size: 10px;">thrift</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/virtualDom/" style="font-size: 10px;">virtualDom</a> <a href="/tags/vue/" style="font-size: 12.5px;">vue</a> <a href="/tags/vue-vuex/" style="font-size: 10px;">vue vuex</a> <a href="/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/tags/weakSet/" style="font-size: 10px;">weakSet</a> <a href="/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 11.25px;">web安全</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/xss/" style="font-size: 10px;">xss</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1/" style="font-size: 10px;">事件冒泡</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 10px;">事件循环</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%8D%95%E8%8E%B7/" style="font-size: 10px;">事件捕获</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%86%92%E6%B3%A1%E7%AE%97%E6%B3%95/" style="font-size: 10px;">冒泡算法</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">函数式编程</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BC%96%E8%AF%91/" style="font-size: 10px;">前端编译</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 10px;">动态规划</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 10px;">响应式</a> <a href="/tags/%E5%9B%9E%E6%96%87/" style="font-size: 10px;">回文</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 18.75px;">基础</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 10px;">安全</a> <a href="/tags/%E5%AF%B9%E8%B1%A1/" style="font-size: 11.25px;">对象</a> <a href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 11.25px;">小程序</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" style="font-size: 11.25px;">微信开发</a> <a href="/tags/%E5%BE%AE%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">微前端</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">快速算法</a> <a href="/tags/%E6%80%A7%E8%83%BD/" style="font-size: 10px;">性能</a> <a href="/tags/%E6%8F%92%E5%85%A5%E7%AE%97%E6%B3%95/" style="font-size: 10px;">插入算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12.5px;">数据库</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 10px;">数组</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF/" style="font-size: 10px;">服务端</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B8%B2%E6%9F%93/" style="font-size: 10px;">服务端渲染</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 10px;">浏览器</a> <a href="/tags/%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/" style="font-size: 10px;">硬件加速</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.75px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">线程</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%99%9A%E6%8B%9FDOM/" style="font-size: 10px;">虚拟DOM</a> <a href="/tags/%E8%AF%95%E9%A2%98/" style="font-size: 12.5px;">试题</a> <a href="/tags/%E8%AF%B7%E6%B1%82%E5%A4%B4/" style="font-size: 10px;">请求头</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" style="font-size: 10px;">软件安装</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10px;">进程</a> <a href="/tags/%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95/" style="font-size: 10px;">选择算法</a> <a href="/tags/%E9%95%BF%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">长连接</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12.5px;">面试</a> <a href="/tags/%E9%BD%90%E5%88%98%E6%B5%B7/" style="font-size: 10px;">齐刘海</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 zhoushirong&nbsp;|
+      <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备16019450号-1</a>&nbsp;|
+      <a href="https://github.com/zhoushirong" target="_blank">github</a>&nbsp;|
+      <a href="https://www.epoos.com" target="_blank">epoos.com</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="https://www.epoos.com" class="mobile-nav-link" target="_self">主站</a>
+  
+    <a href="/" class="mobile-nav-link" target="_self">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link" target="_self">列表</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

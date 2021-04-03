@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-109295694-1', 'auto');
+ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+<!-- 百度统计 -->
+<script type="text/javascript">
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?e7c73fb59256f4428781ae50108da3bc";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+  
+  <title>超文本传输协议 HTTP | 邑司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="超文本传输协议（HyperText Transfer Protocol，缩写：HTTP）是互联网上应用最为广泛的一种网络协议。设计HTTP最初的目的是为了提供一种发布和接收HTML页面的方法。通过HTTP或者HTTPS协议请求的资源由统一资源标识符（Uniform Resource Identifiers，URI）来标识。HTTP是一个客户端终端（用户）和服务器端（网站）请求和应答的标准（TCP）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="超文本传输协议 HTTP">
+<meta property="og:url" content="https://blog.epoos.com/2017/02/27/http/index.html">
+<meta property="og:site_name" content="邑司">
+<meta property="og:description" content="超文本传输协议（HyperText Transfer Protocol，缩写：HTTP）是互联网上应用最为广泛的一种网络协议。设计HTTP最初的目的是为了提供一种发布和接收HTML页面的方法。通过HTTP或者HTTPS协议请求的资源由统一资源标识符（Uniform Resource Identifiers，URI）来标识。HTTP是一个客户端终端（用户）和服务器端（网站）请求和应答的标准（TCP）">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-02-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-30T01:32:00.318Z">
+<meta property="article:author" content="zhoushirong">
+<meta property="article:tag" content="http">
+<meta property="article:tag" content="cache">
+<meta property="article:tag" content="缓存">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">邑司</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="https://www.epoos.com" target="_self">主站</a>
+        
+          <a class="main-nav-link" href="/" target="_self">首页</a>
+        
+          <a class="main-nav-link" href="/archives" target="_self">列表</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.epoos.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-http" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/27/http/" class="article-date">
+  <time datetime="2017-02-26T16:00:00.000Z" itemprop="datePublished">2017-02-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      超文本传输协议 HTTP
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>超文本传输协议（HyperText Transfer Protocol，缩写：HTTP）是互联网上应用最为广泛的一种网络协议。<br>设计HTTP最初的目的是为了提供一种发布和接收HTML页面的方法。<br>通过HTTP或者HTTPS协议请求的资源由统一资源标识符（Uniform Resource Identifiers，URI）来标识。<br>HTTP是一个客户端终端（用户）和服务器端（网站）请求和应答的标准（TCP）</p>
+<p>通常，由HTTP客户端发起一个请求，创建一个到服务器指定端口（默认是80端口）的TCP连接。<br>HTTP服务器则在那个端口监听客户端的请求。<br>一旦收到请求，服务器会向客户端返回一个状态，比如”HTTP/1.1 200 OK”，以及返回的内容，如请求的文件、错误消息、或者其它信息</p>
+<h3 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HTTP/0.9</span><br><span class="line">HTTP/1.0</span><br><span class="line">HTTP/1.1</span><br><span class="line">HTTP/2</span><br></pre></td></tr></table></figure>
+<h3 id="请求方法"><a href="#请求方法" class="headerlink" title="请求方法"></a>请求方法</h3><p>HTTP/1.1协议中共定义了八种方法（也叫“动作”）来以不同方式操作指定的资源</p>
+<ul>
+<li><p><em>OPTIONS：</em>这个方法可以使服务器传回该资源所支持的所有HTTP请求方法。用’*‘来代替资源名称，向Web服务器发送OPTIONS请求，可以测试服务器功能是否正常运作。</p>
+</li>
+<li><p><em>GET：</em>向指定的资源发出“显示”请求。使用GET方法应该只用在读取数据，而不应当被用于产生“副作用”的操作中，例如在Web Application中。其中一个原因是GET可能会被网络蜘蛛等随意访问。</p>
+</li>
+<li><p><em>HEAD：</em>与GET方法一样，都是向服务器发出指定资源的请求。只不过服务器将不传回资源的本文部分。它的好处在于，使用这个方法可以在不必传输全部内容的情况下，就可以获取其中“关于该资源的信息”（元信息或称元数据）。</p>
+</li>
+<li><p><em>POST：</em>向指定资源提交数据，请求服务器进行处理（例如提交表单或者上传文件）。数据被包含在请求本文中。这个请求可能会创建新的资源或修改现有资源，或二者皆有。</p>
+</li>
+<li><p><em>PUT：</em>向指定资源位置上传其最新内容。</p>
+</li>
+<li><p><em>DELETE：</em>请求服务器删除Request-URI所标识的资源。</p>
+</li>
+<li><p><em>TRACE：</em>回显服务器收到的请求，主要用于测试或诊断。</p>
+</li>
+<li><p><em>CONNECT：</em>HTTP/1.1协议中预留给能够将连接改为管道方式的代理服务器。通常用于SSL加密服务器的链接（经由非加密的HTTP代理服务器）。</p>
+</li>
+<li><p><em>方法名称是区分大小写的。<br>当某个请求所针对的资源不支持对应的请求方法的时候，服务器应当返回状态码405（Method Not Allowed），当服务器不认识或者不支持对应的请求方法的时候，应当返回状态码501（Not Implemented）。</em></p>
+</li>
+</ul>
+<hr>
+<h3 id="TCP三次握手"><a href="#TCP三次握手" class="headerlink" title="TCP三次握手"></a>TCP三次握手</h3><ul>
+<li>第一次握手：客户端发送syn包(syn=j)到服务器，并进入SYN_SEND状态，等待服务器确认；</li>
+<li>第二次握手：服务器收到syn包，必须确认客户的SYN（ack=j+1），同时自己也发送一个SYN包（syn=k），即SYN+ACK包，此时服务器进入SYN_RECV状态；</li>
+<li>第三次握手：客户端收到服务器的SYN＋ACK包，向服务器发送确认包ACK(ack=k+1)，此包发送完毕，客户端和服务器进入ESTABLISHED状态，完成三次握手。</li>
+</ul>
+<h3 id="TCP四次挥手"><a href="#TCP四次挥手" class="headerlink" title="TCP四次挥手"></a>TCP四次挥手</h3><hr>
+<h3 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h3><p>1xx：消息——请求已被服务器接收，继续处理<br>2xx：成功——请求已成功被服务器接收、理解、并接受<br>3xx：重定向——需要后续操作才能完成这一请求<br>4xx：请求错误——请求含有词法错误或者无法被执行<br>5xx：服务器错误——服务器在处理某个正确请求时发生错误</p>
+<hr>
+<h3 id="http1-0和http1-1的区别"><a href="#http1-0和http1-1的区别" class="headerlink" title="http1.0和http1.1的区别"></a>http1.0和http1.1的区别</h3><ul>
+<li>缓存处理：增加缓存头来控制缓存策略。</li>
+<li>带宽优化及网络连接的使用：支持断点续传以及部分请求</li>
+<li>错误通知的管理：新增多个错误状态码</li>
+<li>互联网地址的维护：HTTP1.1的请求消息和响应消息都应支持Host头域</li>
+<li>长连接：一个tcp可用于多个http</li>
+</ul>
+<hr>
+<h3 id="http缓存"><a href="#http缓存" class="headerlink" title="http缓存"></a>http缓存</h3><p>通过http获取网络数据的成本是非常高的，尤其是当需要大范围获取数据的时候，好在浏览器都有缓存策略</p>
+<p>1.使用 ETag 验证缓存的响应：<br>服务器下发给客户端的时候在ETag头返回一个验证令牌Response Headers（ETag:”58b4e12b-2492d”）<br>当客户端再次请求的时候讲令牌带上,Request Headers（If-None-Match:W/“58b4e12b-2492d”）<br>服务端验证令牌如果没有发生改变则返回304</p>
+<p>2.Cache-Control：<br>每个资源都可以通过 Cache-Control HTTP 头来定义自己的缓存策略<br>Cache-Control 指令控制谁在什么条件下可以缓存响应以及可以缓存多久</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cache-Control 头在 HTTP/1.1 规范中定义，取代了之前用来定义响应缓存策略的头（例如 Expires）。当前的所有浏览器都支持 Cache-Control，因此，使用它就够了</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>no-cache 和 no-store<br>no-cache：表示必须先与服务器确认返回的响应是否被更改，然后通过ETag来判断是否需要下载资源。<br>no-store：禁止浏览器和所有中继缓存存储返回的任何版本的响应。<br>例如：一个包含个人隐私数据或银行数据的响应。每次用户请求该资源时，都会向服务器发送一个请求，每次都会下载完整的响应</p>
+</li>
+<li><p>public和private<br>如果响应被标记为public，即使有关联的 HTTP 认证，甚至响应状态码无法正常缓存，响应也可以被缓存。大多数情况下，public不是必须的，因为明确的缓存信息（例如max-age）已表示 响应可以被缓存。<br>相比之下，浏览器可以缓存private响应，但是通常只为单个用户缓存，因此，不允许任何中继缓存对其进行缓存 - 例如，用户浏览器可以缓存包含用户私人信息的 HTML 网页，但是 CDN 不能缓存。</p>
+</li>
+<li><p>max-age<br>该指令指定从当前请求开始，允许获取的响应被重用的最长时间（单位为秒）</p>
+</li>
+<li><p>s-maxage<br>同max-age，只用于共享缓存（比如CDN缓存）。</p>
+</li>
+<li><p>Last-modified（类似于ETag）<br>服务器端文件的最后修改时间，需要和cache-control共同使用，是检查服务器端资源是否更新的一种方式<br>当浏览器再次进行请求时，会向服务器传送If-Modified-Since报头，询问Last-Modified时间点之后资源是否被修改过。如果没有修改，则返回码为304，使用缓存；如果修改过，则再次去服务器请求资源，返回码和首次请求相同为200，资源为服务器最新资源。</p>
+</li>
+</ul>
+<p>3.expires：<br>Expires 头指定了一个日期/时间， 在这个日期/时间之后，HTTP响应被认为是过时的<br>如果还有一个 设置了 “max-age” 或者 “s-max-age” 指令的Cache-Control响应头，那么  Expires 头就会被忽略。</p>
+<h3 id="HTTP跨域"><a href="#HTTP跨域" class="headerlink" title="HTTP跨域"></a>HTTP跨域</h3><p>当一个资源从该资源本身所在的服务器不同的域或端口请求一个资源时，资源会发起一个<em>跨域http请求</em><br>处于安全原因，浏览器会限制从脚本内发起的跨域http请求。<br>例如，XMLHttpRequest和Fetch API遵循同源策略。<br>这意味着使用这些API的Web应用程序只能从加载应用程序的同一个域请求HTTP资源，除非使用CORS头文件。</p>
+<p>（跨域并非不一定是浏览器限制了发起跨站请求，而也可能是跨站请求可以正常发起，但是返回结果被浏览器拦截了。最好的例子是 CSRF 跨站攻击原理，请求是发送到了后端服务器无论是否跨域！注意：有些浏览器不允许从 HTTPS 的域跨域访问 HTTP，比如  Chrome 和 Firefox，这些浏览器在请求还未发出的时候就会拦截请求，这是一个特例。）———— MDN HTTP访问控制（CORS）</p>
+<p><em>CORS</em>(跨域资源共享) 机制允许web应用服务进行跨域访问控制。现代浏览器支持在 API 容器中（例如 XMLHttpRequest 或 Fetch ）使用 CORS，以降低跨域 HTTP 请求所带来的风险</p>
+<p><em>跨域资源共享标准（ cross-origin sharing standard ）</em>允许在下列场景中使用跨域 HTTP 请求：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1.由XMLHttpRequest 或 Fetch 发起的跨域 HTTP 请求。</span><br><span class="line">2.Web 字体 (CSS 中通过 @font-face 使用跨域字体资源), 因此，网站就可以发布 TrueType 字体资源，并只允许已授权网站进行跨站调用。</span><br><span class="line">3.WebGL 贴图</span><br><span class="line">4.使用 drawImage 将 Images/video 画面绘制到 canvas</span><br><span class="line">5.样式表（使用 CSSOM）</span><br><span class="line">6.Scripts (未处理的异常)</span><br></pre></td></tr></table></figure>
+<p>跨域资源共享标准新增了一组 HTTP 首部字段，允许服务器声明哪些源站有权限访问哪些资源。另外，规范要求，对那些可能对服务器数据产生副作用的 HTTP 请求方法（特别是 GET 以外的 HTTP 请求，或者搭配某些 MIME 类型的 POST 请求），浏览器必须首先使用 OPTIONS 方法发起一个预检请求（preflight request），从而获知服务端是否允许该跨域请求。服务器确认允许之后，才发起实际的HTTP请求。在预检请求的返回中，服务器端也可以通知客户端，是否需要携带身份凭证（包括 Cookies 和 HTTP 认证相关数据）。<br>（预检请求一般是浏览器检测到请求跨域之后自动发起的，预检请求报文中的 Access-Control-Request-Method 首部字段告知服务器实际请求所使用的 HTTP 方法；Access-Control-Request-Headers首部字段告知服务器实际请求所携带的自定义首部字段。服务器基于从预检请求获得的信息来判断，是否接受接下来的实际请求。）</p>
+<p>跨域请求分两种：简单请求和预检请求。</p>
+<h5 id="什么是简单请求"><a href="#什么是简单请求" class="headerlink" title="什么是简单请求?"></a>什么是简单请求?</h5><p>需要满足下列所有的条件，为简单请求。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">1.使用下列方法之一： GET/POST/HEAD</span><br><span class="line"></span><br><span class="line">2.Fetch 规范定义了对 CORS 安全的首部字段集合，不得人为设置该集合之外的其他首部字段。该集合为：</span><br><span class="line">Accept</span><br><span class="line">Accept-Language</span><br><span class="line">Content-Language</span><br><span class="line">Content-Type （需要注意额外的限制）</span><br><span class="line">DPR</span><br><span class="line">Downlink</span><br><span class="line">Save-Data</span><br><span class="line">Viewport-Width</span><br><span class="line">Width</span><br><span class="line"></span><br><span class="line">3.content-type值仅限于下列三者之一</span><br><span class="line">text/plain</span><br><span class="line">multipart/form-data</span><br><span class="line">application/x-www-form-urlencoded</span><br><span class="line"></span><br><span class="line">4.请求中的任意XMLHttpRequestUpload 对象均没有注册任何事件监听器；XMLHttpRequestUpload 对象可以使用 XMLHttpRequest.upload 属性访问。</span><br><span class="line"></span><br><span class="line">5.请求中没有使用 ReadableStream 对象。</span><br></pre></td></tr></table></figure></p>
+<h5 id="附带身份凭证的跨域请求"><a href="#附带身份凭证的跨域请求" class="headerlink" title="附带身份凭证的跨域请求"></a>附带身份凭证的跨域请求</h5><p>默认跨域请求是不会发送基于  HTTP cookies 和 HTTP 认证信息的身份凭证的。如果要发送身份凭证，需要设置XMLHttprequest的某个特殊标志位。<br>如：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xhr.withCredentials = true</span><br></pre></td></tr></table></figure><br>之后，服务端需要在响应中携带下面的属性，浏览器才会将收到的响应内容返回给请求的发送者<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Allow-Credentials: true // 响应头表示是否可以将对请求的相应暴露给页面。返回true则可以，其它则不可以</span><br></pre></td></tr></table></figure></p>
+<p>对于附带身份凭证的请求，服务器不得设置 Access-Control-Allow-Origin 的值为（ * ）</p>
+<h5 id="Access-Control-Allow-Origin，服务器响应首部字段。"><a href="#Access-Control-Allow-Origin，服务器响应首部字段。" class="headerlink" title="Access-Control-Allow-Origin，服务器响应首部字段。"></a>Access-Control-Allow-Origin，服务器响应首部字段。</h5><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Allow-Origin: <span class="tag">&lt;<span class="name">origin</span>&gt;</span> | *</span><br></pre></td></tr></table></figure>
+<h5 id="Access-Control-Expose-Headers"><a href="#Access-Control-Expose-Headers" class="headerlink" title="Access-Control-Expose-Headers"></a>Access-Control-Expose-Headers</h5><p>在跨域访问时，XMLHttpRequest对象的getResponseHeader()方法只能拿到一些最基本的响应头，Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma，如果要访问其他头，则需要服务器设置本响应头。<br>如：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Expose-Headers: X-My-Custom-Header, X-Another-Custom-Header</span><br></pre></td></tr></table></figure></p>
+<h5 id="Access-Control-Allow-Credentials"><a href="#Access-Control-Allow-Credentials" class="headerlink" title="Access-Control-Allow-Credentials"></a>Access-Control-Allow-Credentials</h5><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Allow-Credentials 头指定了当浏览器的credentials设置为true时是否允许浏览器读取response的内容。</span><br></pre></td></tr></table></figure>
+<h5 id="XDomainRequest-IE89专用"><a href="#XDomainRequest-IE89专用" class="headerlink" title="XDomainRequest (IE89专用)"></a>XDomainRequest (IE89专用)</h5><p>XDomainRequest是在IE8和IE9上的HTTP access control (CORS) 的实现，在IE10中被 包含CORS的XMLHttpRequest 取代了，如果你的开发目标是IE10或IE的后续版本，或想要支待其他的浏览器，你需要使用标准的HTTP access control。<br>该接口可以发送GET和POST请求<br>XDomainRequest为了确保安全构建，采用了多种方法。<br>被请求的URL的服务器必须带有 设置为（“ * ”）或包含了请求方的Access-Control-Allow-Origin的头部。</p>
+<p>限制<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1.必须使用 HTTP 或 HTTPS 协议访问目标 URL(不能http、https跨协议访问)</span><br><span class="line">2.只能使用 HTTP 的 GET 方法和 POST 方法访问目标 URL</span><br><span class="line">3.请求中不能加入自定义的报头</span><br><span class="line">4.只支持 text/plain 作为请求报头Content-Type的取值</span><br><span class="line">5.身份验证和cookie不能和请求一起发送 （解决办法，将cookie等信息放在请求body里面）</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h2><h3 id="维基百科（需代理方能打开）"><a href="#维基百科（需代理方能打开）" class="headerlink" title="维基百科（需代理方能打开）"></a>维基百科（需代理方能打开）</h3><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/超文本传输协议">https://zh.wikipedia.org/wiki/超文本传输协议</a></p>
+<h3 id="http1-0和http1-1的区别-1"><a href="#http1-0和http1-1的区别-1" class="headerlink" title="http1.0和http1.1的区别"></a>http1.0和http1.1的区别</h3><p><a target="_blank" rel="noopener" href="http://blog.csdn.net/forgotaboutgirl/article/details/6936982">http://blog.csdn.net/forgotaboutgirl/article/details/6936982</a></p>
+<h3 id="http、socket、tcp-ip的区别"><a href="#http、socket、tcp-ip的区别" class="headerlink" title="http、socket、tcp/ip的区别"></a>http、socket、tcp/ip的区别</h3><p><a target="_blank" rel="noopener" href="http://jingyan.baidu.com/article/08b6a591e07ecc14a80922f1.html">http://jingyan.baidu.com/article/08b6a591e07ecc14a80922f1.html</a></p>
+<h3 id="http缓存-1"><a href="#http缓存-1" class="headerlink" title="http缓存"></a>http缓存</h3><p><a target="_blank" rel="noopener" href="https://developers.google.cn/web/fundamentals/performance/optimizing-content-efficiency/http-caching?hl=zh-cn">https://developers.google.cn/web/fundamentals/performance/optimizing-content-efficiency/http-caching?hl=zh-cn</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.alloyteam.com/2016/03/discussion-on-web-caching/">http://www.alloyteam.com/2016/03/discussion-on-web-caching/</a></p>
+<h3 id="http状态码"><a href="#http状态码" class="headerlink" title="http状态码"></a>http状态码</h3><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/HTTP状态码">https://zh.wikipedia.org/wiki/HTTP状态码</a></p>
+<h3 id="XDomainRequest"><a href="#XDomainRequest" class="headerlink" title="XDomainRequest"></a>XDomainRequest</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/onepixel/articles/7567948.html">https://www.cnblogs.com/onepixel/articles/7567948.html</a></p>
+<h3 id="三次握手与四次挥手"><a href="#三次握手与四次挥手" class="headerlink" title="三次握手与四次挥手"></a>三次握手与四次挥手</h3><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/53374516">https://zhuanlan.zhihu.com/p/53374516</a><br><a target="_blank" rel="noopener" href="https://hit-alibaba.github.io/interview/basic/network/TCP.html">https://hit-alibaba.github.io/interview/basic/network/TCP.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.epoos.com/2017/02/27/http/" data-id="ckn1ji9ns000gfqvzdwcoa2wb" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cache/" rel="tag">cache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/04/11/svn/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          svn入门
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/02/23/host-ip/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Nginx防止别人的域名解析到自己的服务器上</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <span class="widget-date">2021-02-26</span>
+            <a href="/2021/02/26/compile/">前端编译</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-24</span>
+            <a href="/2021/02/24/weakSet/">weakSet与js内存回收</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-08</span>
+            <a href="/2021/02/08/react16/">react 学习笔记</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-04</span>
+            <a href="/2021/02/04/vue3/">Vue3 初探</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-01-30</span>
+            <a href="/2021/01/30/dynamic/">动态规划算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签索引</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AES/" style="font-size: 10px;">AES</a> <a href="/tags/CONTENTTYPE/" style="font-size: 10px;">CONTENTTYPE</a> <a href="/tags/MIMETYPE/" style="font-size: 10px;">MIMETYPE</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/apply/" style="font-size: 10px;">apply</a> <a href="/tags/async/" style="font-size: 10px;">async</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/bind/" style="font-size: 10px;">bind</a> <a href="/tags/brew/" style="font-size: 10px;">brew</a> <a href="/tags/browser/" style="font-size: 10px;">browser</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/call/" style="font-size: 10px;">call</a> <a href="/tags/child-process/" style="font-size: 10px;">child_process</a> <a href="/tags/chrome/" style="font-size: 10px;">chrome</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/commonjs/" style="font-size: 10px;">commonjs</a> <a href="/tags/compile/" style="font-size: 10px;">compile</a> <a href="/tags/create/" style="font-size: 10px;">create</a> <a href="/tags/csrf/" style="font-size: 10px;">csrf</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/defer/" style="font-size: 10px;">defer</a> <a href="/tags/dns/" style="font-size: 10px;">dns</a> <a href="/tags/dubbo/" style="font-size: 10px;">dubbo</a> <a href="/tags/es6Module/" style="font-size: 10px;">es6Module</a> <a href="/tags/event/" style="font-size: 10px;">event</a> <a href="/tags/fiber/" style="font-size: 10px;">fiber</a> <a href="/tags/flux/" style="font-size: 10px;">flux</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/http/" style="font-size: 11.25px;">http</a> <a href="/tags/http2/" style="font-size: 10px;">http2</a> <a href="/tags/http3/" style="font-size: 10px;">http3</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/instance/" style="font-size: 10px;">instance</a> <a href="/tags/ios%E6%A8%A1%E6%8B%9F%E5%99%A8/" style="font-size: 10px;">ios模拟器</a> <a href="/tags/iphonex/" style="font-size: 10px;">iphonex</a> <a href="/tags/item2/" style="font-size: 10px;">item2</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 16.25px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 11.25px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/nginx/" style="font-size: 11.25px;">nginx</a> <a href="/tags/nodejs/" style="font-size: 17.5px;">nodejs</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/npm-lock/" style="font-size: 10px;">npm-lock</a> <a href="/tags/object/" style="font-size: 11.25px;">object</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/proxy/" style="font-size: 11.25px;">proxy</a> <a href="/tags/react/" style="font-size: 11.25px;">react</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redux/" style="font-size: 10px;">redux</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/rsync/" style="font-size: 10px;">rsync</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sentinel/" style="font-size: 10px;">sentinel</a> <a href="/tags/set/" style="font-size: 10px;">set</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/simulator/" style="font-size: 10px;">simulator</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/ssr/" style="font-size: 10px;">ssr</a> <a href="/tags/svn/" style="font-size: 10px;">svn</a> <a href="/tags/terminal/" style="font-size: 10px;">terminal</a> <a href="/tags/thrift/" style="font-size: 10px;">thrift</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/virtualDom/" style="font-size: 10px;">virtualDom</a> <a href="/tags/vue/" style="font-size: 12.5px;">vue</a> <a href="/tags/vue-vuex/" style="font-size: 10px;">vue vuex</a> <a href="/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/tags/weakSet/" style="font-size: 10px;">weakSet</a> <a href="/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 11.25px;">web安全</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/xss/" style="font-size: 10px;">xss</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1/" style="font-size: 10px;">事件冒泡</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 10px;">事件循环</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%8D%95%E8%8E%B7/" style="font-size: 10px;">事件捕获</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%86%92%E6%B3%A1%E7%AE%97%E6%B3%95/" style="font-size: 10px;">冒泡算法</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">函数式编程</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BC%96%E8%AF%91/" style="font-size: 10px;">前端编译</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 10px;">动态规划</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 10px;">响应式</a> <a href="/tags/%E5%9B%9E%E6%96%87/" style="font-size: 10px;">回文</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 18.75px;">基础</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 10px;">安全</a> <a href="/tags/%E5%AF%B9%E8%B1%A1/" style="font-size: 11.25px;">对象</a> <a href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 11.25px;">小程序</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" style="font-size: 11.25px;">微信开发</a> <a href="/tags/%E5%BE%AE%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">微前端</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">快速算法</a> <a href="/tags/%E6%80%A7%E8%83%BD/" style="font-size: 10px;">性能</a> <a href="/tags/%E6%8F%92%E5%85%A5%E7%AE%97%E6%B3%95/" style="font-size: 10px;">插入算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12.5px;">数据库</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 10px;">数组</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF/" style="font-size: 10px;">服务端</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B8%B2%E6%9F%93/" style="font-size: 10px;">服务端渲染</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 10px;">浏览器</a> <a href="/tags/%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/" style="font-size: 10px;">硬件加速</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.75px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">线程</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%99%9A%E6%8B%9FDOM/" style="font-size: 10px;">虚拟DOM</a> <a href="/tags/%E8%AF%95%E9%A2%98/" style="font-size: 12.5px;">试题</a> <a href="/tags/%E8%AF%B7%E6%B1%82%E5%A4%B4/" style="font-size: 10px;">请求头</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" style="font-size: 10px;">软件安装</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10px;">进程</a> <a href="/tags/%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95/" style="font-size: 10px;">选择算法</a> <a href="/tags/%E9%95%BF%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">长连接</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12.5px;">面试</a> <a href="/tags/%E9%BD%90%E5%88%98%E6%B5%B7/" style="font-size: 10px;">齐刘海</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 zhoushirong&nbsp;|
+      <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备16019450号-1</a>&nbsp;|
+      <a href="https://github.com/zhoushirong" target="_blank">github</a>&nbsp;|
+      <a href="https://www.epoos.com" target="_blank">epoos.com</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="https://www.epoos.com" class="mobile-nav-link" target="_self">主站</a>
+  
+    <a href="/" class="mobile-nav-link" target="_self">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link" target="_self">列表</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-109295694-1', 'auto');
+ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+<!-- 百度统计 -->
+<script type="text/javascript">
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?e7c73fb59256f4428781ae50108da3bc";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+  
+  <title>前端编译 | 邑司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="计算机只能执行二进制文件，但是如果人工使用二进制编写代码，无疑是非常困难的，需要付出巨大的成本。学过 C++ 或者 Java 的都知道，使用这两种预约编写的源码文件要运行，必须先进行编译，编译就是将源码转成二进制的机器码的过程。执行编译的工具是一个特殊的软件，我们叫它为编译器（Compiler）。编译器识别代码中的词汇、句子以及各种特定的格式，并将他们转换成计算机能够识别的二进制形式，这个过程就是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端编译">
+<meta property="og:url" content="https://blog.epoos.com/2021/02/26/compile/index.html">
+<meta property="og:site_name" content="邑司">
+<meta property="og:description" content="计算机只能执行二进制文件，但是如果人工使用二进制编写代码，无疑是非常困难的，需要付出巨大的成本。学过 C++ 或者 Java 的都知道，使用这两种预约编写的源码文件要运行，必须先进行编译，编译就是将源码转成二进制的机器码的过程。执行编译的工具是一个特殊的软件，我们叫它为编译器（Compiler）。编译器识别代码中的词汇、句子以及各种特定的格式，并将他们转换成计算机能够识别的二进制形式，这个过程就是">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-02-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-30T01:32:00.316Z">
+<meta property="article:author" content="zhoushirong">
+<meta property="article:tag" content="前端编译">
+<meta property="article:tag" content="compile">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">邑司</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="https://www.epoos.com" target="_self">主站</a>
+        
+          <a class="main-nav-link" href="/" target="_self">首页</a>
+        
+          <a class="main-nav-link" href="/archives" target="_self">列表</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.epoos.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-compile" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/02/26/compile/" class="article-date">
+  <time datetime="2021-02-25T16:00:00.000Z" itemprop="datePublished">2021-02-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      前端编译
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>计算机只能执行二进制文件，但是如果人工使用二进制编写代码，无疑是非常困难的，需要付出巨大的成本。<br>学过 C++ 或者 Java 的都知道，使用这两种预约编写的源码文件要运行，必须先进行编译，编译就是将源码转成二进制的机器码的过程。<br>执行编译的工具是一个特殊的软件，我们叫它为编译器（Compiler）。<br>编译器识别代码中的词汇、句子以及各种特定的格式，并将他们转换成计算机能够识别的二进制形式，这个过程就是编译（Compile）。</p>
+<h4 id="编译型语言-VS-解释型语言"><a href="#编译型语言-VS-解释型语言" class="headerlink" title="编译型语言 VS 解释型语言"></a>编译型语言 VS 解释型语言</h4><p>当然并不是所有的编程语言都需要编译才能执行<br>需要编译才能执行的语言（如：C、C++、Java）被称为编译型语言。<br>不需要编译即可执行的语言（如:Python、JavaScript、Perl、Shell）被称为解释型语言。</p>
+<p>当然，解释型语言执行的时候也是需要转换成机器码才能执行的，只不过它们是在运行时才翻译成机器语言的，每执行一次都要翻译一次。因此效率比较低。<br>而编译型语言编写的应用在编译后能直接运行，效率相对更高。</p>
+<h4 id="前端编译的转变"><a href="#前端编译的转变" class="headerlink" title="前端编译的转变"></a>前端编译的转变</h4><p>前端开的主要编程语言是Javascript，Javascript是解释型语言，是不需要提前编译的，所谓开箱即用，因此前端行业（在很早之前）没有编译这回事。<br>而随着前端越来越复杂，开发前端时一些新手段新特性越来越多，Vue、React、NodeJS、ES6新语法等变成了基本手段。<br>甚至 CSS 也可以使用 Sass/Less语法来进行编写。而这些新特性大多数都是不能“开箱即用”的，都需要进行预先转换转换才能使用。<br>因此，现在 Javascript 开发或者说前端开发逐渐变成了“非开箱即用”了。</p>
+<p>编译是一个语言到另一个语言表达的转变，这里面不仅仅是功能上的应用，还可以给程序带来性能上的优化。<br>而前端的 ES6 转化到 ES5，Less/Sass 转换为 css，require依赖打包，代码压缩混淆都可以看做是语言的转换，更是提升了应用程序的性能。<br>因此，这些操作是 <strong><em>“编译”</em></strong>。</p>
+<h4 id="前端编译"><a href="#前端编译" class="headerlink" title="前端编译"></a>前端编译</h4><p>前端编译主要功能<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">将框架(如 vue/react) 根据其特性语法进行模板解析、语法转换为常规 js。</span><br><span class="line">将 es6、es7 等高版本 js 转换为所需要版本(如es5)的js语法</span><br><span class="line">将 less、sass、css3 转换为 css</span><br><span class="line">将图片压缩转换(如雪碧图、base64等)</span><br><span class="line">将字体文件合并</span><br><span class="line">将 js/css 依赖合并，抽离公共部分</span><br></pre></td></tr></table></figure><br>进行上述操作当前前端最常用的编译工具就是 Webpack，通过引用不同的 loader 和插件即可实现。<br>比如使用 babel-loader 转换高级语法、使用 sass-loader 转换 sass 等等。</p>
+<h4 id="前端编译原理"><a href="#前端编译原理" class="headerlink" title="前端编译原理"></a>前端编译原理</h4><p>目前大多数编译过程都是先将源代码 Parser 成AST（抽象语法树），然后对 AST 进行分析，在这个分析过程中进行各种优化。<br>AST 是源代码语法结构的一种抽象表示。<br>Babel,Webpack，vue-cli和esLint等很多的工具和库的核心都是通过 AST 抽象语法树这个概念来实现对代码的检查、分析等操作的。<br>在前端当中AST的使用场景非常广，比如在 vue.js 当中，我们在代码中编写的 template 转化成 render function 的过程当中第一步就是解析模版字符串生成AST。<br>AST 是一个非常基础但是同时非常重要的，我们熟知的 TypeScript、babel、webpack、vue-cli 得都是依赖 AST 进行开发的。</p>
+<p>以 <a target="_blank" rel="noopener" href="https://github.com/acornjs/acorn">acorn</a> 为例<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="number">1</span></span><br></pre></td></tr></table></figure><br>词法分析阶段：将字符组成的字符串分解成一个个代码块（词法单元），例子中代码会被解析成 const、a、=、1 四个词法单元。<br>语法分析阶段：将词法单元流转换成一个由元素逐级嵌套组成的语法结构树，即所谓的抽象语法树。<br>代码生成阶段：将 AST 转换成一系列可执行的机器指令代码，例子就是机器通过执行指令会在内存中创建一个变量 a，并将值 1 赋值给它。</p>
+<p>使用 acorn 转换转换的 AST<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;type&quot;</span>: <span class="string">&quot;Program&quot;</span>,</span><br><span class="line">  <span class="string">&quot;start&quot;</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="string">&quot;end&quot;</span>: <span class="number">11</span>,</span><br><span class="line">  <span class="string">&quot;body&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;type&quot;</span>: <span class="string">&quot;VariableDeclaration&quot;</span>,</span><br><span class="line">      <span class="string">&quot;start&quot;</span>: <span class="number">0</span>,</span><br><span class="line">      <span class="string">&quot;end&quot;</span>: <span class="number">11</span>,</span><br><span class="line">      <span class="string">&quot;declarations&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="string">&quot;type&quot;</span>: <span class="string">&quot;VariableDeclarator&quot;</span>,</span><br><span class="line">          <span class="string">&quot;start&quot;</span>: <span class="number">6</span>,</span><br><span class="line">          <span class="string">&quot;end&quot;</span>: <span class="number">11</span>,</span><br><span class="line">          <span class="string">&quot;id&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;type&quot;</span>: <span class="string">&quot;Identifier&quot;</span>,</span><br><span class="line">            <span class="string">&quot;start&quot;</span>: <span class="number">6</span>,</span><br><span class="line">            <span class="string">&quot;end&quot;</span>: <span class="number">7</span>,</span><br><span class="line">            <span class="string">&quot;name&quot;</span>: <span class="string">&quot;a&quot;</span></span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="string">&quot;init&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;type&quot;</span>: <span class="string">&quot;Literal&quot;</span>,</span><br><span class="line">            <span class="string">&quot;start&quot;</span>: <span class="number">10</span>,</span><br><span class="line">            <span class="string">&quot;end&quot;</span>: <span class="number">11</span>,</span><br><span class="line">            <span class="string">&quot;value&quot;</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="string">&quot;raw&quot;</span>: <span class="string">&quot;1&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ],</span><br><span class="line">      <span class="string">&quot;kind&quot;</span>: <span class="string">&quot;const&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="string">&quot;sourceType&quot;</span>: <span class="string">&quot;module&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>然后分析语法树，并逆向进行翻译成相应的语法代码即可实现代码的编译（转换）</p>
+<h3 id="附录-VUE完整版和运行时"><a href="#附录-VUE完整版和运行时" class="headerlink" title="附录 - VUE完整版和运行时"></a>附录 - VUE完整版和运行时</h3><p>使用vue.js时，可以看到官方提供了两个版本可以使用，包括vue.js（完整版）和vue.runtime.js（运行时版<br>vue.runtime.js和vue.js的区别在于，vue.runtime.js不包含模版编译器来获得整个包体积的减少。</p>
+<p>如果你需要在客户端编译模板 (比如传入一个字符串给 template 选项，或挂载到一个元素上并以其 DOM 内部的 HTML 作为模板)，就将需要加上编译器，即完整版：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 需要编译器</span></span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  template: <span class="string">&#x27;&lt;div&gt;&#123;&#123; hi &#125;&#125;&lt;/div&gt;&#x27;</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不需要编译器</span></span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">&quot;#app&quot;</span>,</span><br><span class="line">  data: &#123; <span class="attr">value</span>: <span class="number">0</span> &#125;,</span><br><span class="line">  render (h) &#123;</span><br><span class="line">    <span class="keyword">return</span> h(<span class="string">&#x27;div&#x27;</span>, <span class="built_in">this</span>.hi)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure><br>h就是vue.runtime.js提供的函数，它接收模版字符串中的参数，返回渲染好的原始的html。<br>在实际开发中，由于h函数的参数比较复杂，实际开发中通过使用webpack的vue-loader插件能将vue单文件组件（以.vue结尾的文件）转换为h函数所需要的参数</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.epoos.com/2021/02/26/compile/" data-id="ckn1ji9nj0004fqvz5wc36pes" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compile/" rel="tag">compile</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF%E7%BC%96%E8%AF%91/" rel="tag">前端编译</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2021/02/24/weakSet/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">weakSet与js内存回收</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <span class="widget-date">2021-02-26</span>
+            <a href="/2021/02/26/compile/">前端编译</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-24</span>
+            <a href="/2021/02/24/weakSet/">weakSet与js内存回收</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-08</span>
+            <a href="/2021/02/08/react16/">react 学习笔记</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-04</span>
+            <a href="/2021/02/04/vue3/">Vue3 初探</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-01-30</span>
+            <a href="/2021/01/30/dynamic/">动态规划算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签索引</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AES/" style="font-size: 10px;">AES</a> <a href="/tags/CONTENTTYPE/" style="font-size: 10px;">CONTENTTYPE</a> <a href="/tags/MIMETYPE/" style="font-size: 10px;">MIMETYPE</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/apply/" style="font-size: 10px;">apply</a> <a href="/tags/async/" style="font-size: 10px;">async</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/bind/" style="font-size: 10px;">bind</a> <a href="/tags/brew/" style="font-size: 10px;">brew</a> <a href="/tags/browser/" style="font-size: 10px;">browser</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/call/" style="font-size: 10px;">call</a> <a href="/tags/child-process/" style="font-size: 10px;">child_process</a> <a href="/tags/chrome/" style="font-size: 10px;">chrome</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/commonjs/" style="font-size: 10px;">commonjs</a> <a href="/tags/compile/" style="font-size: 10px;">compile</a> <a href="/tags/create/" style="font-size: 10px;">create</a> <a href="/tags/csrf/" style="font-size: 10px;">csrf</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/defer/" style="font-size: 10px;">defer</a> <a href="/tags/dns/" style="font-size: 10px;">dns</a> <a href="/tags/dubbo/" style="font-size: 10px;">dubbo</a> <a href="/tags/es6Module/" style="font-size: 10px;">es6Module</a> <a href="/tags/event/" style="font-size: 10px;">event</a> <a href="/tags/fiber/" style="font-size: 10px;">fiber</a> <a href="/tags/flux/" style="font-size: 10px;">flux</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/http/" style="font-size: 11.25px;">http</a> <a href="/tags/http2/" style="font-size: 10px;">http2</a> <a href="/tags/http3/" style="font-size: 10px;">http3</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/instance/" style="font-size: 10px;">instance</a> <a href="/tags/ios%E6%A8%A1%E6%8B%9F%E5%99%A8/" style="font-size: 10px;">ios模拟器</a> <a href="/tags/iphonex/" style="font-size: 10px;">iphonex</a> <a href="/tags/item2/" style="font-size: 10px;">item2</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 16.25px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 11.25px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/nginx/" style="font-size: 11.25px;">nginx</a> <a href="/tags/nodejs/" style="font-size: 17.5px;">nodejs</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/npm-lock/" style="font-size: 10px;">npm-lock</a> <a href="/tags/object/" style="font-size: 11.25px;">object</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/proxy/" style="font-size: 11.25px;">proxy</a> <a href="/tags/react/" style="font-size: 11.25px;">react</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redux/" style="font-size: 10px;">redux</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/rsync/" style="font-size: 10px;">rsync</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sentinel/" style="font-size: 10px;">sentinel</a> <a href="/tags/set/" style="font-size: 10px;">set</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/simulator/" style="font-size: 10px;">simulator</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/ssr/" style="font-size: 10px;">ssr</a> <a href="/tags/svn/" style="font-size: 10px;">svn</a> <a href="/tags/terminal/" style="font-size: 10px;">terminal</a> <a href="/tags/thrift/" style="font-size: 10px;">thrift</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/virtualDom/" style="font-size: 10px;">virtualDom</a> <a href="/tags/vue/" style="font-size: 12.5px;">vue</a> <a href="/tags/vue-vuex/" style="font-size: 10px;">vue vuex</a> <a href="/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/tags/weakSet/" style="font-size: 10px;">weakSet</a> <a href="/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 11.25px;">web安全</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/xss/" style="font-size: 10px;">xss</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1/" style="font-size: 10px;">事件冒泡</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 10px;">事件循环</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%8D%95%E8%8E%B7/" style="font-size: 10px;">事件捕获</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%86%92%E6%B3%A1%E7%AE%97%E6%B3%95/" style="font-size: 10px;">冒泡算法</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">函数式编程</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BC%96%E8%AF%91/" style="font-size: 10px;">前端编译</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 10px;">动态规划</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 10px;">响应式</a> <a href="/tags/%E5%9B%9E%E6%96%87/" style="font-size: 10px;">回文</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 18.75px;">基础</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 10px;">安全</a> <a href="/tags/%E5%AF%B9%E8%B1%A1/" style="font-size: 11.25px;">对象</a> <a href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 11.25px;">小程序</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" style="font-size: 11.25px;">微信开发</a> <a href="/tags/%E5%BE%AE%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">微前端</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">快速算法</a> <a href="/tags/%E6%80%A7%E8%83%BD/" style="font-size: 10px;">性能</a> <a href="/tags/%E6%8F%92%E5%85%A5%E7%AE%97%E6%B3%95/" style="font-size: 10px;">插入算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12.5px;">数据库</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 10px;">数组</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF/" style="font-size: 10px;">服务端</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B8%B2%E6%9F%93/" style="font-size: 10px;">服务端渲染</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 10px;">浏览器</a> <a href="/tags/%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/" style="font-size: 10px;">硬件加速</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.75px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">线程</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%99%9A%E6%8B%9FDOM/" style="font-size: 10px;">虚拟DOM</a> <a href="/tags/%E8%AF%95%E9%A2%98/" style="font-size: 12.5px;">试题</a> <a href="/tags/%E8%AF%B7%E6%B1%82%E5%A4%B4/" style="font-size: 10px;">请求头</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" style="font-size: 10px;">软件安装</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10px;">进程</a> <a href="/tags/%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95/" style="font-size: 10px;">选择算法</a> <a href="/tags/%E9%95%BF%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">长连接</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12.5px;">面试</a> <a href="/tags/%E9%BD%90%E5%88%98%E6%B5%B7/" style="font-size: 10px;">齐刘海</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 zhoushirong&nbsp;|
+      <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备16019450号-1</a>&nbsp;|
+      <a href="https://github.com/zhoushirong" target="_blank">github</a>&nbsp;|
+      <a href="https://www.epoos.com" target="_blank">epoos.com</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="https://www.epoos.com" class="mobile-nav-link" target="_self">主站</a>
+  
+    <a href="/" class="mobile-nav-link" target="_self">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link" target="_self">列表</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
