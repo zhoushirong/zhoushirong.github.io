@@ -42,7 +42,7 @@ ga('send', 'pageview');
 <meta property="og:image" content="http://zhoushirong.github.io/img/cdn4.png">
 <meta property="og:image" content="http://zhoushirong.github.io/img/cdn3.png">
 <meta property="article:published_time" content="2021-04-02T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-04-04T00:46:21.398Z">
+<meta property="article:modified_time" content="2021-04-04T00:50:29.279Z">
 <meta property="article:author" content="zhoushirong">
 <meta property="article:tag" content="cdn">
 <meta property="article:tag" content="dns">
@@ -126,7 +126,8 @@ ga('send', 'pageview');
 <p>CDN，中文意思为“内容分发网络”，从字面解释可以得知，是做内容分发的，也就是说将用户的内容分发到各个地方，即在各个地方都部署“CDN节点服务器”。</p>
 <p>因此 <strong><em>CDN加速原因</em></strong>总结一句话就是：通过在全国各地部署的节点服务器，为各个地方发起的请求分配最优的资源数据源。</p>
 <p>那么，如何才能做到为个区域发起的请求分配最优的资源数据源呢？</p>
-<p>这个问题还得从 DNS 来说起。<br>当用户访问使用 CDN 资源服务的网站时，请求首次发起之后，域名解析请求会被流转到预先授权的 DNS 服务器。<br>DNS 服务器解析的时候会发现域名已经配置了 CNAME 记录（需要用户提前配置好），到了 CDN 服务商的某个域名。<br>然后域名解析请求会被发送至 CDN 服务商的 DNS 调度系统，该系统通过一组预先定义好的策略(如内容类型、地理区域、入网类型、网络负载状况等)，将最优的 CDN 节点 IP 地址提供给用户。<br>使用户通过该 IP 即可以最快的速度获得请求内容。</p>
+<p>这个跟 DNS 有关。</p>
+<p>当用户访问使用 CDN 资源服务的网站时，请求首次发起之后，域名解析请求会被流转到预先授权的 DNS 服务器。<br>DNS 服务器解析的时候会发现域名已经配置了 CNAME 记录（需要用户提前配置好），到了 CDN 服务商的某个域名。<br>然后域名解析请求会被发送至 CDN 服务商的 DNS 调度系统，该系统通过一组预先定义好的策略(如内容类型、地理区域、入网类型、网络负载状况等)，将最优的 CDN 节点 IP 地址提供给用户。<br>使用户通过该 IP 即可以最快的速度获得请求内容。</p>
 <p>如下图所示。</p>
 <h3 id="假设用户访问-qcloud-com"><a href="#假设用户访问-qcloud-com" class="headerlink" title="假设用户访问 qcloud.com"></a>假设用户访问 qcloud.com</h3><h4 id="1-没有cdn，发起请求过程"><a href="#1-没有cdn，发起请求过程" class="headerlink" title="1.没有cdn，发起请求过程"></a>1.没有cdn，发起请求过程</h4><p><img src="http://zhoushirong.github.io/img/cdn1.png" alt="无CDN请求场景" width="85%"></p>
 <p>由于服务器部署在广州，而北京、新疆距离广州距离不一样，因此会有<strong>不同程度的延迟</strong>。</p>
@@ -152,7 +153,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.epoos.com/2021/04/03/cdn/" data-id="ckn2g2lk70002yavzb1voge7j" class="article-share-link">Share</a>
+      <a data-url="https://blog.epoos.com/2021/04/03/cdn/" data-id="ckn2g7uf60002a0vzdod9958w" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cdn/" rel="tag">cdn</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cname/" rel="tag">cname</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dns/" rel="tag">dns</a></li></ul>
