@@ -16,7 +16,7 @@ category: 笔记
 
 CDN，中文意思为“内容分发网络”，从字面解释可以得知，是做内容分发的，也就是说将用户的内容分发到各个地方，即在各个地方都部署“CDN节点服务器”。
 
-因此 ***CDN加速原因***总结一句话就是：通过在全国各地部署的节点服务器，为各个地方发起的请求分配最优的资源数据源。
+因此 ***CDN加速原因***总结一句话就是：在各个地方部署缓存服务器，尽可能让用户的请求命中缓存，从缓存中获取数据。
 
 那么，如何才能做到为个区域发起的请求分配最优的资源数据源呢？
 
@@ -66,6 +66,10 @@ DNS 服务器解析的时候会发现域名已经配置了 CNAME 记录（需要
 --- 
 
 ## 名词解释
+
+### CDN 缓存穿透
+CDN 如果没有缓存，则回源进行查找，如果请求资源每次都带有随机数，则每次都会回源，这就是缓存穿透。
+
 ### DNS (域名系统)
 DNS 系统是一个分布式分层数据库，用于存储 IP 地址和其它数据，并按照名称进行查询，他用于将人类可读的域名转换为机器可读的 IP 地址。
 DNS 目录存储于全球范围内分布的域名服务器上，定期更新。
@@ -85,13 +89,13 @@ Name:	epoos.com
 Address: 111.230.220.62
 ```
 通过 nslookup 命令查询得知，当前查询 epoos.com 域名是由 dns 服务器 10.11.56.23 返回的，其结果并不是权威服务器的结果。
-该 dns 服务器应该是[dnspod](https://docs.dnspod.cn/dns/5f471dbc8ae73e11c5b01986/)(国内的 DNS 服务商) 提供的。
+该 dns 服务器是[dnspod](https://docs.dnspod.cn/dns/5f471dbc8ae73e11c5b01986/)(国内的 DNS 服务商) 提供的。
 
 ```html
 Nslookup 是一个监测网络中 DNS 服务器是否能正确实现域名解析的命令行工具。
 ```
 
-### CNAME (Canonical Name Record)
+### DNS 记录类型 —— CNAME (Canonical Name Record)
 CNAME 是域名 DNS 的一种记录，用于解析域名到另外一个域名。
 域名解析服务器遇到CNAME记录会以映射到的目标重新开始查询，这对于需要在同一个IP地址上运行多个服务的情况来说非常方便。
 
@@ -99,9 +103,78 @@ CNAME 是域名 DNS 的一种记录，用于解析域名到另外一个域名。
 如此一来，若服务器 IP 地址改变，则只需修改 example.com 的A记录即可。
 
 CNAME 多用在 CDN 加速上。
+```
+$ dig qcloud.com CNAME
 
-### A 记录
+# ...
+;; QUESTION SECTION:
+;qcloud.com.			IN	CNAME  # 要查询的记录类型
+
+;; AUTHORITY SECTION:
+qcloud.com.		600	IN	SOA	ns1.qq.com. webmaster.qq.com. 1330653999 300 600 86400 86400  # 要查询的记录别名
+# ...
+```
+
+
+### DNS 记录类型 —— A 记录
 A (Address) 记录是用来指定主机名（或域名）对应的IP地址记录
+```
+$ dig qcloud.com
 
-### CDN 缓存穿透
-CDN 如果没有缓存，则回源进行查找，如果请求资源每次都带有随机数，则每次都会回源，这就是缓存穿透。
+# ...
+;; QUESTION SECTION:
+;qcloud.com.			IN	A  # 要查询的记录类型，不指定参数，默认查 A 记录
+
+;; ANSWER SECTION:
+qcloud.com.		17	IN	A	119.29.42.201  # 查询 A 记录的结果
+qcloud.com.		17	IN	A	119.29.47.192
+# ...
+```
+
+### DNS 记录类型 —— AAAA 记录
+A 记录的 IPV6 版本
+
+### DNS 记录类型 —— MX 记录
+邮件交换记录，根据邮件域名的结尾指向对应的邮件服务器进行处理
+```
+$ dig qcloud.com MX
+
+# ...
+;; QUESTION SECTION:
+;qcloud.com.			IN	MX
+
+;; AUTHORITY SECTION:
+qcloud.com.		600	IN	SOA	ns1.qq.com. webmaster.qq.com. 1330653999 300 600 86400 86400
+# ...
+```
+
+### DNS 记录类型 —— NS 记录
+解析服务器记录，用来表明哪台服务器对该域名进行解析
+```
+$ dig qcloud.com NS
+# ...
+;; QUESTION SECTION:
+;qcloud.com.			IN	NS # 查询的记录类型为 NS
+
+;; ANSWER SECTION:
+# 域名解析服务器地址
+qcloud.com.		86400	IN	NS	ns2.qq.com.
+qcloud.com.		86400	IN	NS	ns3.qq.com.
+qcloud.com.		86400	IN	NS	ns4.qq.com.
+qcloud.com.		86400	IN	NS	ns1.qq.com.
+# ...
+```
+
+### DNS 记录类型 —— SOA 记录
+起始授权机构记录，NS 用于标识哪台服务器对该域名进行解析，SOA 用于记录在众多 NS 记录中哪一台是主服务器。
+表示此域名的权威解析服务器地址。当域名解析没有命中缓存的时候，就会回源到此域名的 SOA 记录，这也叫权威解析记录。
+```
+$ dig qcloud.com SOA
+# ...
+;; QUESTION SECTION:
+;qcloud.com.			IN	SOA
+
+;; ANSWER SECTION:
+qcloud.com.		86400	IN	SOA	ns1.qq.com. webmaster.qq.com. 1330653999 300 600 86400 86400
+# ...
+```
