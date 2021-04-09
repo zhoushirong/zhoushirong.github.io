@@ -181,6 +181,14 @@ sysctl hw.physicalcpu: 2
 sysctl hw.logicalcpu: 4
 ```
 
+### 使用 `code .` 命令直接使用 VsCode 打开当前文件夹
+开启方式
+```html
+–> 打开VSCode
+–> 组合键 command+shift+p
+–> 输入shell command
+–> 点击提示 Shell Command: Install ‘code’ command in PATH运行 
+```
 
 ### 安装redis教程传送门
 <a href="http://www.mamicode.com/info-detail-526405.html" target="_blank">http://www.mamicode.com/info-detail-526405.html</a>

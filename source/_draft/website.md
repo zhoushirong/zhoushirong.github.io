@@ -1,13 +1,13 @@
 
 ---
-title: 如何做一个全栈开发
+title: 我对全栈开发的理解
 date: 2021/04/03
 tag: [nodejs,web]
 category: 技术
 ---
 
 
-一、如何做一个全栈开发
+一、我对全栈开发的理解
 前端技术选型：Vue、React、小程序、原生
 路由层：nginx、apache、微软IIS、LiteSpeed
 服务端技术选型：nodejs(koa/express/egg之间的关系)、java、c++、云函数、服务端渲染

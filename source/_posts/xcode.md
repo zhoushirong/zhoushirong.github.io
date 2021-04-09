@@ -11,6 +11,10 @@ tag: [ios模拟器, xcode, simulator]
 ```shell
 open /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app
 ```
+或者手动打开
+```html
+Xcode -> Open Developer Tool -> Simulator
+```
 
 之后只需要根据菜单自己安装对应的系统和模拟器手机型号即可。
 如果仅仅测试h5页面，用safari就可以了。
