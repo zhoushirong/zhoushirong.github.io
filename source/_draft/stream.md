@@ -15,9 +15,18 @@ category: 技术
 节约内存 ：无需先在内存中加载大量数据，然后再进行处理
 提升时效 ：无需等待数据全部加载完成后才能开始处理，在第一个分段数据就可以开始处理数据，这可以极大提升数据处理时效
 
+
+所以说流（Stream）是指数据（Data），而不是容器。流的容器是管道（Pipeline），即运输装置。流的本意是模拟水流的特性，水流从上游流动到下游，编程里的流也是一样的。对于单个流处理器（工序）而言，上一个流处理器（工序）就是上游，下一个就是下游
+
+另外要提一下的是，编程里面流一般有两个工作模式：（以作为一个流处理器的视角）一是“流动模式”，就是说数据源源不断地从上游而来，你只要不断地处理即可。但是每道工序消耗的时间不同，如果你处理不过来，数据就累积在你的缓冲区里面，越来越多，直到你的缓冲区爆掉；（相当于 Push 模式）二是“非流动模式”，数据也会来，但是你要手动从流中提取数据，你不提取数据就存留在上游的发送缓冲区里，最后上游的发送缓冲区爆掉了。（相当于 Pull 模式）因此实现流也要考虑流的“溢出”。
+
 ### 接触过的流
 视频流、音频流
 文件上传、下载
+response
+
+### stream 的实现
+
 
 ## Nodejs 中的流
 流（stream）是 Node.js 中处理流式数据的抽象接口。 stream 模块用于构建实现了流接口的对象。
@@ -82,6 +91,31 @@ var ws = fs.createWriteStream('filename', 'utf-8')
 ws.write('1') // 一点
 ws.write('2') // 一点
 ws.end() // 写入
+
+```
+
+直接读写
+```javascript
+let water = fs.readFileSync('a.txt', { encoding: 'utf8' })
+fs.writeFileSync('b.txt', water)
+```
+这种读写方法，实现方式是，先将整个文件内容存放到内存当中，然后直接从内存中写入
+缺点：
+1.如果文件过大，不能分块处理，会导致内存不足，处理速度慢
+
+以流的形式读写
+```javascript
+var fs = require('fs');
+var readStream = fs.createReadStream('a.mp4'); // 创建可读流
+var writeStream = fs.createWriteStream('b.mp4'); // 创建可写流
+
+readStream.on('data', function(chunk) { // 当有数据流出时，写入数据
+    writeStream.write(chunk);
+});
+
+readStream.on('end', function() { // 当没有数据时，关闭数据流
+    writeStream.end();
+});
 ```
 
 
@@ -232,3 +266,7 @@ https://juejin.cn/post/6854573219060400141
 
 5.流 - 知乎
 https://zhuanlan.zhihu.com/p/36728655
+
+
+6.文件流的实现
+https://github.com/Aaaaaaaty/Blog/issues/28

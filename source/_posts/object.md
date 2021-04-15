@@ -96,7 +96,7 @@ book.year = 2017;
 console.log(book.edition); // 2
 ```
 
-3) 定义多个属性
+4) 定义多个属性
 
 ECMAScript5定义了一个Object.defineProperties()方法。利用这个方法可以通过描述符一次定义多个属性。
 
@@ -126,7 +126,7 @@ Object.defineProperties(book, {
 });
 ```
 
-4) 读取属性的特性
+5) 读取属性的特性
 
 使用ECMAScript5的Ojbect.getOwnPropertyDescriptor()方法，可以取得给定属性的描述符。
 
@@ -136,6 +136,79 @@ Object.defineProperties(book, {
 var descriptor = Object.getOwnPropertyDescriptor(book, "__year"); 
 console.log(descriptor.value, descriptor.writable, descriptor.configurable, descriptor.value);
 
+```
+
+6) Object 排序
+```html
+
+
+
+如果key字符串和数字，数字优先
+
+如果属性名是 symbol，按照string排
+
+```
+```javascript
+var obj0 = {
+  0: 'a',
+  3: 'b',
+  2: 'c',
+  1: 'd'
+}
+// console.log(obj0)
+// 如果 key 为数字，按照从小到大排
+// {0: "a", 1: "d", 2: "c", 3: "b"}
+
+var obj1 = {
+  '0': 'a',
+  '3': 'b',
+  '2': 'c',
+  '1': 'd'
+}
+// console.log(obj1)
+// 如果 key 为数字组成的字符串，按照从小到大排
+// {0: "a", 1: "d", 2: "c", 3: "b"}
+
+var obj2 = {
+  'd': 'a',
+  'b': 'b',
+  'c': 'c',
+  'a': 'd'
+}
+// console.log(obj2)
+// 如果 key 为字符串，按照字符串创建时间顺序排
+// {d: "a", b: "b", c: "c", a: "d"}
+
+var obj3 = {
+  c: 'a',
+  b: 'b',
+  2: 'c',
+  1: 'd'
+}
+// console.log(obj3)
+// 如果 key 为字符串和数字，数字优先
+// {1: "d", 2: "c", c: "a", b: "b"}
+
+var obj4 = {
+  '伯': 'b',
+  'c': 'cc',
+  '阿': 'a',
+  2: 'c',
+  1: 'd'
+}
+// console.log(obj4)
+// 如果 key 为字符串，按照字符串创建时间顺序排，中文也算字符串
+// {1: "d", 2: "c", 伯: "b", c: "cc", 阿: "a"}
+
+var obj5 = {
+  0: 'a',
+  3: 'b',
+  '-2': 'c',
+  1: 'd'
+}
+// console.log(obj4)
+// 如果 key 为字符串，按照字符串创建时间顺序排，负数算字符串
+// {0: "a", 1: "d", 3: "b", -2: "c"}
 ```
 
 --------------------------------

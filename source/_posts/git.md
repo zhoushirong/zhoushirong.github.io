@@ -158,13 +158,12 @@ git有五种状态：未修改（Orgin）、已修改（Modified）、已暂存(
 1.已修改，未暂存
 ``` shell
 git diff # 查看修改
-git checkout . # 撤销修改(方法一)
-git reset --hard # 撤销修改(方法二)
+git checkout . # 撤销所有修改(方法一)
+git checkout -- xx.js # 撤销单个文件
 ```
 
 2.已暂存
 ``` shell
-git add . # 加入暂存
 git diff --cached #  查看修改
 
 git reset # 把修改退回到git add .之前
@@ -175,9 +174,9 @@ git reset --hard # 等同于上面两个命令的组合
 
 3.已提交，未推送
 ``` shell
-git commit -m 'commit message' # 提交修改
 git diff master orgin/master # 查看修改
 git reset --hard orgin/master # 撤回修改（orgin/master代表远程仓库，相当于从远程仓库把代码取回来）
+git reset xxid # 回滚到目标 commit
 ```
 
 4.已推送的代码撤销
@@ -245,6 +244,10 @@ know_hosts
 rm -rf ~/.ssh/known_hosts
 ```
 
+### VsCode git 实用插件
+```html
+gitLens
+```
 
 ### 传送门
 

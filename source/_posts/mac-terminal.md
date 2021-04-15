@@ -11,6 +11,24 @@ Mac搭配的系统是基于Linux内核开发的，因此大部分Linux的命令�
 因此为了提高开发效率，特意学习一下Mac的命令操作。
 下面是一些常用的Terminal操作。
 
+### Mac 必装软件
+```html
+xcode
+https://developer.apple.com/xcode/
+
+安装item2
+https://iterm2.com/
+
+安装git
+https://git-scm.com/
+
+安装brew
+https://brew.sh/index_zh-cn
+
+安装oh-my-zsh (* 只有安装了这个，item2 才好用，一些配置才会生效)
+https://ohmyz.sh/#install
+```
+
 
 ```
 cd —— 进入目录
@@ -182,12 +200,20 @@ sysctl hw.logicalcpu: 4
 ```
 
 ### 使用 `code .` 命令直接使用 VsCode 打开当前文件夹
-开启方式
+1.命令开启方式
 ```html
 –> 打开VSCode
 –> 组合键 command+shift+p
 –> 输入shell command
 –> 点击提示 Shell Command: Install ‘code’ command in PATH运行 
+```
+
+2.手动开启方式
+```html
+-> 打开VSCode
+–> 组合键 command+shift+p
+–> 输入shell command
+–> 点击提示Shell Command: Install ‘code’ command in PATH 运行 
 ```
 
 ### 安装redis教程传送门
