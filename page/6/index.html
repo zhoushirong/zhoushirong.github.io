@@ -89,9 +89,9 @@ ga('send', 'pageview');
         <section id="main">
   
     
-      <article id="default-linux1" class="article article-type-default" itemscope itemprop="blogPost">
+      <article id="default-linux2" class="article article-type-default" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/06/05/linux1/" class="article-date">
+    <a href="/2018/06/05/linux2/" class="article-date">
   <time datetime="2018-06-05T13:51:11.000Z" itemprop="datePublished">2018-06-05</time>
 </a>
     
@@ -107,7 +107,7 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/05/linux1/">Linux学习笔记(一)</a>
+      <a class="article-title" href="/2018/06/05/linux2/">Linux学习笔记(二)</a>
     </h1>
   
 
@@ -116,18 +116,54 @@ ga('send', 'pageview');
     <div class="article-entry" itemprop="articleBody">
       
         <p>接下来一段时间打算学一下linux<br>学习来源书本《Linux命令行与shell脚本编程大全 第三版》</p>
-<h4 id="Linux目录名称"><a href="#Linux目录名称" class="headerlink" title="Linux目录名称"></a>Linux目录名称</h4><p>常见的目录均基于文件系统层级标准（FHS）。很多Linux发型版都遵循了FHS。<br>因此，你可以在任何兼容FHS的Linux系统中很容易的查找文件</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">/sbin # 系统二进制目录，存放许多GNU管理员级工具</span><br><span class="line">/bin # 二进制目录，存放许多用户级别的GNU工具</span><br><span class="line">/usr # 用户二进制目录，大量用户级的GNU工具和数据文件都存储在这里</span><br><span class="line"></span><br><span class="line">/boot # 启动目录，存放启动文件</span><br><span class="line">/dev # 设备目录，Linux在这里创建设备节点</span><br><span class="line">/etc # 系统配置文件目录</span><br><span class="line">/home # 主目录，Linux在这里创建用户目录</span><br><span class="line">/lib # 库目录，存放系统和应用程序的库文件</span><br><span class="line">/media # 媒体目录，可移动媒体设备的常用挂载点</span><br><span class="line">/mnt # 挂载目录，另一个可移动媒体设备的常用挂载点</span><br><span class="line">/opt # 可选目录，常用于存放第三方软件包和数据文件</span><br><span class="line">/proc # 进程目录，存放现有硬件及当前进程的相关信息</span><br><span class="line">/root # root用户的主目录</span><br><span class="line">/run # 运行目录，存放系统运行时的运行时数据</span><br><span class="line">/srv # 服务目录，存放不能低服务的相关文件</span><br><span class="line">/sys # 系统目录，存放系统硬件信息的相关文件</span><br><span class="line">/tmp # 临时目录，可以在该目录中创建和删除临时工作文件</span><br><span class="line">/var # 可变目录，用以存放经常变化的文件，比如日志文件</span><br></pre></td></tr></table></figure>
-<h4 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h4><p>用的最多的几个基本文件查看操作命令，详细参数使用的时候去查</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">cd # 进入目录</span><br><span class="line">ls # 列出</span><br><span class="line">cp # 拷贝</span><br><span class="line">echo # 写入文件</span><br><span class="line">touch # 创建文件</span><br><span class="line">ln # 软连接</span><br><span class="line">mv # 重名了文件(夹)</span><br><span class="line">mkdir # 创建文件夹</span><br><span class="line">rm # 删除文件</span><br><span class="line">rmdir # 删除文件目录</span><br><span class="line">file # 查看文件类型</span><br><span class="line">cat # 查看文件内容</span><br><span class="line">more # 查看一页文件内容 cat升级版</span><br><span class="line">less # 查看一页文件内容 more升级版</span><br><span class="line">tail # 查看文件后n行的内容 可指定查看行数 tail -n file</span><br><span class="line">head # 查看文件前n行的内容 和tail相反 head -n file</span><br><span class="line">cat -n access.log | tail -n 300 | head -n 10</span><br></pre></td></tr></table></figure>
-<h4 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h4><p>GNU计划：又称革奴计划，是由Richard Stallman在1983年9月27日公开发起的。它的目标是创建一套完全自由的操作系统。 ———— 百度百科</p>
-<p>GNU软件：GNU软件是通过GNU项目发布的软件，它是一种根据GNU软件包的README手册以及自由软件指南开发的，大多数GNU软件是免费分发的，但不是多有的都这样，然而，所有的GNU软件都必须是自由软件。 ———— 百度百科</p>
-<p>GCC：GNU编译器套件（GNU Compiler Collection）。<br>包括C、C++、Objective-C、Fortran、Java、Ada和Go语言的前端，也包括了这些语言的库（如libstdc++、libgcj等等）GCC的初衷是为GNU操作系统专门编写的一款编译器。 ———— 百度百科</p>
+<h3 id="一、进程管理"><a href="#一、进程管理" class="headerlink" title="一、进程管理"></a>一、进程管理</h3><h5 id="ps命令"><a href="#ps命令" class="headerlink" title="ps命令"></a>ps命令</h5><p>ps 命令默认会显示运行在当前控制台下的属于当前用户端的进程，显示的选项<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">UID # 启动这些进程的用户</span><br><span class="line">PPID # 父进程的进程号</span><br><span class="line">CMD # 启动程序的名称</span><br><span class="line">PID # process ID 进程id</span><br><span class="line">TTY # 运行在哪个终端</span><br><span class="line">TIME # 已占用的CPU时间</span><br></pre></td></tr></table></figure></p>
+<p>常用参数 ps -xx<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-e # 显示所有进程</span><br><span class="line">-f # 显示完整格式的输出</span><br><span class="line">-w # 采用宽输出模式，不限宽度显示</span><br><span class="line">-l # 显示任务信息</span><br></pre></td></tr></table></figure></p>
+<h5 id="top命令"><a href="#top命令" class="headerlink" title="top命令"></a>top命令</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top # ps命令是查看某一时刻的信息，如果想要查看进程占用资源的趋势则需要用到top命令</span><br></pre></td></tr></table></figure>
+<h5 id="kill-killall命令"><a href="#kill-killall命令" class="headerlink" title="kill killall命令"></a>kill killall命令</h5><p>kill命令可通过进程ID(PID)给进程发信号。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kill $pid # 杀掉进程id为pid的进程</span><br></pre></td></tr></table></figure>
+<p>killall # killall命令支持通过进程名而不是PID来结束进程，也支持通配符<br>以root身份执行此命令当小心，很可能会误杀重要的系统进程</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> eg：</span></span><br><span class="line">killall http* # 杀掉所有以http开头的进程</span><br></pre></td></tr></table></figure>
+<h3 id="二、监测磁盘空间"><a href="#二、监测磁盘空间" class="headerlink" title="二、监测磁盘空间"></a>二、监测磁盘空间</h3><p>linux文件系统将所有的磁盘都并入一个虚拟目录下。<br>在使用新的存储媒体之前，需要把它放到虚拟目录下。这项工作称为 ———— 挂载</p>
+<p>一般情况，新发布的图形化桌面环境都会自动挂载特定类型的可移动存储媒体（可移动存储媒体指的是可从PC上轻易移除的媒体，比如软盘和U盘）</p>
+<h5 id="mount命令"><a href="#mount命令" class="headerlink" title="mount命令"></a>mount命令</h5><p>用mount命令查看机器上的挂载信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount # 输出当前系统上挂载的设备 (设备文件名、挂载点、文件系统类型、已挂载媒体的访问状态)</span><br></pre></td></tr></table></figure>
+<p>mount挂载的文件举例，eg:<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/dev/disk2s1 on /Volumes/网易POPO (hfs, local, nodev, nosuid, read-only, noowners, quarantine, mounted by zsr)</span><br></pre></td></tr></table></figure></p>
+<p>使用 mount 命令手动挂载设备</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount -t type device directory</span><br></pre></td></tr></table></figure>
+<p><strong>type</strong><br>type 参数指定了磁盘被格式化的文件系统类型，linux可识别非常多的文件系统类型<br>如果是需要和windows PC共用这些存储设备，通常得使用下列的文件系统类型</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vfat: windows长文件系统。</span><br><span class="line">ntfs: windows NT、XP、Vista以及windows7中广泛使用的高级文件系统</span><br><span class="line">iso9660: 标准CD-ROM文件系统</span><br></pre></td></tr></table></figure>
+<p>大多数U盘和软盘会被格式化成vfat文件系统。而数据CD则必须使用iso9660文件系统类型</p>
+<p><strong>device</strong><br>device参数指定了改存储设备的设备文件的位置</p>
+<p><strong>directory</strong><br>directory参数指定了挂载点在虚拟目录中的位置</p>
+<p>如：手动将U盘 /dev/sdb1 挂载到 /media/disk 可以使用下面的命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount -t ntfs /dev/sdb1 /media/disk</span><br></pre></td></tr></table></figure>
+<p>挂载之后root用户就可以使用该设备的所有访问权限了，其它用户访问，需要设置目录的访问权限</p>
+<h5 id="umount命令"><a href="#umount命令" class="headerlink" title="umount命令"></a>umount命令</h5><p>从Linux系统上移除一个可移动设备时，不能直接从系统上移除而应该先卸载</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">umount [directory | device]</span><br></pre></td></tr></table></figure>
+<h5 id="df命令"><a href="#df命令" class="headerlink" title="df命令"></a>df命令</h5><p>df命令可以很方便的查看所有已挂载的磁盘的使用情况</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df</span><br><span class="line">df -h # 把输出中的磁盘空间按照用户易读的形式显示</span><br></pre></td></tr></table></figure>
+<p>du命令可以指定显示某个特定目录的磁盘使用情况。可以很容易发现哪个磁盘的存储空间快没了。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">du # 默认当前目录</span><br><span class="line">du /path # 指定目录</span><br><span class="line">du -c # 显示所有已累出文件的总大小</span><br><span class="line">du -h # 把输出中的磁盘空间按照用户易读的形式显示</span><br><span class="line">du -s # 输出每个参数的总计，如显示目录的总大小</span><br></pre></td></tr></table></figure>
+<h3 id="三、处理数据文件"><a href="#三、处理数据文件" class="headerlink" title="三、处理数据文件"></a>三、处理数据文件</h3><h5 id="sort命令排序数据"><a href="#sort命令排序数据" class="headerlink" title="sort命令排序数据"></a>sort命令排序数据</h5><p>sort 命令按照回话指定的默认语言的排序规则对文本文件中的数据进行排序。默认情况下，sort命令会把数据当做字符来执行标准的字符排序。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sort file # 标准字符排序方式</span><br><span class="line">sort -n file # 把数字识别成数字而不是字符</span><br><span class="line">sort -M file # 自动识别三个字符的月份名，并排序</span><br><span class="line">sort -b # 排序时忽略起始的空白</span><br><span class="line">sort -d # 仅考虑空白和字母，不考虑特殊字符</span><br><span class="line">sort -f # 默认会将大写字母排在前面，这个参数会胡烈大小写</span><br><span class="line">sort file -o newfile # 将排序结果写出到指定文件</span><br><span class="line">sort -r # 反序排序</span><br><span class="line">sort -k (--key=POS1[,POS2]) # 排序从POS1位置开始，如果指定了POS2，则到POS2位置结束</span><br><span class="line">sort -t # 指定一个用来区分键位置的字符</span><br></pre></td></tr></table></figure></p>
+<p>其中-t和-k对按照字段分割的数据进行排序非常有用，比如：<br>对字符串 ‘abcd:cdef:dddd:xxxxxx’，以’:’分割，然后取第三个字段dddd进行排序：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sort -t &#x27;:&#x27; -k 3 -n /etc/file   # </span><br></pre></td></tr></table></figure>
+<p>综合运用，将当前目录的文件(夹)大小安照降序输出</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">du -sh * | sort -nr # | 为管道命令，将du的输出重定向到sort命令</span><br></pre></td></tr></table></figure>
+<h5 id="grep命令搜索数据"><a href="#grep命令搜索数据" class="headerlink" title="grep命令搜索数据"></a>grep命令搜索数据</h5><p>grep命令就是从输入或者指定文件中查找包含指定字符的行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">grep xxx file # 搜索某文件(file)中的字段(xxx)所在的那一行数据</span><br><span class="line">grep -v xxx file # 反向搜索，返回不匹配的所有行</span><br><span class="line">grep -n # 输出包含行号</span><br><span class="line">grep -c # 输出匹配的总行数</span><br><span class="line">grep [abcdefghxx] # 正则匹配搜索</span><br></pre></td></tr></table></figure>
+<h5 id="压缩数据"><a href="#压缩数据" class="headerlink" title="压缩数据"></a>压缩数据</h5><p>linux包含了多种文件压缩工具</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">工具         文件扩展名     描述</span><br><span class="line">bzip2       .bz2          </span><br><span class="line">compress    .Z           最初的Unix文件压缩工具，快没人用了</span><br><span class="line">gzip        .gz          GNU压缩工具，linux最常用的压缩工具</span><br><span class="line">zip         .zip         Windows上的ePKZIP工具的Unix实现</span><br></pre></td></tr></table></figure>
+<p>gzip软件包是GNU项目的产物，这个软件包含有下面的工具</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gzip 用来压缩文件</span><br><span class="line">gzcat 用来查看压缩过的文本文件的内容</span><br><span class="line">gunzip 用来解压文件</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gzip ./*  # 将当前目录下的所有文件进行压缩，（会替换源文件）</span><br><span class="line">gunzip ./* # 解压当前目录下的所有.gz文件</span><br></pre></td></tr></table></figure>
+<p><strong>tar</strong><br>虽然zip命令能够很好的将单个文件压缩归档，但是它不是Unix和Linux中的标准归档工具。<br>目前Linux和Unix用的最广泛的归档工具是tar命令。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tar function [options] object1 object2 ...</span><br><span class="line">tar -c # 创建一个新的归档文件</span><br><span class="line">tar -v # 在处理文件时显示文件</span><br><span class="line">tar -f # 输出结果到文件或设备</span><br><span class="line">tar -t # 列出已有的tar归档文件的内容</span><br><span class="line">tar -x # 从已有的归档文件中提取文件</span><br><span class="line">tar -z # 将输出重定向给gzip命令来压缩内容</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -cvf txt.tar 1.txt 2.txt 3.txt # 压缩</span><br><span class="line">tar -zxvf txt.tar # 解压</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.epoos.com/2018/06/05/linux1/" data-id="cknabwrpx000s0pvz9qduchbq" class="article-share-link">Share</a>
+      <a data-url="https://blog.epoos.com/2018/06/05/linux2/" data-id="ckniu5418000sn1vz4uk277ol" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/" rel="tag">shell</a></li></ul>
