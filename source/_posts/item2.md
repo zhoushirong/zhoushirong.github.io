@@ -7,6 +7,11 @@ category: 笔记
 
 ## item2使用快捷键
 
+### item2、zsh 以及 oh-my-zsh
+item2 超好用的终端，可支持分屏
+Oh-my-zsh 则是一个 Zsh 配置管理框架
+网上的关于 item2 的一些皮肤或者设置方式都是基于 oh-my-zsh 的，所以在这之前最好先安装好 oh-my-zsh。
+
 ### 设置快捷键
 ```html
 item2 - Preferences - Profiles - keys
