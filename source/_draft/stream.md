@@ -384,7 +384,7 @@ https://www.barretlee.com/blog/2017/06/06/dive-to-nodejs-at-stream-module/
 11.nodejs中的stream
 https://segmentfault.com/a/1190000014138192
 
-12.美团关于流的文章
+12.美团关于流的文章 *
 https://github.com/zoubin/streamify-your-node-program/blob/master/docs/gulp.md
 
 
@@ -394,8 +394,13 @@ https://www.cnblogs.com/wanghui-garcia/p/9798158.html
 14.nodejs学习博客
 https://github.com/koala-coding/goodBlog
 
+15.https://obeta.me/posts/2020-03-02/读例子入门NodeJS中的Stream和Buffer
 
+16.Node.js Readable流作为Duplex流的数据源
+https://amsimple.com/blog/article/35.html
 
+buffer与流
+17.https://zhuanlan.zhihu.com/p/30960662
 
 node.js 提供了流的抽象类。
 stream.Readable 可读抽象类。
@@ -414,3 +419,4 @@ Linux所提供的管道符“|”将两个命令隔开，管道符左边命令�
 $ cat if.js | wc -l
 $ ps -ef | grep node
 ```
+
