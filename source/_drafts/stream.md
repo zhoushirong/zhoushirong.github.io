@@ -182,44 +182,40 @@ const fs = require('fs')
 class MyReadStream extends Readable {
   constructor(path, options = {}) {
     super(options);
-    this.bytesRead = 0;
-    this.fd = fs.openSync(path, 'r')
-
-    if (this.start !== undefined) {
-      this.pos = this.start;
-    }
-    if (this.end === undefined) {
-      this.end = Infinity;
-    }
+    this.pos = 0
+    this.fd = fs.openSync(path, 'r') // 文件描述符
   }
   _read(n) {
-    n = this.pos !== undefined ?
-      Math.min(this.end - this.pos + 1, n) :
-      Math.min(this.end - this.bytesRead + 1, n);
-
     if (n <= 0) {
       this.push(null);
       return;
     }
 
-    const buf = Buffer.allocUnsafeSlow(n);
-
-    fs.read(this.fd, buf, 0, n, this.pos, (er, bytesRead, buf) => {
+    const buffer = Buffer.allocUnsafeSlow(n);
+    /**
+     * fd 文件描述符
+     * buffer 是一个缓冲区，读取的数据将会写入到这里，默认大小Buffer.alloc(16384)
+     * offset 是开始向缓冲区 buffer 写入数据时的偏移量
+     * length 是整数，指定要读取的字节数
+     * position 是整数，指读取的文件起始位置
+     * 
+     * bytesRead is how many bytes were read from the file
+     * buf 指缓冲区
+     */
+    fs.read(this.fd, buffer, 0, n, this.pos, (err, bytesRead, buf) => {
       if (bytesRead > 0) {
-        if (this.pos !== undefined) {
-          this.pos += bytesRead;
-        }
-
-        this.bytesRead += bytesRead;
-
+        this.pos += bytesRead;
+        // console.log(bytesRead !== buf.length, bytesRead, buf.length)
         if (bytesRead !== buf.length) {
           const dst = Buffer.allocUnsafeSlow(bytesRead);
+          // buffer.copy( target, targetStart, sourceStart, sourceEnd )
+          // 提取buf中位置从0到bytesRead位置的数据，拷贝至dst位置从0开始
           buf.copy(dst, 0, 0, bytesRead);
           buf = dst;
         }
-
         this.push(buf);
       } else {
+        // 如果等于0，表示读取结束。
         this.push(null);
       }
     });
@@ -227,6 +223,7 @@ class MyReadStream extends Readable {
 }
 module.exports = MyReadStream
 ```
+
 使用自己的 MyReadStream 类
 ```javascript
 const http = require('http')
@@ -330,7 +327,10 @@ Readable.prototype.wrap = function(stream) {/*...*/}
 需要注意的是，其中`_read()`方法是一个抽象方法，这里直接抛出一个错误，这就是意味着如果要执行_read 方法，使用者必须自己实现。
 
 
-## 流的工作过程及其注意事项(待完善...)
+## 流的工作过程
+
+(未完，待补充...)
+
 
 ### 流中流动的数据格式
 1）二进制模式，buffer 或者 string 对象
