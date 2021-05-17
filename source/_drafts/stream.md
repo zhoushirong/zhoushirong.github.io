@@ -119,9 +119,8 @@ server.listen(3000, () => {
 亲测，采用流处理的方式之后不会再报错，哪怕文件再大都没问题，而且在浏览器端肉眼可见其在边下载边显示。
 
 你怎么选？
-<img src="../../img/kangshui.jpeg" alt="通过内存读取文件" width="85%">
-<img src="../../img/shuiguan.jpeg" alt="通过stream传输文件" width="85%">
-<!-- <img src="http://zhoushirong.github.io/img/cdn1.png" alt="无CDN请求场景" width="85%"> -->
+![通过内存读取文件](http://zhoushirong.github.io/img/kangshui.jpeg)
+![通过stream传输文件](http://zhoushirong.github.io/img/shuiguan.png)
 
 ### fs.createReadStream 的实现。
 从 Nodejs 官方文档可知，```fs``` 模块继承了 Stream，源码如下
