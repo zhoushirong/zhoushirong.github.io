@@ -183,13 +183,10 @@ class MyReadStream extends Readable {
   constructor(path, options = {}) {
     super(options);
     this.pos = 0
-    this.fd = fs.openSync(path, 'r') // 文件描述符
+    this.fd = fs.openSync(path, 'r') // fs.open 创建文件描述符
   }
   _read(n) {
-    if (n <= 0) {
-      this.push(null);
-      return;
-    }
+    if (n <= 0) return this.push(null);
 
     const buffer = Buffer.allocUnsafeSlow(n);
     /**
@@ -205,11 +202,10 @@ class MyReadStream extends Readable {
     fs.read(this.fd, buffer, 0, n, this.pos, (err, bytesRead, buf) => {
       if (bytesRead > 0) {
         this.pos += bytesRead;
-        // console.log(bytesRead !== buf.length, bytesRead, buf.length)
         if (bytesRead !== buf.length) {
           const dst = Buffer.allocUnsafeSlow(bytesRead);
           // buffer.copy( target, targetStart, sourceStart, sourceEnd )
-          // 提取buf中位置从0到bytesRead位置的数据，拷贝至dst位置从0开始
+          // 从buf中提取 0-bytesRead 位置的数据，拷贝至 dst 0-end 的位置
           buf.copy(dst, 0, 0, bytesRead);
           buf = dst;
         }
@@ -364,7 +360,11 @@ Readable.prototype.wrap = function(stream) {/*...*/}
 ```
 当可读流处于暂停模式时，我们可以使用 read() 方法按需从流中读取数据。但是，在流动模式下，数据会一直不断地被读取，如果没有及时消费数据，则可能丢失数据。所以在流动模式中，我们需要通过 'data' 事件来获取并处理数据。
 
-### 关于积压或背压(Backpressuring)
+### 关于积压或背压(Backpressure)
+背压指在异步场景下，被观察者发送事件速度远快于观察者处理的速度，从而导致下游的 buffer 溢出，这种现象叫作背压。
+![背压成因](http://zhoushirong.github.io/img/back-pressure.jpeg)
+比如上图，管道入口处一样大，入口数据也一样，但是中间或者出口因为各种因素被阻塞或者减小了口径，导致流动受阻，形成背压。
+
 有太多的例子证明有时 Readable 传输给 Writable 的速度远大于它接受和处理的速度。
 如果发生了这种情况，消费者开始为后面的消费而将数据列队形式积压起来，写入队列的时间会越来越长，也正因为如此，更多的数据不得不保存在内存中知道整个流程全部处理完毕。
 比如写入磁盘的速度远比从磁盘读取数据慢得多，因此，当我们试图压缩一个文件并写入磁盘时，积压的问题也就出现了。因为写磁盘的速度不能跟上读磁盘的速度，导致内存溢出。
@@ -407,3 +407,5 @@ Readable.prototype.wrap = function(stream) {/*...*/}
 **字节流（英语：byte stream）** 在计算机科学中是一种比特流，不过里面的比特被打包成一个个我们叫做字节（Bytes）的单位。
 
 **流媒体（英语：Streaming media）** 是指将一连串的多媒体资料压缩后，经过互联网分段发送资料，在互联网上即时传输影音以供观赏的一种技术与过程，此技术使得资料数据包得以像流水一样发送，如果不使用此技术，就必须在使用前下载整个媒体文件。
+
+**Buffer** 在 Node.js 中，Buffer 类是随 Node 内核一起发布的核心库。Buffer 库为 Node.js 带来了一种存储原始数据的方法，可以让 Node.js 处理二进制数据，每当需要在 Node.js 中处理I/O操作中移动的数据时，就有可能使用 Buffer 库。原始数据存储在 Buffer 类的实例中。一个 Buffer 类似于一个整数数组，但它对应于 V8 堆内存之外的一块原始内存。

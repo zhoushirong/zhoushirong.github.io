@@ -4,13 +4,10 @@ class MyReadStream extends Readable {
   constructor(path, options = {}) {
     super(options);
     this.pos = 0
-    this.fd = fs.openSync(path, 'r') // 文件描述符
+    this.fd = fs.openSync(path, 'r') // fs.open 创建文件描述符
   }
   _read(n) {
-    if (n <= 0) {
-      this.push(null);
-      return;
-    }
+    if (n <= 0) return this.push(null);
 
     const buffer = Buffer.allocUnsafeSlow(n);
     /**
@@ -26,11 +23,10 @@ class MyReadStream extends Readable {
     fs.read(this.fd, buffer, 0, n, this.pos, (err, bytesRead, buf) => {
       if (bytesRead > 0) {
         this.pos += bytesRead;
-        // console.log(bytesRead !== buf.length, bytesRead, buf.length)
         if (bytesRead !== buf.length) {
           const dst = Buffer.allocUnsafeSlow(bytesRead);
           // buffer.copy( target, targetStart, sourceStart, sourceEnd )
-          // 提取buf中位置从0到bytesRead位置的数据，拷贝至dst位置从0开始
+          // 从buf中提取 0-bytesRead 位置的数据，拷贝至 dst 0-end 的位置
           buf.copy(dst, 0, 0, bytesRead);
           buf = dst;
         }
