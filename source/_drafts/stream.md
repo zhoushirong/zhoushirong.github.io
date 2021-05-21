@@ -153,9 +153,9 @@ function ReadStream(path, options) {
 }
 ReadStream.prototype.open = openReadFs;
 ReadStream.prototype._construct = _construct;
-ReadStream.prototype._read = function(n) {
-ReadStream.prototype._destroy = function(err, cb) {
-ReadStream.prototype.close = function(cb) {
+ReadStream.prototype._read = function(n) {/* */}
+ReadStream.prototype._destroy = function(err, cb) {/* */}
+ReadStream.prototype.close = function(cb) {/* */}
 //...
 module.exports = {
   ReadStream,
@@ -169,9 +169,26 @@ module.exports = {
 fs.createReadStream 其实质上就是对于核心模块`stream`的一个继承实现。
 ```
 
+那么它是如何实现的呢？
+通过查阅 `ReadStream.prototype._read`源码可知，其最最核心的原力就是重写了`_read()`方法。
+```javascript
+// 精简版本
+ReadStream.prototype._read = function (n) {
+  let toRead = n;
+  this[kFs].read(this.fd, pool, pool.used, toRead, this.pos, (er, bytesRead) => {
+    this.push(b);
+  });
+  this.pos += toRead;
+};
+```
+`toRead`是n参数，表示一次读取的数据大小
+`this.fd`是文件描述符，`this.pos`表示读取文件的位置
+`this.[kFs]`就是 fs 模块对象，调用 fs.read 方法实现选择性读取文件数据块。
+通过分析可知，`_read`方法其实就是一个少量多次读取文件的实现方式。
+
 ## 如何实现自己的 Stream。
-Stream 其实就是程序与外界交换数据的一种抽象，Nodejs 中的 Stream 就是该抽象的类。
-前面通过对`fs.createReadStream`源码的简单分析也可以得知，它就是对于 Stream 的一个继承实现。
+前面分析了 `fs.createReadStream` 的实现过程，可以看出它就是对于 Stream 的一个继承实现。
+而核心方法 `ReadStream.prototype._read`就是实现了一个少量多次读取文件数据的方法实现。
 既然如此，我们是不是也可以实现自己的 `createReadStream`呢？
 答案是肯定的。
 
@@ -220,7 +237,7 @@ class MyReadStream extends Readable {
 module.exports = MyReadStream
 ```
 
-使用自己的 MyReadStream 类
+MyReadStream 类的调用方法
 ```javascript
 const http = require('http')
 const MyReadStream = require('./my-read-stream')
@@ -246,8 +263,11 @@ server.listen(3000, () => {
 ```javascript
 const { Readable } = require('stream');
 ```
-我们从上面可以看到一个关键类`Readable`，它是实现 ReadStream 的一个核心类，而这个类是由`stream` 库提供的。
-从nodejs源码中可以找到这个类所在的文件 stream.js
+无论是 `fs.createReadStrea` 还是 `./my-read-stream.js` 都可以看到第一行包含了上述语句。
+它是干什么的呢？
+
+从源码可以看出，关键类 `Readable`，它是实现 ReadStream 的一个核心类，而这个类是由`stream` 库提供的。
+从 nodejs 源码中可以找到这个类所在的文件 stream.js
 ```javascript
 // node/lib/stream.js
 const Stream = module.exports = require('internal/streams/legacy').Stream;
@@ -272,7 +292,7 @@ Stream.prototype.pipe = function(dest, options) {/*...*/}
 
 从上面代码可以得出如下信息
 ```
-1.Stream 类继承了events
+1.Stream 类继承了 events
 2.Stream 类实现了Readable、Writable、Duplex、Transform、PassThrough、pipeline 类
 ```
 也就是说，基于 Stream 创建的流是具有Event事件接口的。
@@ -294,7 +314,7 @@ pipeline - 一个模块化函数，用于对接不同的数据流，可以处理
 ```
 
 接下来继续探究 `Stream.Readable`方法。
-从上面源码不难看出，Stream.Readable 方法来自于文件 `internal/streams/readable`
+从源码不难看出，Stream.Readable 方法来自于文件 `internal/streams/readable`
 ```javascript
 // internal/streams/readable
 // ...
@@ -322,54 +342,100 @@ Readable.prototype.wrap = function(stream) {/*...*/}
 如上就是 readable 文件提供的操作流的方法。
 需要注意的是，其中`_read()`方法是一个抽象方法，这里直接抛出一个错误，这就是意味着如果要执行_read 方法，使用者必须自己实现。
 
+## pipe 方法
+```javascript
+const stream = new MyReadStream('./index.html')
+stream.pipe(res)
+```
+上面实现了 MyReadStream 类，搞清楚了流从哪里来
+那么`stream.pipe(res)`是如何去的呢？
+想知道，其实也容易，就是上面列出来的 `internal/streams/readable.js`文件中的 `Readable.prototype.pipe`方法。
+```javascript
+Readable.prototype.pipe = function(dest, pipeOpts) {
+  const src = this;
+  // 流的基本信息存储
+  const state = this._readableState;
+  state.pipes.push(dest);
+  dest.on('unpipe', onunpipe);
+  src.on('data', ondata);
+  function ondata(chunk) {
+    // 写入数据到dest
+    const ret = dest.write(chunk);
+    if (ret === false) {
+      if (!cleanedUp) {
+        src.pause();
+      }
+      if (!ondrain) {
+        dest.on('drain', ondrain);
+      }
+    }
+  }
+  dest.once('close', onclose);
+  dest.once('finish', onfinish);
+  dest.emit('pipe', src);
+  if (!state.flowing) {
+    src.resume();
+  }
+  return dest;
+};
+```
+`pipe` 方法主要调用`dest.write(chunk)`实现了数据的写入，除此之外还添加了一些事件的监听。
+最后返回数据流 dest，而，http 的 res 实质上也是一个流的实现,因此，可以很容易的通过 pipe 将数据进行流转。
 
 ## 流的工作过程
+使用`.push()`将数据推进一个 readable 流中时，一直要到另一个东西来消耗数据之前，数据都会存在一个缓存中。
+想要的是当需要数据时数据才会产生，以此来避免大量的缓存数据，我们可以通过定义一个 `._read` 函数来实现按需推送数据。
+只有在数据消耗者出现时，`_read` 函数才会被调用。
+
+数据源 ——> 管道 ——> 缓冲区 ——> 目的地
+1.readable 从数据源 file 读取数据
+  1) 创建的可读流对象可是二进制模式(buffer|string) 或者 普通对象模式
+  2) 读出的数据名为 readableStream，此时流状态为 paused(暂停)
+  3) 当创建一个流的时候，就会先将缓存区填满，缓存区大小为 hightWaterMark
+
+2.两种方式将 paused 变为 flowing(流动)状态，触发数据开始流动
+  1) 通过 on('data', ...) 事件触发 readableStream 的数据的流动
+  2) 通过 resume() 方法触发数据流动
+  3) 通过 pipe() 方法将数据转接到另一个 writeable 对象
+
+3.数据暂停
+  1) 当调用方式为 pipe() 时，先移除 data 的监听事件，然后调用 stream.unpipe() 方法清除所有管道，流状态将变为 paused
+  2) 当调用方式为非 pipe() 时，调用 stream.pause() 方法可以将状态变为 paused
+  3) 当流状态为 paused 的时候，调用 stream.read() 方法，可以按需从流中读取数据块
+  4) 当数据 paused 的时候，数据会先存在上游的缓冲区里，缓冲区满了之后需要停止数据的读取
+  5) 缓冲区数据满了之后，需要调用 on('drain', ...) 清空缓冲区的数据
+  6) 当缓冲区被清空之后，会再次出发 readable 事件，读取数据存入缓冲区
+
+ondata onreadable onpipe 区别？
+当一个数据块可以从流中被读出时，会触发'readable'事件。
+某些情况下，如果没有准备好，监听'readable'事件将会导致一些数据从底层系统读出到内部缓存。
+当内部缓冲区被排空后，当有更多数据时，'readable'事件会被再次触发。
+
+当可读流中有数据读出时会触发'data'事件，绑定'data'事件监听器，监听器绑定后如果流是暂停模式将会被切换到流动模式。
+其监听函数callback(chunk)中有一个chunk参数，表示收到的数据块：
+chunk {Buffer | String} 数据块 'data'事件监听器绑定后，数据会被尽可能地传递，如果你想从流尽快的取出所有数据，这是最理想的方式。
+
+read()方法会从内部缓冲区中拉取并返回若干数据。
+当没有更多可用数据时，会返回null。
+使用read()方法读取数据时，如果传入了size参数，那么它会返回指定字节的数据；当指定的size字节不可用时，则返回null。
+如果没有指定size参数，那么会返回内部缓冲区中的所有数据
+该方法仅应在暂停模式时被调用，在流动模式中，该方法会被自动调用直到内部缓冲区被清空。
 
 (未完，待补充...)
-
-
-### 流中流动的数据格式
-1）二进制模式，buffer 或者 string 对象
-2）一系列普通对象
-
-### 关于缓存与 highWaterMark
-当创建一个流的时候，就会先将缓存区填满。
-当消费小于最高水位线的时候，会自动填满缓存区数据至最高水位线。
-当缓存区被清空以后，会再次触发 readable 事件
-
-### 流的两个工作模式
-作为源头的可读流有两个工作模式： 流动（flowing） 和 暂停（paused）
-“流动模式”，就是说数据源源不断地从上游而来，你只要不断地处理即可。但是每道工序消耗的时间不同，如果你处理不过来，数据就累积在你的缓冲区里面，越来越多，直到你的缓冲区爆掉；（相当于 Push 模式）
-此模式中，数据自动从底层系统读取，并通过 EventEmitter 接口的事件尽可能快地被提供给应用程序。
-
-“非流动模式”，数据也会来，但是你要手动从流中提取数据，你不提取数据就存留在上游的发送缓冲区里，最后上游的发送缓冲区爆掉了。（相当于 Pull 模式）因此实现流也要考虑流的“溢出”。
-此模式中，数据会堆积在内部缓冲器中，必须显式调用 stream.read() 读取数据块。
-
-所有可读流都开始于暂停模式 ，可以通过以下方式切换到流动模式：
-```html
-添加 'data' 事件句柄，添加 on('data', ...) 事件监听
-调用 stream.resume() 方法。
-调用 stream.pipe() 方法将数据发送到可写流。
-```
-
-可读流可以通过以下方式 切换回暂停模式：
-```html
-如果没有管道目标，则调用 stream.pause() 。
-如果有管道目标，则移除所有管道目标。调用 stream.unpipe() 可以删除所有管道。
-默认情况下，所有可读流均以 暂停模式 开始，但可以很轻易地将其切换为 流动模式 ，如有必要也可以在两种模式中来回切换。
-```
-当可读流处于暂停模式时，我们可以使用 read() 方法按需从流中读取数据。但是，在流动模式下，数据会一直不断地被读取，如果没有及时消费数据，则可能丢失数据。所以在流动模式中，我们需要通过 'data' 事件来获取并处理数据。
 
 ### 关于积压或背压(Backpressure)
 背压指在异步场景下，被观察者发送事件速度远快于观察者处理的速度，从而导致下游的 buffer 溢出，这种现象叫作背压。
 ![背压成因](http://zhoushirong.github.io/img/back-pressure.jpeg)
 比如上图，管道入口处一样大，入口数据也一样，但是中间或者出口因为各种因素被阻塞或者减小了口径，导致流动受阻，形成背压。
 
-有太多的例子证明有时 Readable 传输给 Writable 的速度远大于它接受和处理的速度。
+有很多的例子都能证明有时 Readable 传输给 Writable 的速度远大于它接受和处理的速度。
 如果发生了这种情况，消费者开始为后面的消费而将数据列队形式积压起来，写入队列的时间会越来越长，也正因为如此，更多的数据不得不保存在内存中知道整个流程全部处理完毕。
 比如写入磁盘的速度远比从磁盘读取数据慢得多，因此，当我们试图压缩一个文件并写入磁盘时，积压的问题也就出现了。因为写磁盘的速度不能跟上读磁盘的速度，导致内存溢出。
 
 以上，就是通过 ReadStream 的基本使用探索了 Nodejs Stream 的完整实现路径，并不涉及一些细节。
+
+
+hightWaterMark 可自己指定，默认大小为16kb(16384字节,对于对象模型流而言是 16)
 
 ## 总结
 流是一种抽象，流式处理是一种思想，一种渐进式处理数据的方式。
