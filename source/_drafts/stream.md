@@ -1,87 +1,102 @@
 
 ---
 title: Nodejs 中的 Stream
-date: 2021/05/16
+date: 2021/05/27
 tag: [file, stream]
 category: 技术
 ---
 
 ## 一、Stream(流) 基础介绍
 Stream 中文翻译“流”。
-流最主要的特点就是“读一点数据处理一点数据”，可以理解为按需处理。
+其一个重要的的特点就是为按需处理，即“读一点数据处理一点数据”。
 日常生活中最常见的“流”就是音视频流了。
 当然，作为编程人员我们知道，除了音视频流，还存在字节流、比特流等。
 
-流的一个很重要的特点就是: 连续且可以没有头尾，没有绝对位置，只有相对位置。
-流不是一个容器，它只是一个抽象的概念，可以理解为是对程序与外界交换数据的一种抽象。
+流连续且没有头尾，没有绝对位置，它不是一个容器，只是一个抽象概念，可以理解为是对程序与外界交换数据的一种抽象。
 
-市面上比较流行的编程语言都实现了自己的流，比如 Unix 操作系统中的管道运算符。
+在数据处理上，流处理是最常见也是最实用的处理的方式。
+比如 Unix 操作系统中的管道运算符。
 ```shell
 $ cat logfile.txt | grep 2021/05/20
 ```
-如上述命令，`cat logfile.txt` 意思是查看日志文件 `logfile.txt`的所有日志信息，但是日志文件往往很大，如果所有的都显示显然会让人很头疼。
-因此，管道符 '|' 出现了，管道符的作用就是让一边的数据像流水一样流向右边，作为右边 grep 命令的输入，而 grep 命令就是一个过滤网，过滤掉不需要的数据，仅仅留下 '2021/05/20' 相关的日志。
+如上命令的作用就是查看日志文件 `logfile.txt` 中包含 '2021/05/20' 字符串的日志记录。
+管道符 '|' 让左边 cat 命令查看的数据，像流水一样流向右边，作为 grep 命令的输入，而 grep 命令就是一个过滤网，过滤掉不需要的数据。
+仅仅留下 '2021/05/20' 相关的日志。
 
-流的应用在日常生活中非常多，其实现方式也多种多样，作为前端开发，日常生活中接触最多的语言就是 javascript，而早期的 Javascript 作为网页脚本语言，本身是没有实现流的。
-直到后来 Nodejs的出现，Nodejs 提供了很多核心模块，包括操作文件的 `fs` 模块，处理 http 请求的 `http` 模块等。正是这些模块的出现让我们的 javascript 语言一飞冲天，成为了编程语言界的主流语言之一。
+类似于上面的例子，我们日常编程中也用到了很多类似文件操作，最常见的就是对于磁盘文件的读写了。
+市面上比较流行的编程语言都实现了自己的流，Nodejs 就是其中之一。
 
-然而，无论是文件和 http 请求的处理，其身后都离不开另一个核心模块，那就是 `Stream`, Stream 核心模块就是 Nodejs 中对于流的实现。
-
+作为前端开发，日常生活中接触最多的语言就是 javascript，而早期的 Javascript 作为网页脚本语言，本身是没有实现流的。
+直到后来 Nodejs 的出现。
+Nodejs 作为后端编程语言，它提供了很多 Javascript 没有的能力，集成在它的核心模块里面。
+Nodejs 的 Stream 模块就是 Nodejs 语言对于流的实现。
 
 ## 二、Nodejs 核心模块 Stream 在生产环境中的运用
-就我个人感官，平时使用 Nodejs 做一些小工具开发或者网络后端 http 应用的时候，很少甚至可以说没有直接用到 Stream 模块。我们很难在某个 Nodejs 应用中找到类似这样的代码。
+平时使用 Nodejs 做一些小工具开发或者使用 Koa/express 开发后端应用的时候，很少甚至可以说没有直接用到 Stream 模块。
+我们很难在某个 Nodejs 应用中找到直接使用 stream 模块的代码，比如
 ```javascript
 const stream = require('stream')
 ```
 
-是不是说我们可以不用关心这个模块呢？
-很显然，不是。
+但是我们一定很熟悉这样的代码。
+```javascript
+const http = require('http');
+const fs = require('fs');
+http.createServer((req, res) => {
+  res.statusCode = 200
+  res.setHeader('Content-Type', 'text/html')
+  const stream = fs.createReadStream('./index.html')
+  stream.pipe(res)
+}).listen(3000)
+```
+如上代码中的 ```http``` 和 ```fs``` 模块让我们可以用个位数的代码行数实现一个 http 服务器。
+能够让我们如此便利编写服务器应用，其背后的模块就是 ```stream```。
 
 ### 那么 Stream 模块在 Nodejs 处于一个什么位置呢？
-Stream 模块本身主要用于开发者创建新类型的流实例
-对于以消费流对象为主的开发者，极少需要直接使用 Stream 模块。
+Stream 模块本身主要用于开发者创建新类型的流实例，对于以消费流对象为主的开发者，极少需要直接使用 Stream 模块。
+它类似于一个基类，其它模块都是继承此基类实现的子类。
+http 请求的 req/res 以及 fs 模块的 createReadStream 等都是基于 stream 的实现。
 
-Stream 类似于一个基类，其它模块都是继承此基类实现的子类。
-那么他们到底是如何继承或者说使用 Stream 类的呢？
+如下图
+![stream简单依赖关系](http://zhoushirong.github.io/img/jiandan.png)
+http 依赖于 event、stream、buffer
+fs 依赖于 event 和 stream、buffer
 
-我们先看一个简单的 http 请求例子。
-### http 请求例子
-```html
-<!-- index.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>hello world</title>
-</head>
-<body>
-  hello world
-</body>
-</html>
-```
+上面只是一个简化版的依赖关系图，其实际比这个复杂的多，比如
+![stream复杂的依赖关系](http://zhoushirong.github.io/img/fuza.png)
 
+当然，这几个模块作为nodejs 的基础能力，与其它模块以及互相之间依赖关系其只会更复杂。
+有兴趣可以去 Nodejs 源码逐个分析了解，本文的重心还是在于介绍 Stream。
+
+### Stream 的作用
+对于实现一个 http 服务器的例子，或许有人会想到这样的代码。
 ```javascript
-// http.js
 const http = require('http')
 const fs = require('fs')
 const server = http.createServer((req, res) => {
   res.statusCode = 200
   res.setHeader('Content-Type', 'text/html')
+  // 直接读取文件
   fs.readFile('./bigindex.html', 'utf8', (err, data) => {
-    if (err) {
-      console.log(err)
-    }
     res.end(data)
   })
-})
-server.listen(3000, () => {
-  console.log(`url is http://localhost:${3000}/`)
-})
+}).listen(3000)
 ```
-上面是一个简单的 http 请求服务器，返回 index.html。
+这段代码和前面例子的区别在于，读取文件的方式。
+前面是创建文件流，然后将文件流通过 pipe 方法传送给 res。
+后面的例子值直接读取整个文件，然后将文件通过 end 方法返回。
 
-看上去没什么问题，但是如果这个html文件特别大(如：1G+)会怎么？
-亲测答案是：
+看上去没什么问题，两中方式都能实现。
+如果我们实际写一个 index.html 文件来运行也不会出现什么问题。
+
+那么哪种方式更好呢？
+```html
+答案是：第一种，使用文件流的形式。
+```
+
+但是，为什么呢？
+因为我做了一个测试，我创建了一个特别大的 html 文件特别大，1G+。
+然后第一个例子能正常跑，第二个例子直接报错了。
 ```html
 url is http://localhost:3000/
 Error: Cannot create a string longer than 0x1fffffe8 characters
@@ -90,39 +105,29 @@ Error: Cannot create a string longer than 0x1fffffe8 characters
     at FSReqCallback.readFileAfterClose [as oncomplete] (internal/fs/read_file_context.js:68:23) {
   code: 'ERR_STRING_TOO_LONG'
 }
-Error: Cannot create a string longer than 0x1fffffe8 characters
-    at Object.slice (buffer.js:608:37)
-    at Buffer.toString (buffer.js:805:14)
-    at FSReqCallback.readFileAfterClose [as oncomplete] (internal/fs/read_file_context.js:68:23) {
-  code: 'ERR_STRING_TOO_LONG'
-}
 ```
-很明显，内存爆了(当然如果机器特别特别特别牛，也可能不爆)。
-我们使用 `fs.readfile` 或者 `fs.readfileSync` 的时候是先将文件存储在内存中，直到读完为止再进行下一步的，如果文件过大，内存存不下的时候就会出错。
+很明显，报错的原因字符串过长。
+当我们使用 `fs.readfile` 或者 `fs.readfileSync` 的时候是先将文件存储在内存中，一次性读取
+一次性读完之后再进行下一步，如果文件过大，就会导致存不下的时候就会出错。
 
-因此，对于大文件，很明显不能直接读文件
-那么这种情况该如何处理呢？答案就是 Stream。
-```javascript
-const http = require('http')
-const fs = require('fs')
-const server = http.createServer((req, res) => {
-  res.statusCode = 200
-  res.setHeader('Content-Type', 'text/html')
-  // 创建一个可读流，然后通过 pipe 将文件一点一点的返回
-  const stream = fs.createReadStream('./bigindex.html')
-  stream.pipe(res)
-})
-server.listen(3000, () => {
-  console.log(`url is http://localhost:${3000}/`)
-})
-```
-亲测，采用流处理的方式之后不会再报错，哪怕文件再大都没问题，而且在浏览器端肉眼可见其在边下载边显示。
+
+因此，对于大文件，很明显不能直接读文件。
+那么，为什么第一个例子中不会报错呢？
+答案就是 Stream。
+采用流处理的方式不会报错，哪怕文件再大都没问题。
 
 你怎么选？
-![通过内存读取文件](http://zhoushirong.github.io/img/kangshui.jpeg)
-![通过stream传输文件](http://zhoushirong.github.io/img/shuiguan.png)
+![通过内存读取文件](http://zhoushirong.github.io/img/kangshui.png)
+![通过stream传输文件](http://zhoushirong.github.io/img/shuiguan.jpeg)
 
-### fs.createReadStream 的实现。
+---
+
+看了上面的实例，你一定会想知道，到底是为什么呢？
+为什么使用流就不会报错呢？
+接下来，让我们一起去探索探索。
+
+
+## fs.createReadStream 的实现。
 从 Nodejs 官方文档可知，```fs``` 模块继承了 Stream，源码如下
 ```javascript
 // node/lib/fs.js
@@ -259,7 +264,7 @@ server.listen(3000, () => {
 但是上面，仅仅是基于 Stream 的一个可读流的实现，那么 Stream 内部到底是什么样呢？
 
 
-## 三、关于 Stream 类。
+## 关于 Stream 类。
 ```javascript
 const { Readable } = require('stream');
 ```
