@@ -37,7 +37,6 @@ Nodejs 的 Stream 模块就是 Nodejs 语言对于流的实现。
 ```javascript
 const stream = require('stream')
 ```
-
 但是我们一定很熟悉这样的代码。
 ```javascript
 // 例1
@@ -53,7 +52,66 @@ http.createServer((req, res) => {
 如上代码中的 ```http``` 和 ```fs``` 模块让我们可以用个位数的代码行数实现一个 http 服务器。
 能够让我们如此便利编写服务器应用，其背后的模块就是 ```stream```。
 
-### 那么 Stream 模块在 Nodejs 处于一个什么位置呢？
+## 三、Stream 的作用
+实现 http 服务器的有很多，返回文件的方式也各种各样，比如不同意 例1 中的实现方式
+我们采用如下方式来实现。
+将原来通过 `fs.createReadStream` 的方式读取文件改为 通过 `fs.readFile` 方法直接读取。
+```javascript
+// 例2
+const http = require('http')
+const fs = require('fs')
+const server = http.createServer((req, res) => {
+  res.statusCode = 200
+  res.setHeader('Content-Type', 'text/html')
+  // 直接读取文件
+  fs.readFile('./index.html', 'utf8', (err, data) => {
+    res.end(data)
+  })
+}).listen(3000)
+```
+这段代码和前面例子的区别在于，读取文件的方式。
+前面是创建文件流，然后将文件流通过 pipe 方法传送给 res。
+后面的例子值直接读取整个文件，然后将文件通过 end 方法返回。
+
+看上去没什么问题，两中方式都能实现，我们实际写一个 index.html 文件来运行也不会出现什么问题。
+
+那么哪种方式更好呢？
+```html
+答案是：第一种，使用文件流的形式。
+```
+
+为什么呢？
+我做了一个测试，我创建了一个特别大的 html 文件特别大，1G+。
+然后第一个例子能正常跑，第二个例子直接报错了。
+```html
+url is http://localhost:3000/
+Error: Cannot create a string longer than 0x1fffffe8 characters
+    at Object.slice (buffer.js:608:37)
+    at Buffer.toString (buffer.js:805:14)
+    at FSReqCallback.readFileAfterClose [as oncomplete] (internal/fs/read_file_context.js:68:23) {
+  code: 'ERR_STRING_TOO_LONG'
+}
+```
+报错的原因字符串过长，超过了0x1fffffe8 (536870888 Byte === 512 MB)。
+
+原来，当我们使用 `fs.readfile` 或者 `fs.readfileSync` 的时候是先将文件存储在内存中，一次性读取
+一次性读完之后再进行下一步，如果文件过大，就会触发最大字符串长度限制，导致出错。
+
+
+那么，为什么第一个例子中不会报错呢？
+答案就是 Stream，对于这种情况，采用流处理的方式是不会报错，哪怕文件再大都没问题。
+
+---
+
+为什么使用流就不会报错呢？
+如图所示
+![通过内存读取文件](http://zhoushirong.github.io/img/kangshui.png)
+![通过stream传输文件](http://zhoushirong.github.io/img/shuiguan.jpeg)
+上图所示，直接读取文件和通过 stream 读取就是类似于上图
+一个是一次性搬运，另一个是将数据分为一小块一小块的进行传输。
+
+
+## 四、Stream 模块在 Nodejs 中的位置
 Stream 模块本身主要用于开发者创建新类型的流实例，对于以消费流对象为主的开发者，极少需要直接使用 Stream 模块。
 它类似于一个基类，其它模块都是继承此基类实现的子类。
 http 请求的 req/res 以及 fs 模块的 createReadStream 等都是基于 stream 的实现。
@@ -69,65 +127,7 @@ fs 依赖于 event 和 stream、buffer
 当然，这几个模块作为nodejs 的基础能力，与其它模块以及互相之间依赖关系其只会更复杂。
 有兴趣可以去 Nodejs 源码逐个分析了解，本文的重心还是在于介绍 Stream。
 
-### Stream 的作用
-对于实现一个 http 服务器的例子，或许有人会想到这样的代码。
-```javascript
-// 例2
-const http = require('http')
-const fs = require('fs')
-const server = http.createServer((req, res) => {
-  res.statusCode = 200
-  res.setHeader('Content-Type', 'text/html')
-  // 直接读取文件
-  fs.readFile('./bigindex.html', 'utf8', (err, data) => {
-    res.end(data)
-  })
-}).listen(3000)
-```
-这段代码和前面例子的区别在于，读取文件的方式。
-前面是创建文件流，然后将文件流通过 pipe 方法传送给 res。
-后面的例子值直接读取整个文件，然后将文件通过 end 方法返回。
-
-看上去没什么问题，两中方式都能实现。
-如果我们实际写一个 index.html 文件来运行也不会出现什么问题。
-
-那么哪种方式更好呢？
-```html
-答案是：第一种，使用文件流的形式。
-```
-
-但是，为什么呢？
-我做了一个测试，我创建了一个特别大的 html 文件特别大，1G+。
-然后第一个例子能正常跑，第二个例子直接报错了。
-```html
-url is http://localhost:3000/
-Error: Cannot create a string longer than 0x1fffffe8 characters
-    at Object.slice (buffer.js:608:37)
-    at Buffer.toString (buffer.js:805:14)
-    at FSReqCallback.readFileAfterClose [as oncomplete] (internal/fs/read_file_context.js:68:23) {
-  code: 'ERR_STRING_TOO_LONG'
-}
-```
-很明显，报错的原因字符串过长，超过了0x1fffffe8 (536870888 Byte === 512 MB)。
-当我们使用 `fs.readfile` 或者 `fs.readfileSync` 的时候是先将文件存储在内存中，一次性读取
-一次性读完之后再进行下一步，如果文件过大，就会触发最大字符串长度限制，导致出错。
-
-
-因此，对于大文件，很明显不能直接读文件。
-那么，为什么第一个例子中不会报错呢？
-答案就是 Stream。
-采用流处理的方式不会报错，哪怕文件再大都没问题。
-
----
-
-看了上面的实例，你一定会想知道，到底是为什么呢？
-为什么使用流就不会报错呢？
-因为
-![通过内存读取文件](http://zhoushirong.github.io/img/kangshui.png)
-![通过stream传输文件](http://zhoushirong.github.io/img/shuiguan.jpeg)
-类似于上图所示，一个是一次性搬运，另一个是将数据分为一小块一小块的进行传输。
-
-## 探索 fs.createReadStream 的实现。
+## 五、探索 fs.createReadStream 的实现。
 从 Nodejs 官方文档可知，`fs.createReadStream` 是基于 Stream 实现的。
 ```javascript
 // node/lib/fs.js
@@ -323,7 +323,7 @@ read 方法用来读取数据流。
 _read 是 read 的底层实现，重写了 _read 方法，每次调用 read 的时候会触发 _read.
 
 
-### 流的工作过程
+## 六、流的工作过程
 ![流的工作过程](http://zhoushirong.github.io/img/pipe-stream.png)
 
 数据源 ——> 管道 ——> 缓冲区 ——> 目的地
@@ -371,7 +371,7 @@ read() 方法仅应在暂停模式时被调用，在流动模式中，该方法�
 stream API的一个核心目标（特别是stream.pipe()方法）是把缓存的数据控制在可接受范围内。
 
 
-## 如何实现自己的 Stream。
+## 七、如何实现自己的 Stream。
 那么它是如何实现的呢？
 通过查阅 `ReadStream.prototype._read` 源码可知，其最最核心的原力就是重写了`_read()`方法。
 ```javascript
@@ -457,7 +457,7 @@ http.createServer((req, res) => {
 相信看了如上例子你已经对流的使用有了基本认识，对于 `fs.createReadStream` 有了很直观的了解了。
 
 
-## 总结
+## 八、总结
 流是一种抽象，流式处理是一种思想，一种渐进式处理数据的方式。
 
 为什么要有 Stream？
