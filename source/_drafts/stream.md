@@ -59,12 +59,12 @@ Stream 模块本身主要用于开发者创建新类型的流实例，对于以�
 http 请求的 req/res 以及 fs 模块的 createReadStream 等都是基于 stream 的实现。
 
 如下图
-![stream简单依赖关系](http://zhoushirong.github.io/img/jiandan.png)
+![stream简单依赖关系](https://zhoushirong.github.io/img/jiandan.png)
 http 依赖于 event、stream、buffer
 fs 依赖于 event 和 stream、buffer
 
 上面只是一个简化版的依赖关系图，其实际比这个复杂的多，比如
-![stream复杂的依赖关系](http://zhoushirong.github.io/img/fuza.png)
+![stream复杂的依赖关系](https://zhoushirong.github.io/img/fuza.png)
 
 当然，这几个模块作为nodejs 的基础能力，与其它模块以及互相之间依赖关系其只会更复杂。
 有兴趣可以去 Nodejs 源码逐个分析了解，本文的重心还是在于介绍 Stream。
@@ -100,7 +100,7 @@ const server = http.createServer((req, res) => {
 我做了一个测试，我创建了一个特别大的 html 文件特别大，1G+。
 然后第一个例子能正常跑，第二个例子直接报错了。
 ```html
-url is http://localhost:3000/
+url is https://localhost:3000/
 Error: Cannot create a string longer than 0x1fffffe8 characters
     at Object.slice (buffer.js:608:37)
     at Buffer.toString (buffer.js:805:14)
@@ -123,8 +123,8 @@ Error: Cannot create a string longer than 0x1fffffe8 characters
 看了上面的实例，你一定会想知道，到底是为什么呢？
 为什么使用流就不会报错呢？
 因为
-![通过内存读取文件](http://zhoushirong.github.io/img/kangshui.png)
-![通过stream传输文件](http://zhoushirong.github.io/img/shuiguan.jpeg)
+![通过内存读取文件](https://zhoushirong.github.io/img/kangshui.png)
+![通过stream传输文件](https://zhoushirong.github.io/img/shuiguan.jpeg)
 类似于上图所示，一个是一次性搬运，另一个是将数据分为一小块一小块的进行传输。
 
 ## 探索 fs.createReadStream 的实现。
@@ -324,7 +324,7 @@ _read 是 read 的底层实现，重写了 _read 方法，每次调用 read 的�
 
 
 ### 流的工作过程
-![流的工作过程](http://zhoushirong.github.io/img/pipe-stream.png)
+![流的工作过程](https://zhoushirong.github.io/img/pipe-stream.png)
 
 数据源 ——> 管道 ——> 缓冲区 ——> 目的地
 1.readable 从数据源 file 读取数据
@@ -355,7 +355,7 @@ read() 方法仅应在暂停模式时被调用，在流动模式中，该方法�
 
 ### 关于积压或背压(Backpressure)
 背压指在异步场景下，被观察者发送事件速度远快于观察者处理的速度，从而导致下游的 buffer 溢出，这种现象叫作背压。
-![背压成因](http://zhoushirong.github.io/img/back-pressure.jpeg)
+![背压成因](https://zhoushirong.github.io/img/back-pressure.jpeg)
 比如上图，管道入口处一样大，入口数据也一样，但是中间或者出口因为各种因素被阻塞或者减小了口径，导致流动受阻，形成背压。
 
 在流的系统中，当 Readable 传输给 Writable 的速度远大于它接受和处理的速度的时候，会导致未能被处理的数据越来越大，占用更多内存。
