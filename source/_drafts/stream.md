@@ -49,8 +49,8 @@ http.createServer((req, res) => {
   stream.pipe(res)
 }).listen(3000)
 ```
-如上代码中的 ```http``` 和 ```fs``` 模块让我们可以用个位数的代码行数实现一个 http 服务器。
-能够让我们如此便利编写服务器应用，其背后的模块就是 ```stream```。
+如上代码中的 `http` 和 `fs` 模块让我们可以用个位数的代码行数实现一个 http 服务器。
+能够让我们如此便利编写服务器应用，其背后的模块就是 `stream`。
 
 ## 三、Stream 的作用
 实现 http 服务器的有很多，返回文件的方式也各种各样，比如不同意 例1 中的实现方式
@@ -92,7 +92,7 @@ Error: Cannot create a string longer than 0x1fffffe8 characters
   code: 'ERR_STRING_TOO_LONG'
 }
 ```
-报错的原因字符串过长，超过了0x1fffffe8 (536870888 Byte === 512 MB)。
+报错的原因字符串过长，超过了`0x1fffffe8 (536870888 Byte === 512 MB)`。
 
 原来，当我们使用 `fs.readfile` 或者 `fs.readfileSync` 的时候是先将文件存储在内存中，一次性读取
 一次性读完之后再进行下一步，如果文件过大，就会触发最大字符串长度限制，导致出错。
@@ -104,10 +104,10 @@ Error: Cannot create a string longer than 0x1fffffe8 characters
 ---
 
 为什么使用流就不会报错呢？
-如图所示
 ![读取文件比较](http://zhoushirong.github.io/img/kangshuivs.png)
-上图所示，直接读取文件和通过 stream 读取就是类似于上图
+如上图所示，直接读取文件和通过 stream 读取就是类似于上图
 一个是一次性搬运，另一个是将数据分为一小块一小块的进行传输。
+很显然，后者更轻松。
 
 
 ## 四、Stream 模块在 Nodejs 中的位置
@@ -281,25 +281,32 @@ Stream.prototype.pipe = function(dest, options) {
 };
 ```
 
-代码很长，但是逻辑并不复杂
-Stream 类在 legacy.js 中创建，在这里
+代码很长，但是这里并未对其进行精简，因为这就是实现流 pipe 处理的核心逻辑。
+虽然代码多，但是其逻辑并不复杂，很容易就可以看出，这里就是 Stream 类的源头。
 ```html
+Stream 类在 legacy.js 中创建
 Stream 类继承了 events，使其拥有了 events 的事件监听能力。
-实现 pipe 方法，并为流添加了 ondata/ondrain/onend/onclode/onerror 等事件监听使之能够被读取、暂停和拥有基本错误处理能力
+同时还实现 pipe 方法，并为流添加了 `ondata/ondrain/onend/onclode/onerror` 等事件监听，使之能够被读取、暂停和拥有基本错误处理能力
 ```
-呼~，终于找到源头了。
-至此，整个 Readable 流的实现路径总算是找完了。
-
+同时也可以看出
+```html
+当 dest.write(chunk) === false 的时候 on data 执行 pause 暂停
+当 ondrain 的时候，执行 source.resume() 继续读取数据
+当 onend 或 onclosen 的时候清除事件监听
+以及最终 return dest 使之能够执行 pipe 链等。
+```
 
 ### source && dest
+```hrml
 pipe 方法除了事件监听，可以看到两个字段，分别是 source 和 dest
 pipe 类似于一个管道，source 是其流入方，dest 是起流出目的地。
 也就是所谓的 readable 流和 writeable 流。
 ondata 中主要调用 `dest.write(chunk)` 实现了数据的写入，如果返回 false 则暂停数据读取。
-
+```
 
 ### 关于 writeable 流
-Stream.Readable 方法来自于文件 `internal/streams/readable`
+搞清楚了流的源头，接下来继续探索一下 readable 流。
+从上面的源码不难看出，Stream.Readable 方法来自于文件 `internal/streams/readable`
 ```javascript
 // internal/streams/readable
 // ...
@@ -327,24 +334,32 @@ _read 是 read 的底层实现，重写了 _read 方法，每次调用 read 的�
 
 数据源 ——> 管道 ——> 缓冲区 ——> 目的地
 1.readable 从数据源 file 读取数据
+```html
   1) 创建的可读流对象可是二进制模式(buffer|string) 或者 普通对象模式
   2) 读出的数据名为 readableStream，此时流状态为 paused(与之对应的状态为 flowing)
   3) 当创建一个流的时候，就会先将缓存区填满，缓存区大小为 hightWaterMark
+```
 
 2.以下方式将 paused 变为 flowing(流动)状态，触发数据开始流动
+```html
   1) 通过 on('data', ...) 事件触发 readableStream 的数据的流动
   2) 通过 resume() 方法触发数据流动
   3) 通过 pipe() 方法将数据转接到另一个 writeable 流
+```
 
 3.以下方式可以将 flowing 变为 paused
+```html
   1) 当调用方式为 pipe() 时，先移除 data 的监听事件，然后调用 stream.unpipe() 方法清除所有管道，流状态将变为 paused
   2) 当调用方式为非 pipe() 时，调用 stream.pause() 方法可以将状态变为 paused
+```
 
 4.流数据的消费
+```html
   1) 流创建完成会触发 onreadable 事件，此时流已经准备好。
   2) 创建好的流默认为 paused 状态
   3) 创建可读流之后，数据会先存在上游的缓冲区里，缓冲区大小默认为 highWaterMark，缓冲区满了之后会调用 pause 停止数据的读取。
   4) 消费流的时候会读取缓冲区的数据，缓冲区数据被消耗完之后会再次触发 onreadable 事件。
+```
 
 read()方法会从内部缓冲区中拉取并返回若干数据，没有更多可用数据时，会返回null。
 使用read()方法读取数据，如果传入了 size 参数，会返回指定字节的数据，当指定的size字节不可用时，则返回 null。
@@ -352,25 +367,25 @@ read()方法会从内部缓冲区中拉取并返回若干数据，没有更多�
 read() 方法仅应在暂停模式时被调用，在流动模式中，该方法会被自动调用直到内部缓冲区被清空。
 
 
-### 关于积压或背压(Backpressure)
+## 七、关于积压或背压(Backpressure)
 背压指在异步场景下，被观察者发送事件速度远快于观察者处理的速度，从而导致下游的 buffer 溢出，这种现象叫作背压。
-![背压成因](http://zhoushirong.github.io/img/back-pressure.jpeg)
+![back-pressure.jpeg](http://zhoushirong.github.io/img/back-pressure.jpeg)
 比如上图，管道入口处一样大，入口数据也一样，但是中间或者出口因为各种因素被阻塞或者减小了口径，导致流动受阻，形成背压。
 
 在流的系统中，当 Readable 传输给 Writable 的速度远大于它接受和处理的速度的时候，会导致未能被处理的数据越来越大，占用更多内存。
 之后更多的数据不得不保存在内存中直到整个流程全部处理完毕，形成恶性循环，最终导致内存溢出。
 
-### buffer、hightWaterMark 与背压问题的解决方法
-```缓冲器(buffer)```是流的读写过程中的一个临时存放点，是一个独立于 V8 堆内存之外的内存空间。
+#### buffer、hightWaterMark 与背压问题的解决方法
+`缓冲器(buffer)`是流的读写过程中的一个临时存放点，是一个独立于 V8 堆内存之外的内存空间。
 利用缓冲器能够将少量、多次的数据进行批量的在磁盘中读写；也能够将大块文件分批少量的进行搬运。
 
-```hightWaterMark```是一个可选参数，缓冲器中缓冲数据的大小取决于 highWaterMark 的值，它是一个阈值，默认 16kb (16384字节,对于对象模型流而言是 16)。
+`hightWaterMark`是一个可选参数，缓冲器中缓冲数据的大小取决于 highWaterMark 的值，它是一个阈值，默认 16kb (16384字节,对于对象模型流而言是 16)。
 当缓冲器中数据达到 highWaterMark 的值时，会暂停从底层资源读取数据(readable._read)，直到当前缓冲器中数据被消费完。
 
 stream API的一个核心目标（特别是stream.pipe()方法）是把缓存的数据控制在可接受范围内。
 
 
-## 七、如何实现自己的 Stream。
+## 八、如何实现自己的 Stream。
 那么它是如何实现的呢？
 通过查阅 `ReadStream.prototype._read` 源码可知，其最最核心的原力就是重写了`_read()`方法。
 ```javascript
@@ -456,7 +471,7 @@ http.createServer((req, res) => {
 相信看了如上例子你已经对流的使用有了基本认识，对于 `fs.createReadStream` 有了很直观的了解了。
 
 
-## 八、总结
+## 九、总结
 流是一种抽象，流式处理是一种思想，一种渐进式处理数据的方式。
 
 为什么要有 Stream？
