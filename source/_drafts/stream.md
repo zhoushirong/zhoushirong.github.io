@@ -105,8 +105,7 @@ Error: Cannot create a string longer than 0x1fffffe8 characters
 
 为什么使用流就不会报错呢？
 如图所示
-![通过内存读取文件](http://zhoushirong.github.io/img/kangshui.png)
-![通过stream传输文件](http://zhoushirong.github.io/img/shuiguan.jpeg)
+![读取文件比较](http://zhoushirong.github.io/img/kangshuivs.png)
 上图所示，直接读取文件和通过 stream 读取就是类似于上图
 一个是一次性搬运，另一个是将数据分为一小块一小块的进行传输。
 
