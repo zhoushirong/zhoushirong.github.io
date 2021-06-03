@@ -1,7 +1,7 @@
 
 ---
 title: Nodejs 中的 Stream
-date: 2021/05/27
+date: 2021/06/3
 tag: [file, stream]
 category: 技术
 ---
@@ -337,7 +337,7 @@ _read 是 read 的底层实现，重写了 _read 方法，每次调用 read 的�
 ```html
   1) 创建的可读流对象可是二进制模式(buffer|string) 或者 普通对象模式
   2) 读出的数据名为 readableStream，此时流状态为 paused(与之对应的状态为 flowing)
-  3) 当创建一个流的时候，就会先将缓存区填满，缓存区大小为 hightWaterMark
+  3) 当创建一个流的时候，就会先将缓存区填满，缓存区大小为 highWaterMark
 ```
 
 2.以下方式将 paused 变为 flowing(流动)状态，触发数据开始流动
@@ -375,11 +375,11 @@ read() 方法仅应在暂停模式时被调用，在流动模式中，该方法�
 在流的系统中，当 Readable 传输给 Writable 的速度远大于它接受和处理的速度的时候，会导致未能被处理的数据越来越大，占用更多内存。
 之后更多的数据不得不保存在内存中直到整个流程全部处理完毕，形成恶性循环，最终导致内存溢出。
 
-#### buffer、hightWaterMark 与背压问题的解决方法
+#### buffer、highWaterMark 与背压问题的解决方法
 `缓冲器(buffer)`是流的读写过程中的一个临时存放点，是一个独立于 V8 堆内存之外的内存空间。
 利用缓冲器能够将少量、多次的数据进行批量的在磁盘中读写；也能够将大块文件分批少量的进行搬运。
 
-`hightWaterMark`是一个可选参数，缓冲器中缓冲数据的大小取决于 highWaterMark 的值，它是一个阈值，默认 16kb (16384字节,对于对象模型流而言是 16)。
+`highWaterMark`是一个可选参数，缓冲器中缓冲数据的大小取决于 highWaterMark 的值，它是一个阈值，默认 16kb (16384字节,对于对象模型流而言是 16)。
 当缓冲器中数据达到 highWaterMark 的值时，会暂停从底层资源读取数据(readable._read)，直到当前缓冲器中数据被消费完。
 
 stream API的一个核心目标（特别是stream.pipe()方法）是把缓存的数据控制在可接受范围内。
@@ -459,7 +459,7 @@ const http = require('http')
 const MyReadStream = require('./my-read-stream')
 
 http.createServer((req, res) => {
-	res.statusCode = 200
+  res.statusCode = 200
   res.setHeader('Content-Type', 'text/html')
   const stream = new MyReadStream('./index.html')
   stream.pipe(res)
@@ -493,7 +493,6 @@ http.createServer((req, res) => {
 
 流的应用场景？
 文件系统、网络系统、加密解密、压缩解压模块中都使用了流，并且都根据自身系统的需要扩展了 Stream 模块的抽象类。
-
 
 
 ## 附录 - 名词简介
