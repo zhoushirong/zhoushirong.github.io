@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-109295694-1', 'auto');
+ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+<!-- 百度统计 -->
+<script type="text/javascript">
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?e7c73fb59256f4428781ae50108da3bc";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+  
+  <title>Nodejs 中的 Stream | 邑司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一、Stream(流) 基础介绍Stream 中文翻译“流”。其一个重要的的特点就是为按需处理，即“读一点数据处理一点数据”。日常生活中最常见的“流”就是音视频流了。当然，作为编程人员我们知道，除了音视频流，还存在字节流、比特流等。 流连续且没有头尾，没有绝对位置，它不是一个容器，只是一个抽象概念，可以理解为是对程序与外界交换数据的一种抽象。 在数据处理上，流处理是最常见也是最实用的处理的方式。比">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nodejs 中的 Stream">
+<meta property="og:url" content="https://blog.epoos.com/2021/06/03/stream/index.html">
+<meta property="og:site_name" content="邑司">
+<meta property="og:description" content="一、Stream(流) 基础介绍Stream 中文翻译“流”。其一个重要的的特点就是为按需处理，即“读一点数据处理一点数据”。日常生活中最常见的“流”就是音视频流了。当然，作为编程人员我们知道，除了音视频流，还存在字节流、比特流等。 流连续且没有头尾，没有绝对位置，它不是一个容器，只是一个抽象概念，可以理解为是对程序与外界交换数据的一种抽象。 在数据处理上，流处理是最常见也是最实用的处理的方式。比">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zhoushirong.github.io/img/kangshuivs.png">
+<meta property="og:image" content="http://zhoushirong.github.io/img/jiandan.png">
+<meta property="og:image" content="http://zhoushirong.github.io/img/fuza.png">
+<meta property="og:image" content="http://zhoushirong.github.io/img/pipe-stream.png">
+<meta property="og:image" content="http://zhoushirong.github.io/img/back-pressure.jpeg">
+<meta property="article:published_time" content="2021-06-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-06-03T12:15:31.349Z">
+<meta property="article:author" content="zhoushirong">
+<meta property="article:tag" content="file">
+<meta property="article:tag" content="stream">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://zhoushirong.github.io/img/kangshuivs.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">邑司</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="https://www.epoos.com" target="_self">主站</a>
+        
+          <a class="main-nav-link" href="/" target="_self">首页</a>
+        
+          <a class="main-nav-link" href="/archives" target="_self">列表</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.epoos.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-stream" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/06/03/stream/" class="article-date">
+  <time datetime="2021-06-02T16:00:00.000Z" itemprop="datePublished">2021-06-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Nodejs 中的 Stream
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、Stream-流-基础介绍"><a href="#一、Stream-流-基础介绍" class="headerlink" title="一、Stream(流) 基础介绍"></a>一、Stream(流) 基础介绍</h2><p>Stream 中文翻译“流”。<br>其一个重要的的特点就是为按需处理，即“读一点数据处理一点数据”。<br>日常生活中最常见的“流”就是音视频流了。<br>当然，作为编程人员我们知道，除了音视频流，还存在字节流、比特流等。</p>
+<p>流连续且没有头尾，没有绝对位置，它不是一个容器，只是一个抽象概念，可以理解为是对程序与外界交换数据的一种抽象。</p>
+<p>在数据处理上，流处理是最常见也是最实用的处理的方式。<br>比如 Unix 操作系统中的管道运算符。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> cat logfile.txt | grep 2021/05/20</span></span><br></pre></td></tr></table></figure><br>如上命令的作用就是查看日志文件 <code>logfile.txt</code> 中包含 ‘2021/05/20’ 字符串的日志记录。<br>管道符 ‘|’ 让左边 cat 命令查看的数据，像流水一样流向右边，作为 grep 命令的输入，而 grep 命令就是一个过滤网，过滤掉不需要的数据。<br>仅仅留下 ‘2021/05/20’ 相关的日志。</p>
+<p>类似于上面的例子，我们日常编程中也用到了很多类似文件操作，最常见的就是对于磁盘文件的读写了。<br>市面上比较流行的编程语言都实现了自己的流，Nodejs 就是其中之一。</p>
+<p>作为前端开发，日常生活中接触最多的语言就是 javascript，而早期的 Javascript 作为网页脚本语言，本身是没有实现流的。<br>直到后来 Nodejs 的出现。<br>Nodejs 作为后端编程语言，它提供了很多 Javascript 没有的能力，集成在它的核心模块里面。<br>Nodejs 的 Stream 模块就是 Nodejs 语言对于流的实现。</p>
+<h2 id="二、Nodejs-核心模块-Stream-在生产环境中的运用"><a href="#二、Nodejs-核心模块-Stream-在生产环境中的运用" class="headerlink" title="二、Nodejs 核心模块 Stream 在生产环境中的运用"></a>二、Nodejs 核心模块 Stream 在生产环境中的运用</h2><p>平时使用 Nodejs 做一些小工具开发或者使用 Koa/express 开发后端应用的时候，很少甚至可以说没有直接用到 Stream 模块。<br>我们很难在某个 Nodejs 应用中找到直接使用 stream 模块的代码，比如<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> stream = <span class="built_in">require</span>(<span class="string">&#x27;stream&#x27;</span>)</span><br></pre></td></tr></table></figure><br>但是我们一定很熟悉这样的代码。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 例1</span></span><br><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">&#x27;http&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line">http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  res.statusCode = <span class="number">200</span></span><br><span class="line">  res.setHeader(<span class="string">&#x27;Content-Type&#x27;</span>, <span class="string">&#x27;text/html&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> stream = fs.createReadStream(<span class="string">&#x27;./index.html&#x27;</span>)</span><br><span class="line">  stream.pipe(res)</span><br><span class="line">&#125;).listen(<span class="number">3000</span>)</span><br></pre></td></tr></table></figure><br>如上代码中的 <code>http</code> 和 <code>fs</code> 模块让我们可以用个位数的代码行数实现一个 http 服务器。<br>能够让我们如此便利编写服务器应用，其背后的模块就是 <code>stream</code>。</p>
+<h2 id="三、Stream-的作用"><a href="#三、Stream-的作用" class="headerlink" title="三、Stream 的作用"></a>三、Stream 的作用</h2><p>实现 http 服务器的有很多，返回文件的方式也各种各样，比如不同意 例1 中的实现方式<br>我们采用如下方式来实现。<br>将原来通过 <code>fs.createReadStream</code> 的方式读取文件改为 通过 <code>fs.readFile</code> 方法直接读取。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 例2</span></span><br><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">&#x27;http&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  res.statusCode = <span class="number">200</span></span><br><span class="line">  res.setHeader(<span class="string">&#x27;Content-Type&#x27;</span>, <span class="string">&#x27;text/html&#x27;</span>)</span><br><span class="line">  <span class="comment">// 直接读取文件</span></span><br><span class="line">  fs.readFile(<span class="string">&#x27;./index.html&#x27;</span>, <span class="string">&#x27;utf8&#x27;</span>, <span class="function">(<span class="params">err, data</span>) =&gt;</span> &#123;</span><br><span class="line">    res.end(data)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;).listen(<span class="number">3000</span>)</span><br></pre></td></tr></table></figure><br>这段代码和前面例子的区别在于，读取文件的方式。<br>前面是创建文件流，然后将文件流通过 pipe 方法传送给 res。<br>后面的例子值直接读取整个文件，然后将文件通过 end 方法返回。</p>
+<p>看上去没什么问题，两中方式都能实现，我们实际写一个 index.html 文件来运行也不会出现什么问题。</p>
+<p>那么哪种方式更好呢？<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">答案是：第一种，使用文件流的形式。</span><br></pre></td></tr></table></figure></p>
+<p>为什么呢？<br>我做了一个测试，我创建了一个特别大的 html 文件特别大，1G+。<br>然后第一个例子能正常跑，第二个例子直接报错了。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">url is http://localhost:3000/</span><br><span class="line">Error: Cannot create a string longer than 0x1fffffe8 characters</span><br><span class="line">    at Object.slice (buffer.js:608:37)</span><br><span class="line">    at Buffer.toString (buffer.js:805:14)</span><br><span class="line">    at FSReqCallback.readFileAfterClose [as oncomplete] (internal/fs/read_file_context.js:68:23) &#123;</span><br><span class="line">  code: &#x27;ERR_STRING_TOO_LONG&#x27;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>报错的原因字符串过长，超过了<code>0x1fffffe8 (536870888 Byte === 512 MB)</code>。</p>
+<p>原来，当我们使用 <code>fs.readfile</code> 或者 <code>fs.readfileSync</code> 的时候是先将文件存储在内存中，一次性读取<br>一次性读完之后再进行下一步，如果文件过大，就会触发最大字符串长度限制，导致出错。</p>
+<p>那么，为什么第一个例子中不会报错呢？<br>答案就是 Stream，对于这种情况，采用流处理的方式是不会报错，哪怕文件再大都没问题。</p>
+<hr>
+<p>为什么使用流就不会报错呢？<br><img src="http://zhoushirong.github.io/img/kangshuivs.png" alt="读取文件比较"><br>如上图所示，直接读取文件和通过 stream 读取就是类似于上图<br>一个是一次性搬运，另一个是将数据分为一小块一小块的进行传输。<br>很显然，后者更轻松。</p>
+<h2 id="四、Stream-模块在-Nodejs-中的位置"><a href="#四、Stream-模块在-Nodejs-中的位置" class="headerlink" title="四、Stream 模块在 Nodejs 中的位置"></a>四、Stream 模块在 Nodejs 中的位置</h2><p>Stream 模块本身主要用于开发者创建新类型的流实例，对于以消费流对象为主的开发者，极少需要直接使用 Stream 模块。<br>它类似于一个基类，其它模块都是继承此基类实现的子类。<br>http 请求的 req/res 以及 fs 模块的 createReadStream 等都是基于 stream 的实现。</p>
+<p>如下图<br><img src="http://zhoushirong.github.io/img/jiandan.png" alt="stream简单依赖关系"><br>http 依赖于 event、stream、buffer<br>fs 依赖于 event 和 stream、buffer</p>
+<p>上面只是一个简化版的依赖关系图，其实际比这个复杂的多，比如<br><img src="http://zhoushirong.github.io/img/fuza.png" alt="stream复杂的依赖关系"></p>
+<p>当然，这几个模块作为nodejs 的基础能力，与其它模块以及互相之间依赖关系其只会更复杂。<br>有兴趣可以去 Nodejs 源码逐个分析了解，本文的重心还是在于介绍 Stream。</p>
+<h2 id="五、探索-fs-createReadStream-的实现。"><a href="#五、探索-fs-createReadStream-的实现。" class="headerlink" title="五、探索 fs.createReadStream 的实现。"></a>五、探索 fs.createReadStream 的实现。</h2><p>从 Nodejs 官方文档可知，<code>fs.createReadStream</code> 是基于 Stream 实现的。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// node/lib/fs.js</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">lazyLoadStreams</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!ReadStream) &#123;</span><br><span class="line">    (&#123; ReadStream &#125; = <span class="built_in">require</span>(<span class="string">&#x27;internal/fs/streams&#x27;</span>));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createReadStream</span>(<span class="params">path, options</span>) </span>&#123;</span><br><span class="line">  lazyLoadStreams();</span><br><span class="line">  <span class="comment">// ReadStream 来自 node/internal/fs/streams.js</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> ReadStream(path, options);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>createReadStream 返回一个 ReadStream 的实例<br>可以看出，其核心实现还是在 <code>internal/fs/streams.js</code> 中</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// node/internal/fs/streams.js</span></span><br><span class="line"><span class="keyword">const</span> &#123; Readable &#125; = <span class="built_in">require</span>(<span class="string">&#x27;stream&#x27;</span>);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ReadStream</span>(<span class="params">path, options</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!(<span class="built_in">this</span> <span class="keyword">instanceof</span> ReadStream))</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ReadStream(path, options);</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="comment">// 其实际上调用了 stream 模块的 Readable</span></span><br><span class="line">  ReflectApply(Readable, <span class="built_in">this</span>, [options]);</span><br><span class="line">&#125;</span><br><span class="line">ReadStream.prototype.open = openReadFs;</span><br><span class="line">ReadStream.prototype._construct = _construct;</span><br><span class="line">ReadStream.prototype._read = <span class="function"><span class="keyword">function</span>(<span class="params">n</span>) </span>&#123;<span class="comment">/* */</span>&#125;</span><br><span class="line">ReadStream.prototype._destroy = <span class="function"><span class="keyword">function</span>(<span class="params">err, cb</span>) </span>&#123;<span class="comment">/* */</span>&#125;</span><br><span class="line">ReadStream.prototype.close = <span class="function"><span class="keyword">function</span>(<span class="params">cb</span>) </span>&#123;<span class="comment">/* */</span>&#125;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  ReadStream,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>此文件导出类 <code>ReadStream</code><br>但是该类最终是在核心模块<code>stream</code>中的 <code>Readable</code> 类中实现的。<br>fs.createReadStream 其实质上就是对于核心模块<code>stream.Readable</code>的一个继承实现。<br>没办法，要想搞清楚，还得继续探索。</p>
+<p>从 nodejs 源码中可以找到这个 <code>stream.Readable</code> 类所在的文件 stream.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// node/lib/stream.js</span></span><br><span class="line"><span class="keyword">const</span> Stream = <span class="built_in">module</span>.exports = <span class="built_in">require</span>(<span class="string">&#x27;internal/streams/legacy&#x27;</span>).Stream;</span><br><span class="line">Stream.Readable = <span class="built_in">require</span>(<span class="string">&#x27;internal/streams/readable&#x27;</span>);</span><br><span class="line">Stream.Writable = <span class="built_in">require</span>(<span class="string">&#x27;internal/streams/writable&#x27;</span>);</span><br><span class="line">Stream.Duplex = <span class="built_in">require</span>(<span class="string">&#x27;internal/streams/duplex&#x27;</span>);</span><br><span class="line">Stream.Transform = <span class="built_in">require</span>(<span class="string">&#x27;internal/streams/transform&#x27;</span>);</span><br></pre></td></tr></table></figure><br>可以看出，stream.js 中 Stream 类分别实现了 <code>readable</code>、<code>writable</code>、<code>duplex</code>、<code>transform</code>四个方法<br>这也是官网以及网上很多资料所说的， Stream 中四大类流的方法。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Writable - 可写入数据的流，可以通过管道写入、但不能通过管道读取的流</span><br><span class="line">Readable - 可读取数据的流，可以通过管道读取、但不能通过管道写入的流</span><br><span class="line">Duplex - 可读又可写的流，可以通过管道写入和读取的流，基本上相对于是可读流和可写流的组合</span><br><span class="line">Transform - 在读写过程中可以修改或转换数据的 Duplex 流。</span><br></pre></td></tr></table></figure></p>
+<p>很明显，他们的实现还在其引入的文件中单独实现的，包括最原始的 Stream 类。<br>最原始的 Stream 类是基于 legacy.js 文件中的 Stream 类创建的。<br>好吧，继续找到 legacy.js 文件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// node/lib/internal/streams/legacy.js</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 继承 events</span></span><br><span class="line"><span class="keyword">const</span> EE = <span class="built_in">require</span>(<span class="string">&#x27;events&#x27;</span>);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Stream</span>(<span class="params">opts</span>) </span>&#123;</span><br><span class="line">  EE.call(<span class="built_in">this</span>, opts);</span><br><span class="line">&#125;</span><br><span class="line">ObjectSetPrototypeOf(Stream.prototype, EE.prototype);</span><br><span class="line">ObjectSetPrototypeOf(Stream, EE);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 核心方法 pipe，dest 是即将流入的目的地</span></span><br><span class="line">Stream.prototype.pipe = <span class="function"><span class="keyword">function</span>(<span class="params">dest, options</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> source = <span class="built_in">this</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ondata 触发流动的时候，满足一定条件暂停流动</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">ondata</span>(<span class="params">chunk</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (dest.writable &amp;&amp; dest.write(chunk) === <span class="literal">false</span> &amp;&amp; source.pause) &#123;</span><br><span class="line">      source.pause();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  source.on(<span class="string">&#x27;data&#x27;</span>, ondata);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ondrain 继续触发数据流动</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">ondrain</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (source.readable &amp;&amp; source.resume) &#123;</span><br><span class="line">      source.resume();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  dest.on(<span class="string">&#x27;drain&#x27;</span>, ondrain);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// If the &#x27;end&#x27; option is not supplied, dest.end() will be called when</span></span><br><span class="line">  <span class="comment">// source gets the &#x27;end&#x27; or &#x27;close&#x27; events.  Only dest.end() once.</span></span><br><span class="line">  <span class="keyword">if</span> (!dest._isStdio &amp;&amp; (!options || options.end !== <span class="literal">false</span>)) &#123;</span><br><span class="line">    source.on(<span class="string">&#x27;end&#x27;</span>, onend);</span><br><span class="line">    source.on(<span class="string">&#x27;close&#x27;</span>, onclose);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> didOnEnd = <span class="literal">false</span>;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">onend</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (didOnEnd) <span class="keyword">return</span>;</span><br><span class="line">    didOnEnd = <span class="literal">true</span>;</span><br><span class="line">    dest.end();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">onclose</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (didOnEnd) <span class="keyword">return</span>;</span><br><span class="line">    didOnEnd = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> dest.destroy === <span class="string">&#x27;function&#x27;</span>) dest.destroy();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Don&#x27;t leave dangling pipes when there are errors.</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">onerror</span>(<span class="params">er</span>) </span>&#123;</span><br><span class="line">    cleanup();</span><br><span class="line">    <span class="keyword">if</span> (EE.listenerCount(<span class="built_in">this</span>, <span class="string">&#x27;error&#x27;</span>) === <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="built_in">this</span>.emit(<span class="string">&#x27;error&#x27;</span>, er);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  prependListener(source, <span class="string">&#x27;error&#x27;</span>, onerror);</span><br><span class="line">  prependListener(dest, <span class="string">&#x27;error&#x27;</span>, onerror);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Remove all the event listeners that were added.</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">cleanup</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    source.removeListener(<span class="string">&#x27;data&#x27;</span>, ondata);</span><br><span class="line">    dest.removeListener(<span class="string">&#x27;drain&#x27;</span>, ondrain);</span><br><span class="line"></span><br><span class="line">    source.removeListener(<span class="string">&#x27;end&#x27;</span>, onend);</span><br><span class="line">    source.removeListener(<span class="string">&#x27;close&#x27;</span>, onclose);</span><br><span class="line"></span><br><span class="line">    source.removeListener(<span class="string">&#x27;error&#x27;</span>, onerror);</span><br><span class="line">    dest.removeListener(<span class="string">&#x27;error&#x27;</span>, onerror);</span><br><span class="line"></span><br><span class="line">    source.removeListener(<span class="string">&#x27;end&#x27;</span>, cleanup);</span><br><span class="line">    source.removeListener(<span class="string">&#x27;close&#x27;</span>, cleanup);</span><br><span class="line"></span><br><span class="line">    dest.removeListener(<span class="string">&#x27;close&#x27;</span>, cleanup);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  source.on(<span class="string">&#x27;end&#x27;</span>, cleanup);</span><br><span class="line">  source.on(<span class="string">&#x27;close&#x27;</span>, cleanup);</span><br><span class="line"></span><br><span class="line">  dest.on(<span class="string">&#x27;close&#x27;</span>, cleanup);</span><br><span class="line">  dest.emit(<span class="string">&#x27;pipe&#x27;</span>, source);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Allow for unix-like usage: A.pipe(B).pipe(C)</span></span><br><span class="line">  <span class="keyword">return</span> dest;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>代码很长，但是这里并未对其进行精简，因为这就是实现流 pipe 处理的核心逻辑。<br>虽然代码多，但是其逻辑并不复杂，很容易就可以看出，这里就是 Stream 类的源头。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Stream 类在 legacy.js 中创建</span><br><span class="line">Stream 类继承了 events，使其拥有了 events 的事件监听能力。</span><br><span class="line">同时还实现 pipe 方法，并为流添加了 `ondata/ondrain/onend/onclode/onerror` 等事件监听，使之能够被读取、暂停和拥有基本错误处理能力</span><br></pre></td></tr></table></figure><br>同时也可以看出<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">当 dest.write(chunk) === false 的时候 on data 执行 pause 暂停</span><br><span class="line">当 ondrain 的时候，执行 source.resume() 继续读取数据</span><br><span class="line">当 onend 或 onclosen 的时候清除事件监听</span><br><span class="line">以及最终 return dest 使之能够执行 pipe 链等。</span><br></pre></td></tr></table></figure></p>
+<h3 id="source-amp-amp-dest"><a href="#source-amp-amp-dest" class="headerlink" title="source &amp;&amp; dest"></a>source &amp;&amp; dest</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pipe 方法除了事件监听，可以看到两个字段，分别是 source 和 dest</span><br><span class="line">pipe 类似于一个管道，source 是其流入方，dest 是起流出目的地。</span><br><span class="line">也就是所谓的 readable 流和 writeable 流。</span><br><span class="line">ondata 中主要调用 &#96;dest.write(chunk)&#96; 实现了数据的写入，如果返回 false 则暂停数据读取。</span><br></pre></td></tr></table></figure>
+<h3 id="关于-writeable-流"><a href="#关于-writeable-流" class="headerlink" title="关于 writeable 流"></a>关于 writeable 流</h3><p>搞清楚了流的源头，接下来继续探索一下 readable 流。<br>从上面的源码不难看出，Stream.Readable 方法来自于文件 <code>internal/streams/readable</code><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// internal/streams/readable</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">Readable.prototype.push = <span class="function"><span class="keyword">function</span>(<span class="params">chunk, encoding</span>) </span>&#123;<span class="comment">/*...*/</span>&#125;</span><br><span class="line">Readable.prototype.read = <span class="function"><span class="keyword">function</span>(<span class="params">n</span>) </span>&#123;<span class="comment">/*...*/</span>&#125;</span><br><span class="line">Readable.prototype._read = <span class="function"><span class="keyword">function</span>(<span class="params">n</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 调用这个方法直接报错，要想不报错，必须手动实现此方法。</span></span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> ERR_METHOD_NOT_IMPLEMENTED(<span class="string">&#x27;_read()&#x27;</span>);</span><br><span class="line">&#125;;</span><br><span class="line">Readable.prototype.pipe = <span class="function"><span class="keyword">function</span>(<span class="params">dest, pipeOpts</span>) </span>&#123;<span class="comment">/*...*/</span>&#125;</span><br><span class="line">Readable.prototype.on = <span class="function"><span class="keyword">function</span>(<span class="params">ev, fn</span>) </span>&#123;<span class="comment">/*...*/</span>&#125;</span><br><span class="line">Readable.prototype.resume = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;<span class="comment">/*...*/</span>&#125;</span><br><span class="line">Readable.prototype.pause = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;<span class="comment">/*...*/</span>&#125;</span><br><span class="line">Readable.prototype.wrap = <span class="function"><span class="keyword">function</span>(<span class="params">stream</span>) </span>&#123;<span class="comment">/*...*/</span>&#125;</span><br></pre></td></tr></table></figure><br>如上就是 readable 文件提供的操作流的方法。<br>需要注意的是，其中<code>_read()</code>方法是一个抽象方法，这里直接抛出一个错误，这就是意味着如果要执行_read 方法，使用者必须自己实现。<br>push 方法将数据推入 readable 流中。<br>read 方法用来读取数据流。<br>_read 是 read 的底层实现，重写了 _read 方法，每次调用 read 的时候会触发 _read.</p>
+<h2 id="六、流的工作过程"><a href="#六、流的工作过程" class="headerlink" title="六、流的工作过程"></a>六、流的工作过程</h2><p><img src="http://zhoushirong.github.io/img/pipe-stream.png" alt="流的工作过程"></p>
+<p>数据源 ——&gt; 管道 ——&gt; 缓冲区 ——&gt; 目的地<br>1.readable 从数据源 file 读取数据<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1) 创建的可读流对象可是二进制模式(buffer|string) 或者 普通对象模式</span><br><span class="line">2) 读出的数据名为 readableStream，此时流状态为 paused(与之对应的状态为 flowing)</span><br><span class="line">3) 当创建一个流的时候，就会先将缓存区填满，缓存区大小为 highWaterMark</span><br></pre></td></tr></table></figure></p>
+<p>2.以下方式将 paused 变为 flowing(流动)状态，触发数据开始流动<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1) 通过 on(&#x27;data&#x27;, ...) 事件触发 readableStream 的数据的流动</span><br><span class="line">2) 通过 resume() 方法触发数据流动</span><br><span class="line">3) 通过 pipe() 方法将数据转接到另一个 writeable 流</span><br></pre></td></tr></table></figure></p>
+<p>3.以下方式可以将 flowing 变为 paused<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1) 当调用方式为 pipe() 时，先移除 data 的监听事件，然后调用 stream.unpipe() 方法清除所有管道，流状态将变为 paused</span><br><span class="line">2) 当调用方式为非 pipe() 时，调用 stream.pause() 方法可以将状态变为 paused</span><br></pre></td></tr></table></figure></p>
+<p>4.流数据的消费<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1) 流创建完成会触发 onreadable 事件，此时流已经准备好。</span><br><span class="line">2) 创建好的流默认为 paused 状态</span><br><span class="line">3) 创建可读流之后，数据会先存在上游的缓冲区里，缓冲区大小默认为 highWaterMark，缓冲区满了之后会调用 pause 停止数据的读取。</span><br><span class="line">4) 消费流的时候会读取缓冲区的数据，缓冲区数据被消耗完之后会再次触发 onreadable 事件。</span><br></pre></td></tr></table></figure></p>
+<p>read()方法会从内部缓冲区中拉取并返回若干数据，没有更多可用数据时，会返回null。<br>使用read()方法读取数据，如果传入了 size 参数，会返回指定字节的数据，当指定的size字节不可用时，则返回 null。<br>不指定 size 参数，会返回内部缓冲区中的所有数据。<br>read() 方法仅应在暂停模式时被调用，在流动模式中，该方法会被自动调用直到内部缓冲区被清空。</p>
+<h2 id="七、关于积压或背压-Backpressure"><a href="#七、关于积压或背压-Backpressure" class="headerlink" title="七、关于积压或背压(Backpressure)"></a>七、关于积压或背压(Backpressure)</h2><p>背压指在异步场景下，被观察者发送事件速度远快于观察者处理的速度，从而导致下游的 buffer 溢出，这种现象叫作背压。<br><img src="http://zhoushirong.github.io/img/back-pressure.jpeg" alt="back-pressure.jpeg"><br>比如上图，管道入口处一样大，入口数据也一样，但是中间或者出口因为各种因素被阻塞或者减小了口径，导致流动受阻，形成背压。</p>
+<p>在流的系统中，当 Readable 传输给 Writable 的速度远大于它接受和处理的速度的时候，会导致未能被处理的数据越来越大，占用更多内存。<br>之后更多的数据不得不保存在内存中直到整个流程全部处理完毕，形成恶性循环，最终导致内存溢出。</p>
+<h4 id="buffer、highWaterMark-与背压问题的解决方法"><a href="#buffer、highWaterMark-与背压问题的解决方法" class="headerlink" title="buffer、highWaterMark 与背压问题的解决方法"></a>buffer、highWaterMark 与背压问题的解决方法</h4><p><code>缓冲器(buffer)</code>是流的读写过程中的一个临时存放点，是一个独立于 V8 堆内存之外的内存空间。<br>利用缓冲器能够将少量、多次的数据进行批量的在磁盘中读写；也能够将大块文件分批少量的进行搬运。</p>
+<p><code>highWaterMark</code>是一个可选参数，缓冲器中缓冲数据的大小取决于 highWaterMark 的值，它是一个阈值，默认 16kb (16384字节,对于对象模型流而言是 16)。<br>当缓冲器中数据达到 highWaterMark 的值时，会暂停从底层资源读取数据(readable._read)，直到当前缓冲器中数据被消费完。</p>
+<p>stream API的一个核心目标（特别是stream.pipe()方法）是把缓存的数据控制在可接受范围内。</p>
+<h2 id="八、如何实现自己的-Stream。"><a href="#八、如何实现自己的-Stream。" class="headerlink" title="八、如何实现自己的 Stream。"></a>八、如何实现自己的 Stream。</h2><p>那么它是如何实现的呢？<br>通过查阅 <code>ReadStream.prototype._read</code> 源码可知，其最最核心的原力就是重写了<code>_read()</code>方法。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 精简版本</span></span><br><span class="line">ReadStream.prototype._read = <span class="function"><span class="keyword">function</span> (<span class="params">n</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> toRead = n;</span><br><span class="line">  <span class="built_in">this</span>[kFs].read(<span class="built_in">this</span>.fd, pool, pool.used, toRead, <span class="built_in">this</span>.pos, <span class="function">(<span class="params">er, bytesRead</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.push(b);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="built_in">this</span>.pos += toRead;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><br><code>toRead</code>是n参数，表示一次读取的数据大小<br><code>this.fd</code>是文件描述符，<code>this.pos</code>表示读取文件的位置<br><code>this.[kFs]</code>就是 fs 模块对象，调用 fs.read 方法实现选择性读取文件数据块。<br>通过分析可知，<code>_read</code>方法其实就是一个少量多次读取文件的实现方式。</p>
+<p>前面分析了 <code>fs.createReadStream</code> 的实现过程，可以看出它就是对于 Stream 的一个继承实现。<br>而核心方法 <code>ReadStream.prototype._read</code> 就是实现了一个少量多次读取文件数据的方法实现。<br>既然如此，我们也可以实现自己的 <code>createReadStream</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// MyReadStream.js</span></span><br><span class="line"><span class="keyword">const</span> &#123; Readable &#125; = <span class="built_in">require</span>(<span class="string">&#x27;stream&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyReadStream</span> <span class="keyword">extends</span> <span class="title">Readable</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">path, options = &#123;&#125;</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>(options);</span><br><span class="line">    <span class="built_in">this</span>.pos = <span class="number">0</span></span><br><span class="line">    <span class="built_in">this</span>.fd = fs.openSync(path, <span class="string">&#x27;r&#x27;</span>) <span class="comment">// fs.open 创建文件描述符</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">_read</span>(<span class="params">n</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">0</span>) <span class="keyword">return</span> <span class="built_in">this</span>.push(<span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> buffer = Buffer.allocUnsafeSlow(n);</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * fd 文件描述符</span></span><br><span class="line"><span class="comment">     * buffer 是一个缓冲区，读取的数据将会写入到这里，默认大小Buffer.alloc(16384)</span></span><br><span class="line"><span class="comment">     * offset 是开始向缓冲区 buffer 写入数据时的偏移量</span></span><br><span class="line"><span class="comment">     * length 是整数，指定要读取的字节数</span></span><br><span class="line"><span class="comment">     * position 是整数，指读取的文件起始位置</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * bytesRead is how many bytes were read from the file</span></span><br><span class="line"><span class="comment">     * buf 指缓冲区</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    fs.read(<span class="built_in">this</span>.fd, buffer, <span class="number">0</span>, n, <span class="built_in">this</span>.pos, <span class="function">(<span class="params">err, bytesRead, buf</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (bytesRead &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">this</span>.pos += bytesRead;</span><br><span class="line">        <span class="keyword">if</span> (bytesRead !== buf.length) &#123;</span><br><span class="line">          <span class="keyword">const</span> dst = Buffer.allocUnsafeSlow(bytesRead);</span><br><span class="line">          <span class="comment">// buffer.copy( target, targetStart, sourceStart, sourceEnd )</span></span><br><span class="line">          <span class="comment">// 从buf中提取 0-bytesRead 位置的数据，拷贝至 dst 0-end 的位置</span></span><br><span class="line">          buf.copy(dst, <span class="number">0</span>, <span class="number">0</span>, bytesRead);</span><br><span class="line">          buf = dst;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">this</span>.push(buf);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 如果等于0，表示读取结束。</span></span><br><span class="line">        <span class="built_in">this</span>.push(<span class="literal">null</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">module</span>.exports = MyReadStream</span><br></pre></td></tr></table></figure>
+<p>MyReadStream 类的调用<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">&#x27;http&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> MyReadStream = <span class="built_in">require</span>(<span class="string">&#x27;./my-read-stream&#x27;</span>)</span><br><span class="line"></span><br><span class="line">http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  res.statusCode = <span class="number">200</span></span><br><span class="line">  res.setHeader(<span class="string">&#x27;Content-Type&#x27;</span>, <span class="string">&#x27;text/html&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> stream = <span class="keyword">new</span> MyReadStream(<span class="string">&#x27;./index.html&#x27;</span>)</span><br><span class="line">  stream.pipe(res)</span><br><span class="line">&#125;).listen(<span class="number">3000</span>)</span><br></pre></td></tr></table></figure><br>上面的例子 MyReadStream 类其实就是继承了 <code>Stream.Readable</code>类，然后实现了自己的 <code>_read()</code>方法。<br>而 _read 方法的实现就是调用了<code>fs.read()</code>方法逐步读取文件内容，当文件读取完成之后 <code>this.push(null)</code>结束。</p>
+<p>相信看了如上例子你已经对流的使用有了基本认识，对于 <code>fs.createReadStream</code> 有了很直观的了解了。</p>
+<h2 id="九、总结"><a href="#九、总结" class="headerlink" title="九、总结"></a>九、总结</h2><p>流是一种抽象，流式处理是一种思想，一种渐进式处理数据的方式。</p>
+<p>为什么要有 Stream？<br>在计算机处理任务的过程中，通常会把数据加载到内存中，但是内存空间是有限的。<br>当数据量过大时，不可能把所有数据都放在内存里，此时就需要一种能够持续处理数据的方式，流式处理就是其中一个。<br>另一个重要的原因是内存的 IO 速度高于 HD 和网络的 IO 速度，又不能让内存一直处于 pending 状态。<br>所以需要缓冲区，而流处理恰好能够提供这样一个缓冲区。</p>
+<p>流的优点？<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">节约内存 ：无需先在内存中加载大量数据，然后再进行处理</span><br><span class="line">提升时效 ：无需等待数据全部加载完成后才能处理，从第一个分段数据就可以开始处理，极大提升了数据处理时效</span><br></pre></td></tr></table></figure></p>
+<p>流的特点？<br>1.事件： 所有流都是 EventEmitter 的实例，所以不同的流也具有不同的事件，事件也就是告知外界自己自身的工作状态的方式。<br>2.独立缓冲区： 可读流和可写流都有自己的独立于 V8 堆内存之外的独立缓冲区。<br>3.字符编码： 我们通常在进行文件读写时，操作的其实是字节流，所以在设置流参数 options 时需要注意编码格式，格式不同 chunk 的内容和大小就会不同。可读流与可写流默认的编码格式不同。</p>
+<p>流的应用场景？<br>文件系统、网络系统、加密解密、压缩解压模块中都使用了流，并且都根据自身系统的需要扩展了 Stream 模块的抽象类。</p>
+<h2 id="附录-名词简介"><a href="#附录-名词简介" class="headerlink" title="附录 - 名词简介"></a>附录 - 名词简介</h2><p><strong>比特流（bitstream或bit stream）</strong> 是一个比特的序列。一个字节流则是一个字节的序列，一般来说一个字节是8个比特。也可以被视为是一种特殊的比特流。</p>
+<p><strong>字节流（英语：byte stream）</strong> 在计算机科学中是一种比特流，不过里面的比特被打包成一个个我们叫做字节（Bytes）的单位。</p>
+<p><strong>流媒体（英语：Streaming media）</strong> 是指将一连串的多媒体资料压缩后，经过互联网分段发送资料，在互联网上即时传输影音以供观赏的一种技术与过程，此技术使得资料数据包得以像流水一样发送，如果不使用此技术，就必须在使用前下载整个媒体文件。</p>
+<p><strong>Buffer</strong> (常被翻译为缓冲区)在 Node.js 中，Buffer 类是随 Node 内核一起发布的核心库。Buffer 库为 Node.js 带来了一种存储原始数据的方法，可以让 Node.js 处理二进制数据，每当需要在 Node.js 中处理I/O操作中移动的数据时，就有可能使用 Buffer 库。原始数据存储在 Buffer 类的实例中。一个 Buffer 类似于一个整数数组，但它对应于 V8 堆内存之外的一块原始内存。任何数据的读写都会产生缓冲区。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.epoos.com/2021/06/03/stream/" data-id="ckpgv54sw002ah0vz6myi4l47" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/file/" rel="tag">file</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/stream/" rel="tag">stream</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2021/04/03/cdn/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">cdn 简介</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <span class="widget-date">2021-06-03</span>
+            <a href="/2021/06/03/stream/">Nodejs 中的 Stream</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-04-03</span>
+            <a href="/2021/04/03/cdn/">cdn 简介</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-26</span>
+            <a href="/2021/02/26/compile/">前端编译</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-24</span>
+            <a href="/2021/02/24/weakSet/">weakSet与js内存回收</a>
+          </li>
+        
+          <li>
+            <span class="widget-date">2021-02-08</span>
+            <a href="/2021/02/08/react16/">react 学习笔记</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签索引</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AES/" style="font-size: 10px;">AES</a> <a href="/tags/CONTENTTYPE/" style="font-size: 10px;">CONTENTTYPE</a> <a href="/tags/MIMETYPE/" style="font-size: 10px;">MIMETYPE</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/apply/" style="font-size: 10px;">apply</a> <a href="/tags/async/" style="font-size: 10px;">async</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/bind/" style="font-size: 10px;">bind</a> <a href="/tags/brew/" style="font-size: 10px;">brew</a> <a href="/tags/browser/" style="font-size: 10px;">browser</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/call/" style="font-size: 10px;">call</a> <a href="/tags/cdn/" style="font-size: 10px;">cdn</a> <a href="/tags/child-process/" style="font-size: 10px;">child_process</a> <a href="/tags/chrome/" style="font-size: 10px;">chrome</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/cname/" style="font-size: 10px;">cname</a> <a href="/tags/commonjs/" style="font-size: 10px;">commonjs</a> <a href="/tags/compile/" style="font-size: 10px;">compile</a> <a href="/tags/create/" style="font-size: 10px;">create</a> <a href="/tags/csrf/" style="font-size: 10px;">csrf</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/defer/" style="font-size: 10px;">defer</a> <a href="/tags/dns/" style="font-size: 11.25px;">dns</a> <a href="/tags/dubbo/" style="font-size: 10px;">dubbo</a> <a href="/tags/es6Module/" style="font-size: 10px;">es6Module</a> <a href="/tags/event/" style="font-size: 10px;">event</a> <a href="/tags/fiber/" style="font-size: 10px;">fiber</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/flux/" style="font-size: 10px;">flux</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/http/" style="font-size: 11.25px;">http</a> <a href="/tags/http2/" style="font-size: 10px;">http2</a> <a href="/tags/http3/" style="font-size: 10px;">http3</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/instance/" style="font-size: 10px;">instance</a> <a href="/tags/ios%E6%A8%A1%E6%8B%9F%E5%99%A8/" style="font-size: 10px;">ios模拟器</a> <a href="/tags/iphonex/" style="font-size: 10px;">iphonex</a> <a href="/tags/item2/" style="font-size: 10px;">item2</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 16.25px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 11.25px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/nginx/" style="font-size: 11.25px;">nginx</a> <a href="/tags/nodejs/" style="font-size: 17.5px;">nodejs</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/npm-lock/" style="font-size: 10px;">npm-lock</a> <a href="/tags/object/" style="font-size: 11.25px;">object</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/proxy/" style="font-size: 11.25px;">proxy</a> <a href="/tags/react/" style="font-size: 11.25px;">react</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redux/" style="font-size: 10px;">redux</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/rsync/" style="font-size: 10px;">rsync</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sentinel/" style="font-size: 10px;">sentinel</a> <a href="/tags/set/" style="font-size: 10px;">set</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/simulator/" style="font-size: 10px;">simulator</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/ssr/" style="font-size: 10px;">ssr</a> <a href="/tags/stream/" style="font-size: 10px;">stream</a> <a href="/tags/svn/" style="font-size: 10px;">svn</a> <a href="/tags/terminal/" style="font-size: 10px;">terminal</a> <a href="/tags/thrift/" style="font-size: 10px;">thrift</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/virtualDom/" style="font-size: 10px;">virtualDom</a> <a href="/tags/vue/" style="font-size: 12.5px;">vue</a> <a href="/tags/vue-vuex/" style="font-size: 10px;">vue vuex</a> <a href="/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/tags/weakSet/" style="font-size: 10px;">weakSet</a> <a href="/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 11.25px;">web安全</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/xss/" style="font-size: 10px;">xss</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1/" style="font-size: 10px;">事件冒泡</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 10px;">事件循环</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%8D%95%E8%8E%B7/" style="font-size: 10px;">事件捕获</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%86%92%E6%B3%A1%E7%AE%97%E6%B3%95/" style="font-size: 10px;">冒泡算法</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">函数式编程</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BC%96%E8%AF%91/" style="font-size: 10px;">前端编译</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 10px;">动态规划</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 10px;">响应式</a> <a href="/tags/%E5%9B%9E%E6%96%87/" style="font-size: 10px;">回文</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 18.75px;">基础</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 10px;">安全</a> <a href="/tags/%E5%AF%B9%E8%B1%A1/" style="font-size: 11.25px;">对象</a> <a href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 11.25px;">小程序</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" style="font-size: 11.25px;">微信开发</a> <a href="/tags/%E5%BE%AE%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">微前端</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">快速算法</a> <a href="/tags/%E6%80%A7%E8%83%BD/" style="font-size: 10px;">性能</a> <a href="/tags/%E6%8F%92%E5%85%A5%E7%AE%97%E6%B3%95/" style="font-size: 10px;">插入算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12.5px;">数据库</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 10px;">数组</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF/" style="font-size: 10px;">服务端</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B8%B2%E6%9F%93/" style="font-size: 10px;">服务端渲染</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 10px;">浏览器</a> <a href="/tags/%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/" style="font-size: 10px;">硬件加速</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.75px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">线程</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%99%9A%E6%8B%9FDOM/" style="font-size: 10px;">虚拟DOM</a> <a href="/tags/%E8%AF%95%E9%A2%98/" style="font-size: 12.5px;">试题</a> <a href="/tags/%E8%AF%B7%E6%B1%82%E5%A4%B4/" style="font-size: 10px;">请求头</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" style="font-size: 10px;">软件安装</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10px;">进程</a> <a href="/tags/%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95/" style="font-size: 10px;">选择算法</a> <a href="/tags/%E9%95%BF%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">长连接</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12.5px;">面试</a> <a href="/tags/%E9%BD%90%E5%88%98%E6%B5%B7/" style="font-size: 10px;">齐刘海</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 zhoushirong&nbsp;|
+      <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备16019450号-1</a>&nbsp;|
+      <a href="https://github.com/zhoushirong" target="_blank">github</a>&nbsp;|
+      <a href="https://www.epoos.com" target="_blank">epoos.com</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="https://www.epoos.com" class="mobile-nav-link" target="_self">主站</a>
+  
+    <a href="/" class="mobile-nav-link" target="_self">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link" target="_self">列表</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

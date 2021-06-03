@@ -89,14 +89,14 @@ ga('send', 'pageview');
         <section id="main">
   
     
-      <article id="post-data-bind" class="article article-type-post" itemscope itemprop="blogPost">
+      <article id="post-http-headers" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2021/01/11/data-bind/" class="article-date">
-  <time datetime="2021-01-10T16:00:00.000Z" itemprop="datePublished">2021-01-11</time>
+    <a href="/2021/01/12/http-headers/" class="article-date">
+  <time datetime="2021-01-11T16:00:00.000Z" itemprop="datePublished">2021-01-12</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+    <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a>
   </div>
 
   </div>
@@ -107,7 +107,7 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2021/01/11/data-bind/">响应式</a>
+      <a class="article-title" href="/2021/01/12/http-headers/">http的请求头基础</a>
     </h1>
   
 
@@ -115,20 +115,665 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>当前实现</p>
-<h4 id="proxy-对比-Object-defineProperty"><a href="#proxy-对比-Object-defineProperty" class="headerlink" title="proxy 对比 Object.defineProperty"></a>proxy 对比 Object.defineProperty</h4><p>Object.defineProperty 数据劫持只是对对象的属性进行劫持，无法监听新增属性和删除属性<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">深层对象的劫持需要一次性递归，性能不好</span><br><span class="line">劫持数组时需要重写覆盖部分 Array.prototype 原生方法</span><br></pre></td></tr></table></figure><br>补充：<br>其实在Object.defineProperty 本身是可用劫持数组的，本质上和劫持对象属性一样，只不过数组的属性是数组下标。<br>对象属性的新增需要重新劫持，所以，对于已经被劫持的数组，push的时候也需要进行重新添加劫持。<br>Vue 的实现中，从性能/体验的性价比考虑，放弃了这个特性。</p>
-<p>proxy 数据劫持真正的对对象本身进行劫持，不好做polyfill<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">可以监听到对象新增、删除属性</span><br><span class="line">只在 getter 时才对对象的下一层进行劫持(优化了性能)</span><br><span class="line">能正确监听原生数组方法</span><br></pre></td></tr></table></figure></p>
-<h4 id="proxy-优势"><a href="#proxy-优势" class="headerlink" title="proxy 优势"></a>proxy 优势</h4><p>1.支持13种拦截操作，这是defineProperty不具备的<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">get(target, propKey, receiver)：拦截对象属性的读取，比如 proxy.foo 和 proxy[&#x27;foo&#x27;]。</span><br><span class="line">set(target, propKey, value, receiver)：拦截对象属性的设置，比如 proxy.foo = v 或 proxy[&#x27;foo&#x27;] = v ，返回一个布尔值。</span><br><span class="line">has(target, propKey)：拦截 propKey in proxy 的操作，返回一个布尔值。</span><br><span class="line">deleteProperty(target, propKey)：拦截 delete proxy[propKey] 的操作，返回一个布尔值。</span><br><span class="line">ownKeys(target)：拦截 Object.getOwnPropertyNames(proxy) 、 Object.getOwnPropertySymbols(proxy) 、Object.keys(proxy) 、for...in 循环，返回一个数组。该方法返回目标对象所有自身的属性的属性名，而 Object.keys() 的返回结果仅包括目标对象自身的可遍历属性。</span><br><span class="line">getOwnPropertyDescriptor(target, propKey)：拦截 Object.getOwnPropertyDescriptor(proxy, propKey) ，返回属性的描述对象。</span><br><span class="line">defineProperty(target, propKey, propDesc)：拦截 Object.defineProperty(proxy, propKey, propDesc） 、Object.defineProperties(proxy, propDescs) ，返回一个布尔值。</span><br><span class="line">preventExtensions(target)：拦截 Object.preventExtensions(proxy) ，返回一个布尔值。</span><br><span class="line">getPrototypeOf(target)：拦截 Object.getPrototypeOf(proxy) ，返回一个对象。</span><br><span class="line">isExtensible(target)：拦截 Object.isExtensible(proxy) ，返回一个布尔值。</span><br><span class="line">setPrototypeOf(target, proto)：拦截 Object.setPrototypeOf(proxy, proto) ，返回一个布尔值。如果目标对象是函数，那么还有两种额外操作可以拦截。</span><br><span class="line">apply(target, object, args)：拦截 Proxy 实例作为函数调用的操作，比如 proxy(...args)、proxy.call(object, ...args) 、proxy.apply(...) 。</span><br><span class="line">construct(target, args)：拦截 Proxy 实例作为构造函数调用的操作，比如 new proxy(...args) 。</span><br></pre></td></tr></table></figure><br>2.作为新标准，长远来看，JS引擎会继续优化 Proxy ，但 getter 和 setter 基本不会再有针对性优化。</p>
-<h3 id="传送门"><a href="#传送门" class="headerlink" title="传送门"></a>传送门</h3><p><a target="_blank" rel="noopener" href="https://github.com/answershuto/learnVue/blob/master/docs/响应式原理.MarkDownMarkDown">Vue2.0响应式原理</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.huaweicloud.com/articles/2474b1a4d8d3904e213cac1085726dda.html">Vue2.0 defineProperty正名</a></p>
+        <h3 id="互联网媒体类型"><a href="#互联网媒体类型" class="headerlink" title="互联网媒体类型"></a>互联网媒体类型</h3><p>互联网媒体类型（Internet media type，也称为MIME类型（MIME type）或内容类型（content type））<br>是给互联网上传输的内容赋予的分类类型。互联网媒体类型与文件拓展名相对应。</p>
+<p>一个MIME类型一定包括 <strong><em>类型（type）</em></strong>和 <strong><em>子类型（subtype）</em></strong><br>还可能包括一个或多个 <strong><em>可选参数（optional parameter）</em></strong>。</p>
+<p>比如，HTML文件的互联网媒体类型可能是<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">text/html; charset=UTF-8</span><br></pre></td></tr></table></figure><br>上面例子，文件类型为text，子类型为html，charset是一个可选参数，其值为UTF-8</p>
+<h4 id="Content-Type（内容类型）"><a href="#Content-Type（内容类型）" class="headerlink" title="Content-Type（内容类型）"></a>Content-Type（内容类型）</h4><p>实体头部用于指示资源的MIME类型，一般是指网页中存在的 Content-Type，用于定义网络文件的类型和网页的编码，决定浏览器将以什么形式、什么编码读取这个文件<br>这就是为什么发起请求的时候，有的是请求图片，有的是请求网页，有的是下载文件的原因了。</p>
+<h4 id="request-里面的-Content-Type"><a href="#request-里面的-Content-Type" class="headerlink" title="request 里面的 Content-Type"></a>request 里面的 Content-Type</h4><p>用于表明发送数据流的类型，服务端根据此类型来采用该类型文件的解析方式来解析数据</p>
+<h4 id="使用-post-方式提交数据的时候指定的几种-body-类型。"><a href="#使用-post-方式提交数据的时候指定的几种-body-类型。" class="headerlink" title="使用 post 方式提交数据的时候指定的几种 body 类型。"></a>使用 post 方式提交数据的时候指定的几种 body 类型。</h4><p>这是将发送信息至服务器时内容的编码类型。服务端根据这些类型来判断使用哪种方式解析数据。</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>application/x-www-form-urlencoded</td>
+<td>原生的 form 表单的提交的默认数据格式，Body 中的数据以’key1=value1&amp;key2=value2’的文本格式传输；如果是使用 ajax提交，则需要手动格式化body的内容。</td>
+</tr>
+<tr>
+<td>multipart/form-data</td>
+<td>Http协议最开始是不支持文件上传的，直到1995年发布的规范新增这个contentType类型，multipart单词是多部分的意思，这意味着body中的数据允许由多部分组成，可以同时传入二进制和文本；将表单的数据组织成Key-Value形式，用分隔符 boundary（boundary可任意设置）处理成一条消息。可同时上传文件和参数。 </td>
+</tr>
+<tr>
+<td>application/json</td>
+<td>body内容是 json 格式的文本</td>
+</tr>
+<tr>
+<td>text/plain</td>
+<td>body 的内容就只是文本，空格转换为 “+” 加号，但不对特殊字符编码。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="form-data-举例"><a href="#form-data-举例" class="headerlink" title="form-data 举例"></a>form-data 举例</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&#x27;xxx&#x27;</span> <span class="attr">method</span>=<span class="string">&#x27;post&#x27;</span> <span class="attr">enctype</span>=<span class="string">&#x27;multipart/form-data&#x27;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&#x27;text&#x27;</span> <span class="attr">name</span>=<span class="string">&#x27;user_name&#x27;</span> <span class="attr">value</span>=<span class="string">&#x27;user_name_str&#x27;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&#x27;file&#x27;</span> <span class="attr">name</span>=<span class="string">&#x27;file_name&#x27;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&#x27;submit&#x27;</span>&gt;</span>提交<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>下面的使用jquery post 提交方式和上面是等效的<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">  url: <span class="string">&#x27;xxx&#x27;</span>,</span><br><span class="line">  type: <span class="string">&#x27;POST&#x27;</span>,</span><br><span class="line">  contentType: <span class="string">&#x27;multipart/form-data&#x27;</span>, <span class="comment">// jquery ajax 默认为 x-www-form-urllencoded</span></span><br><span class="line">  success: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<h4 id="response-里面的-Content-Type"><a href="#response-里面的-Content-Type" class="headerlink" title="response 里面的 Content-Type"></a>response 里面的 Content-Type</h4><p>Http响应也会带Content-Type，原理和请求的一致，目的是告诉客户端实际返回的内容的内容类型，让接收方知道怎么解析数据。</p>
+<h4 id="常见媒体格式（维基百科）"><a href="#常见媒体格式（维基百科）" class="headerlink" title="常见媒体格式（维基百科）"></a>常见媒体格式（维基百科）</h4><h5 id="Type-application"><a href="#Type-application" class="headerlink" title="Type application"></a>Type application</h5><table>
+<thead>
+<tr>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>application/atom+xml</td>
+<td>Atom feeds</td>
+</tr>
+<tr>
+<td>application/ecmascript</td>
+<td>ECMAScript/JavaScript;[4]（相当于application/javascript但是严格的处理规则）</td>
+</tr>
+<tr>
+<td>application/EDI-X12</td>
+<td>EDI ANSI ASC X12资料[5]</td>
+</tr>
+<tr>
+<td>application/EDIFACT</td>
+<td>EDI EDIFACT资料[5]</td>
+</tr>
+<tr>
+<td>application/json</td>
+<td>JSON（JavaScript Object Notation）[6]</td>
+</tr>
+<tr>
+<td>application/javascript</td>
+<td>JavaScript。</td>
+</tr>
+<tr>
+<td>application/octet-stream</td>
+<td>任意的二进制文件（通常做为通知浏览器下载文件</td>
+</tr>
+<tr>
+<td>application/ogg</td>
+<td>Ogg, 视频文件格式[9]</td>
+</tr>
+<tr>
+<td>application/pdf</td>
+<td>PDF（Portable Document Format）[10]</td>
+</tr>
+<tr>
+<td>application/postscript</td>
+<td>PostScript[7]</td>
+</tr>
+<tr>
+<td>application/rdf+xml</td>
+<td>Resource Description Framework[11]</td>
+</tr>
+<tr>
+<td>application/rss+xml</td>
+<td>RSS feeds</td>
+</tr>
+<tr>
+<td>application/soap+xml</td>
+<td>SOAP[12]</td>
+</tr>
+<tr>
+<td>application/font-woff</td>
+<td>Web Open Font Format;（推荐使用；使用application/x-font-woff直到它变为官方标准）</td>
+</tr>
+<tr>
+<td>application/xhtml+xml</td>
+<td>XHTML[13]</td>
+</tr>
+<tr>
+<td>application/xml</td>
+<td>XML文件[14]</td>
+</tr>
+<tr>
+<td>application/xml-dtd</td>
+<td>DTD文件[14]</td>
+</tr>
+<tr>
+<td>application/xop+xml</td>
+<td>XML-binary Optimized Packaging[15]</td>
+</tr>
+<tr>
+<td>application/zip</td>
+<td>ZIP压缩包[16]</td>
+</tr>
+<tr>
+<td>application/gzip</td>
+<td>Gzip[17]</td>
+</tr>
+</tbody>
+</table>
+<h5 id="Type-Audio"><a href="#Type-Audio" class="headerlink" title="Type Audio"></a>Type Audio</h5><table>
+<thead>
+<tr>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>audio/mp4</td>
+<td>MP4音频档案[18]</td>
+</tr>
+<tr>
+<td>audio/mpeg</td>
+<td>MP3或其他MPEG音频档案[19]</td>
+</tr>
+<tr>
+<td>audio/ogg</td>
+<td>Ogg音频档案[9]</td>
+</tr>
+<tr>
+<td>audio/vorbis</td>
+<td>Vorbis音频档案[20]</td>
+</tr>
+<tr>
+<td>audio/vnd.rn-realaudio</td>
+<td>RealAudio音频档案[21]</td>
+</tr>
+<tr>
+<td>audio/vnd.wave</td>
+<td>WAV音频档案[22]</td>
+</tr>
+<tr>
+<td>audio/webm</td>
+<td>WebM音频档案</td>
+</tr>
+<tr>
+<td>audio/flac</td>
+<td>FLAC音频档案</td>
+</tr>
+</tbody>
+</table>
+<h5 id="Type-Image"><a href="#Type-Image" class="headerlink" title="Type Image"></a>Type Image</h5><table>
+<thead>
+<tr>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image/gif</td>
+<td>GIF图像文件[23]</td>
+</tr>
+<tr>
+<td>image/jpeg</td>
+<td>JPEG图像文件[23]</td>
+</tr>
+<tr>
+<td>image/png</td>
+<td>PNG图像文件[24]</td>
+</tr>
+<tr>
+<td>image/webp</td>
+<td>WebP图像文件</td>
+</tr>
+<tr>
+<td>image/svg+xml</td>
+<td>SVG向量图像文件[25]</td>
+</tr>
+<tr>
+<td>image/tiff</td>
+<td>TIFF图像文件[26]</td>
+</tr>
+<tr>
+<td>image/icon</td>
+<td>ICO图片文件。</td>
+</tr>
+</tbody>
+</table>
+<h5 id="Type-Text"><a href="#Type-Text" class="headerlink" title="Type Text"></a>Type Text</h5><table>
+<thead>
+<tr>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text/css</td>
+<td>CSS文件[29]</td>
+</tr>
+<tr>
+<td>text/csv</td>
+<td>CSV文件[30]</td>
+</tr>
+<tr>
+<td>text/html</td>
+<td>HTML文件[31]</td>
+</tr>
+<tr>
+<td>text/javascript</td>
+<td>(过时)，推荐使用 application/javascript。</td>
+</tr>
+<tr>
+<td>text/plain</td>
+<td>纯文字内容[32]</td>
+</tr>
+<tr>
+<td>text/vcard</td>
+<td>vCard（电子名片）[33]</td>
+</tr>
+<tr>
+<td>text/xml</td>
+<td>XML[14]</td>
+</tr>
+</tbody>
+</table>
+<h5 id="Type-Video"><a href="#Type-Video" class="headerlink" title="Type Video"></a>Type Video</h5><table>
+<thead>
+<tr>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>video/mpeg</td>
+<td>MPEG-1视频文件[34]</td>
+</tr>
+<tr>
+<td>video/mp4</td>
+<td>MP4视频文件[35]</td>
+</tr>
+<tr>
+<td>video/ogg</td>
+<td>Ogg视频文件[9]</td>
+</tr>
+<tr>
+<td>video/quicktime</td>
+<td>QuickTime视频文件[36]</td>
+</tr>
+<tr>
+<td>video/webm</td>
+<td>WebM视频文件（基于Matroska基础）</td>
+</tr>
+<tr>
+<td>video/x-matroska</td>
+<td>Matroska（多媒体封装格式）</td>
+</tr>
+<tr>
+<td>video/x-ms-wmv</td>
+<td>Windows Media Video视频文件[37]</td>
+</tr>
+<tr>
+<td>video/x-flv</td>
+<td>Flash Video（FLV档）</td>
+</tr>
+</tbody>
+</table>
+<h5 id="Type-Model-三维计算机图形文件"><a href="#Type-Model-三维计算机图形文件" class="headerlink" title="Type Model(三维计算机图形文件)"></a>Type Model(三维计算机图形文件)</h5><table>
+<thead>
+<tr>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>model/example[27]</td>
+<td>Example Media Types for Use in Documentation</td>
+</tr>
+<tr>
+<td>model/iges</td>
+<td>IGS files, IGES files[28]</td>
+</tr>
+<tr>
+<td>model/mesh</td>
+<td>MSH files, MESH files[28]</td>
+</tr>
+<tr>
+<td>model/vrml</td>
+<td>WRL files, VRML files[28]</td>
+</tr>
+<tr>
+<td>model/x3d+binary</td>
+<td>X3D ISO standard for representing 3D computer graphics, X3DB binary files</td>
+</tr>
+<tr>
+<td>model/x3d+vrml</td>
+<td>X3D ISO standard for representing 3D computer graphics, X3DV VRML files</td>
+</tr>
+<tr>
+<td>model/x3d+xml</td>
+<td>X3D ISO standard for representing 3D computer graphics, X3D XML files</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Request-Headers的候选属性"><a href="#Request-Headers的候选属性" class="headerlink" title="Request Headers的候选属性"></a>Request Headers的候选属性</h4><table>
+<thead>
+<tr>
+<th>属性值</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accept</td>
+<td>指定客户端能够接收的内容类型</td>
+<td>Accept: text/plain, text/html</td>
+</tr>
+<tr>
+<td>Accept-Charset</td>
+<td>请求头用来告知（服务器）客户端可以处理的字符集类型。</td>
+<td>Accept-Charset: utf-8, iso-8859-1;q=0.5, *;q=0.1</td>
+</tr>
+<tr>
+<td>Accept-Encoding</td>
+<td>指定浏览器可以支持的web服务器返回内容压缩编码类型</td>
+<td>Accept-Encoding: compress, gzip, deflate</td>
+</tr>
+<tr>
+<td>Accept-Language</td>
+<td>浏览器可接受的语言</td>
+<td>Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7</td>
+</tr>
+<tr>
+<td>Accept-Ranges</td>
+<td>请求资源的某一段数据</td>
+<td>Accept-Ranges: bytes=0-1023</td>
+</tr>
+<tr>
+<td>Authorization</td>
+<td>请求消息首部包含有用来向（代理）服务器证明用户代理身份的凭证。</td>
+<td>Authorization: Basic QWxhZLRpbjpvcGVuIHNoc2FtZQ==</td>
+</tr>
+<tr>
+<td>Cache-Control</td>
+<td>指定请求和响应遵循的缓存机制</td>
+<td>Cache-Control: no-cache(或者 max-age=100)</td>
+</tr>
+<tr>
+<td>Connection</td>
+<td>决定当前的事务完成后，是否会关闭网络连接</td>
+<td>Connection: keep-alive</td>
+</tr>
+<tr>
+<td>Cookie</td>
+<td>HTTP请求发送时，会把保存在该请求域名下的所有cookie值一起发送给web服务器</td>
+<td>Cookie: $Version=1; Skin=new;</td>
+</tr>
+<tr>
+<td>Content-Length</td>
+<td>请求的内容长度</td>
+<td>Content-Length: 348</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>请求的与实体对应的MIME信息</td>
+<td>Content-Type: application/x-www-form-urlencoded</td>
+</tr>
+<tr>
+<td>Date</td>
+<td>请求发送的日期和时间</td>
+<td>Date: Tue, 15 Nov 2018 08:22:31 GMT</td>
+</tr>
+<tr>
+<td>Expect</td>
+<td>包含一个期望条件，表示服务器只有在满足此期望条件的情况下才能妥善地处理请求</td>
+<td>Expect: 100-continue</td>
+</tr>
+<tr>
+<td>From</td>
+<td>发出请求的用户的Email</td>
+<td>From: <a href="mailto:user@email.com">user@email.com</a></td>
+</tr>
+<tr>
+<td>Host</td>
+<td>指定请求的服务器的域名和端口号</td>
+<td>Host: <a target="_blank" rel="noopener" href="http://www.yanggb.com">www.yanggb.com</a></td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>只有请求内容与实体相匹配才有效</td>
+<td>If-Match: “737060ff8c284d8af7ad2082f209582d”</td>
+</tr>
+<tr>
+<td>If-Modified-Since</td>
+<td>如果请求的部分在指定时间之后被修改则请求成功，未被修改则返回304代码</td>
+<td>If-Modified-Since: Sat, 29 Oct 2018 19:43:31 GMT</td>
+</tr>
+<tr>
+<td>If-None-Match</td>
+<td>如果内容未改变返回304代码，参数为服务器先前发送的Etag，与服务器回应的Etag比较判断是否改变</td>
+<td>If-None-Match: “737060cd8c284d8af7ad3082f209582d”</td>
+</tr>
+<tr>
+<td>If-Range</td>
+<td>如果实体未改变，服务器发送客户端丢失的部分，否则发送整个实体。参数也为Etag</td>
+<td>If-Range: “737060cd8c284d8af7ad3082f209582d”</td>
+</tr>
+<tr>
+<td>If-Unmodified-Since</td>
+<td>只在实体在指定时间之后未被修改才请求成功</td>
+<td>If-Unmodified-Since: Sat, 29 Oct 2018 19:23:11 GMT</td>
+</tr>
+<tr>
+<td>Max-Forwards</td>
+<td>限制信息通过代理和网关传送的时间</td>
+<td>Max-Forwards: 10</td>
+</tr>
+<tr>
+<td>Pragma</td>
+<td>用来包含实现特定的指令</td>
+<td>Pragma: no-cache</td>
+</tr>
+<tr>
+<td>Proxy-Authorization</td>
+<td>连接到代理的授权证书</td>
+<td>Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==</td>
+</tr>
+<tr>
+<td>Range</td>
+<td>只请求实体的一部分，指定范围</td>
+<td>Range: bytes=500-999</td>
+</tr>
+<tr>
+<td>Referer</td>
+<td>先前网页的地址，当前请求网页紧随其后，即来路</td>
+<td>Referer: <a target="_blank" rel="noopener" href="http://www.yanggb.com/yanggb1.html">http://www.yanggb.com/yanggb1.html</a></td>
+</tr>
+<tr>
+<td>TE</td>
+<td>客户端愿意接受的传输编码，并通知服务器接受接受尾加头信息</td>
+<td>TE: trailers,deflate;q=0.5</td>
+</tr>
+<tr>
+<td>Upgrade</td>
+<td>向服务器指定某种传输协议以便服务器进行转换（如果支持）</td>
+<td>Upgrade: HTTP/2.0, SHTTP/1.3, IRC/6.9, RTA/x11</td>
+</tr>
+<tr>
+<td>User-Agent</td>
+<td>User-Agent的内容包含发出请求的用户信息</td>
+<td>User-Agent: Mozilla/5.0 (Linux; X11)</td>
+</tr>
+<tr>
+<td>Via</td>
+<td>通知中间网关或代理服务器地址，通信协议</td>
+<td>Via: 1.0 fred, 1.1 nowhere.com (Apache/1.1)</td>
+</tr>
+<tr>
+<td>Warning</td>
+<td>关于消息实体的警告信息</td>
+<td>Warn: 199 Miscellaneous warning</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Response-Headers的候选属性"><a href="#Response-Headers的候选属性" class="headerlink" title="Response Headers的候选属性"></a>Response Headers的候选属性</h4><table>
+<thead>
+<tr>
+<th>候选属性</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accept-Ranges</td>
+<td>表明服务器是否支持指定范围请求及哪种类型的分段请求</td>
+<td>Accept-Ranges: bytes</td>
+</tr>
+<tr>
+<td>Age</td>
+<td>从原始服务器到代理缓存形成的估算时间（以秒计，非负）</td>
+<td>Age: 12</td>
+</tr>
+<tr>
+<td>Allow</td>
+<td>对某网络资源的有效的请求行为，不允许则返回405</td>
+<td>Allow: GET, HEAD</td>
+</tr>
+<tr>
+<td>Access-Control-Allow-Credentials</td>
+<td>表示是否可以将对请求的响应暴露给页面，常用作跨域</td>
+<td>Access-Control-Allow-Credentials: true</td>
+</tr>
+<tr>
+<td>Access-Control-Allow-Origin</td>
+<td>表示请求的许可域名</td>
+<td>Access-Control-Allow-Origin: <a target="_blank" rel="noopener" href="https://www.163.com">https://www.163.com</a></td>
+</tr>
+<tr>
+<td>Access-Control-Allow-Methods</td>
+<td>预检请求应答中明确客户端所要访问的资源允许使用的方法(列表)。</td>
+<td>Access-Control-Allow-Methods: POST, OPTIONS</td>
+</tr>
+<tr>
+<td>Cache-Control</td>
+<td>告诉所有的缓存机制是否可以缓存及哪种类型</td>
+<td>Cache-Control: no-cache</td>
+</tr>
+<tr>
+<td>Content-Encoding</td>
+<td>web服务器支持的返回内容压缩编码类型</td>
+<td>Content-Encoding: gzip</td>
+</tr>
+<tr>
+<td>Content-Language</td>
+<td>响应体的语言</td>
+<td>Content-Language: en,zh</td>
+</tr>
+<tr>
+<td>Content-Length</td>
+<td>响应体的长度</td>
+<td>Content-Length: 348</td>
+</tr>
+<tr>
+<td>Content-Location</td>
+<td>请求资源可替代的备用的另一地址</td>
+<td>Content-Location: /index.htm</td>
+</tr>
+<tr>
+<td>Content-MD5</td>
+<td>返回资源的MD5校验值</td>
+<td>Content-MD5: Q2hlY2sgSW50ZWdyaXR5IQ==</td>
+</tr>
+<tr>
+<td>Content-Range</td>
+<td>在整个返回体中本部分的字节位置</td>
+<td>Content-Range: bytes 21010-47021/47022</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>返回内容的MIME类型</td>
+<td>Content-Type: text/html; charset=utf-8</td>
+</tr>
+<tr>
+<td>Date</td>
+<td>原始服务器消息发出的时间</td>
+<td>Date: Tue, 15 Nov 2018 08:22:22 GMT</td>
+</tr>
+<tr>
+<td>ETag</td>
+<td>请求变量的实体标签的当前值</td>
+<td>ETag: “737060cd8c284d8af7ad3082f209582d”</td>
+</tr>
+<tr>
+<td>Expires</td>
+<td>响应过期的日期和时间</td>
+<td>Expires: Thu, 01 Dec 2018 16:00:00 GMT</td>
+</tr>
+<tr>
+<td>Last-Modified</td>
+<td>请求资源的最后修改时间</td>
+<td>Last-Modified: Tue, 15 Nov 2018 12:25:26 GMT</td>
+</tr>
+<tr>
+<td>Location</td>
+<td>用来重定向接收方到非请求URL的位置来完成请求或标识新的资源</td>
+<td>Location: <a target="_blank" rel="noopener" href="http://www.yanggb.com/yanggb2.html">http://www.yanggb.com/yanggb2.html</a></td>
+</tr>
+<tr>
+<td>Pragma</td>
+<td>包括实现特定的指令，它可应用到响应链上的任何接收方</td>
+<td>Pragma: no-cache</td>
+</tr>
+<tr>
+<td>Proxy-Authenticate</td>
+<td>它指出认证方案和可应用到代理的该URL上的参数</td>
+<td>Proxy-Authenticate: Basic</td>
+</tr>
+<tr>
+<td>refresh</td>
+<td>应用于重定向或一个新的资源被创造，在5秒之后重定向（由网景提出，被大部分浏览器支持）</td>
+<td>Refresh: 5; url=<a target="_blank" rel="noopener" href="http://www.yanggb.com/yanggb9.html">http://www.yanggb.com/yanggb9.html</a></td>
+</tr>
+<tr>
+<td>Retry-After</td>
+<td>如果实体暂时不可取，通知客户端在指定时间之后再次尝试</td>
+<td>Retry-After: 120</td>
+</tr>
+<tr>
+<td>Server</td>
+<td>web服务器软件名称</td>
+<td>Server: Apache/1.3.27 (Unix) (Red-Hat/Linux)</td>
+</tr>
+<tr>
+<td>Set-Cookie</td>
+<td>设置Http Cookie</td>
+<td>Set-Cookie: UserID=JohnDoe; Max-Age=3600; Version=1</td>
+</tr>
+<tr>
+<td>Trailer</td>
+<td>指出头域在分块传输编码的尾部存在</td>
+<td>Trailer: Max-Forwards</td>
+</tr>
+<tr>
+<td>Transfer-Encoding</td>
+<td>文件传输编码</td>
+<td>Transfer-Encoding:chunked</td>
+</tr>
+<tr>
+<td>Vary</td>
+<td>告诉下游代理是使用缓存响应还是从原始服务器请求</td>
+<td>Vary: *</td>
+</tr>
+<tr>
+<td>Via</td>
+<td>告知代理客户端响应是通过哪里发送的</td>
+<td>Via: 1.0 fred, 1.1 nowhere.com (Apache/1.1)</td>
+</tr>
+<tr>
+<td>Warning</td>
+<td>警告实体可能存在的问题</td>
+<td>Warning: 199 Miscellaneous warning</td>
+</tr>
+<tr>
+<td>WWW-Authenticate</td>
+<td>表明客户端请求实体应该使用的授权方案</td>
+<td>WWW-Authenticate: Basic</td>
+</tr>
+</tbody>
+</table>
+<h3 id="传送门"><a href="#传送门" class="headerlink" title="传送门"></a>传送门</h3><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/互联网媒体类型">互联网媒体类型</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.epoos.com/2021/01/11/data-bind/" data-id="ckpasqnub000efvvz67vd7np8" class="article-share-link">Share</a>
+      <a data-url="https://blog.epoos.com/2021/01/12/http-headers/" data-id="ckpgv54ry000nh0vzfrv63oad" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/proxy/" rel="tag">proxy</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" rel="tag">响应式</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CONTENTTYPE/" rel="tag">CONTENTTYPE</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MIMETYPE/" rel="tag">MIMETYPE</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AF%B7%E6%B1%82%E5%A4%B4/" rel="tag">请求头</a></li></ul>
 
     </footer>
   </div>
@@ -174,6 +819,11 @@ ga('send', 'pageview');
       <ul>
         
           <li>
+            <span class="widget-date">2021-06-03</span>
+            <a href="/2021/06/03/stream/">Nodejs 中的 Stream</a>
+          </li>
+        
+          <li>
             <span class="widget-date">2021-04-03</span>
             <a href="/2021/04/03/cdn/">cdn 简介</a>
           </li>
@@ -193,11 +843,6 @@ ga('send', 'pageview');
             <a href="/2021/02/08/react16/">react 学习笔记</a>
           </li>
         
-          <li>
-            <span class="widget-date">2021-02-04</span>
-            <a href="/2021/02/04/vue3/">Vue3 初探</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -207,7 +852,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">标签索引</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AES/" style="font-size: 10px;">AES</a> <a href="/tags/CONTENTTYPE/" style="font-size: 10px;">CONTENTTYPE</a> <a href="/tags/MIMETYPE/" style="font-size: 10px;">MIMETYPE</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/apply/" style="font-size: 10px;">apply</a> <a href="/tags/async/" style="font-size: 10px;">async</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/bind/" style="font-size: 10px;">bind</a> <a href="/tags/brew/" style="font-size: 10px;">brew</a> <a href="/tags/browser/" style="font-size: 10px;">browser</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/call/" style="font-size: 10px;">call</a> <a href="/tags/cdn/" style="font-size: 10px;">cdn</a> <a href="/tags/child-process/" style="font-size: 10px;">child_process</a> <a href="/tags/chrome/" style="font-size: 10px;">chrome</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/cname/" style="font-size: 10px;">cname</a> <a href="/tags/commonjs/" style="font-size: 10px;">commonjs</a> <a href="/tags/compile/" style="font-size: 10px;">compile</a> <a href="/tags/create/" style="font-size: 10px;">create</a> <a href="/tags/csrf/" style="font-size: 10px;">csrf</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/defer/" style="font-size: 10px;">defer</a> <a href="/tags/dns/" style="font-size: 11.25px;">dns</a> <a href="/tags/dubbo/" style="font-size: 10px;">dubbo</a> <a href="/tags/es6Module/" style="font-size: 10px;">es6Module</a> <a href="/tags/event/" style="font-size: 10px;">event</a> <a href="/tags/fiber/" style="font-size: 10px;">fiber</a> <a href="/tags/flux/" style="font-size: 10px;">flux</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/http/" style="font-size: 11.25px;">http</a> <a href="/tags/http2/" style="font-size: 10px;">http2</a> <a href="/tags/http3/" style="font-size: 10px;">http3</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/instance/" style="font-size: 10px;">instance</a> <a href="/tags/ios%E6%A8%A1%E6%8B%9F%E5%99%A8/" style="font-size: 10px;">ios模拟器</a> <a href="/tags/iphonex/" style="font-size: 10px;">iphonex</a> <a href="/tags/item2/" style="font-size: 10px;">item2</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 16.25px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 11.25px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/nginx/" style="font-size: 11.25px;">nginx</a> <a href="/tags/nodejs/" style="font-size: 17.5px;">nodejs</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/npm-lock/" style="font-size: 10px;">npm-lock</a> <a href="/tags/object/" style="font-size: 11.25px;">object</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/proxy/" style="font-size: 11.25px;">proxy</a> <a href="/tags/react/" style="font-size: 11.25px;">react</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redux/" style="font-size: 10px;">redux</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/rsync/" style="font-size: 10px;">rsync</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sentinel/" style="font-size: 10px;">sentinel</a> <a href="/tags/set/" style="font-size: 10px;">set</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/simulator/" style="font-size: 10px;">simulator</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/ssr/" style="font-size: 10px;">ssr</a> <a href="/tags/svn/" style="font-size: 10px;">svn</a> <a href="/tags/terminal/" style="font-size: 10px;">terminal</a> <a href="/tags/thrift/" style="font-size: 10px;">thrift</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/virtualDom/" style="font-size: 10px;">virtualDom</a> <a href="/tags/vue/" style="font-size: 12.5px;">vue</a> <a href="/tags/vue-vuex/" style="font-size: 10px;">vue vuex</a> <a href="/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/tags/weakSet/" style="font-size: 10px;">weakSet</a> <a href="/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 11.25px;">web安全</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/xss/" style="font-size: 10px;">xss</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1/" style="font-size: 10px;">事件冒泡</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 10px;">事件循环</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%8D%95%E8%8E%B7/" style="font-size: 10px;">事件捕获</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%86%92%E6%B3%A1%E7%AE%97%E6%B3%95/" style="font-size: 10px;">冒泡算法</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">函数式编程</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BC%96%E8%AF%91/" style="font-size: 10px;">前端编译</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 10px;">动态规划</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 10px;">响应式</a> <a href="/tags/%E5%9B%9E%E6%96%87/" style="font-size: 10px;">回文</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 18.75px;">基础</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 10px;">安全</a> <a href="/tags/%E5%AF%B9%E8%B1%A1/" style="font-size: 11.25px;">对象</a> <a href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 11.25px;">小程序</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" style="font-size: 11.25px;">微信开发</a> <a href="/tags/%E5%BE%AE%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">微前端</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">快速算法</a> <a href="/tags/%E6%80%A7%E8%83%BD/" style="font-size: 10px;">性能</a> <a href="/tags/%E6%8F%92%E5%85%A5%E7%AE%97%E6%B3%95/" style="font-size: 10px;">插入算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12.5px;">数据库</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 10px;">数组</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF/" style="font-size: 10px;">服务端</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B8%B2%E6%9F%93/" style="font-size: 10px;">服务端渲染</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 10px;">浏览器</a> <a href="/tags/%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/" style="font-size: 10px;">硬件加速</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.75px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">线程</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%99%9A%E6%8B%9FDOM/" style="font-size: 10px;">虚拟DOM</a> <a href="/tags/%E8%AF%95%E9%A2%98/" style="font-size: 12.5px;">试题</a> <a href="/tags/%E8%AF%B7%E6%B1%82%E5%A4%B4/" style="font-size: 10px;">请求头</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" style="font-size: 10px;">软件安装</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10px;">进程</a> <a href="/tags/%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95/" style="font-size: 10px;">选择算法</a> <a href="/tags/%E9%95%BF%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">长连接</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12.5px;">面试</a> <a href="/tags/%E9%BD%90%E5%88%98%E6%B5%B7/" style="font-size: 10px;">齐刘海</a>
+      <a href="/tags/AES/" style="font-size: 10px;">AES</a> <a href="/tags/CONTENTTYPE/" style="font-size: 10px;">CONTENTTYPE</a> <a href="/tags/MIMETYPE/" style="font-size: 10px;">MIMETYPE</a> <a href="/tags/RSA/" style="font-size: 10px;">RSA</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/apply/" style="font-size: 10px;">apply</a> <a href="/tags/async/" style="font-size: 10px;">async</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/bind/" style="font-size: 10px;">bind</a> <a href="/tags/brew/" style="font-size: 10px;">brew</a> <a href="/tags/browser/" style="font-size: 10px;">browser</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/call/" style="font-size: 10px;">call</a> <a href="/tags/cdn/" style="font-size: 10px;">cdn</a> <a href="/tags/child-process/" style="font-size: 10px;">child_process</a> <a href="/tags/chrome/" style="font-size: 10px;">chrome</a> <a href="/tags/cluster/" style="font-size: 10px;">cluster</a> <a href="/tags/cname/" style="font-size: 10px;">cname</a> <a href="/tags/commonjs/" style="font-size: 10px;">commonjs</a> <a href="/tags/compile/" style="font-size: 10px;">compile</a> <a href="/tags/create/" style="font-size: 10px;">create</a> <a href="/tags/csrf/" style="font-size: 10px;">csrf</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/defer/" style="font-size: 10px;">defer</a> <a href="/tags/dns/" style="font-size: 11.25px;">dns</a> <a href="/tags/dubbo/" style="font-size: 10px;">dubbo</a> <a href="/tags/es6Module/" style="font-size: 10px;">es6Module</a> <a href="/tags/event/" style="font-size: 10px;">event</a> <a href="/tags/fiber/" style="font-size: 10px;">fiber</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/flux/" style="font-size: 10px;">flux</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/gulp/" style="font-size: 10px;">gulp</a> <a href="/tags/http/" style="font-size: 11.25px;">http</a> <a href="/tags/http2/" style="font-size: 10px;">http2</a> <a href="/tags/http3/" style="font-size: 10px;">http3</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/instance/" style="font-size: 10px;">instance</a> <a href="/tags/ios%E6%A8%A1%E6%8B%9F%E5%99%A8/" style="font-size: 10px;">ios模拟器</a> <a href="/tags/iphonex/" style="font-size: 10px;">iphonex</a> <a href="/tags/item2/" style="font-size: 10px;">item2</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/jdk/" style="font-size: 10px;">jdk</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/linux/" style="font-size: 16.25px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/mysql/" style="font-size: 11.25px;">mysql</a> <a href="/tags/new/" style="font-size: 10px;">new</a> <a href="/tags/nginx/" style="font-size: 11.25px;">nginx</a> <a href="/tags/nodejs/" style="font-size: 17.5px;">nodejs</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/npm-lock/" style="font-size: 10px;">npm-lock</a> <a href="/tags/object/" style="font-size: 11.25px;">object</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/pm2/" style="font-size: 10px;">pm2</a> <a href="/tags/proxy/" style="font-size: 11.25px;">proxy</a> <a href="/tags/react/" style="font-size: 11.25px;">react</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/redux/" style="font-size: 10px;">redux</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/rsync/" style="font-size: 10px;">rsync</a> <a href="/tags/scp/" style="font-size: 10px;">scp</a> <a href="/tags/sentinel/" style="font-size: 10px;">sentinel</a> <a href="/tags/set/" style="font-size: 10px;">set</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/simulator/" style="font-size: 10px;">simulator</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/ssh/" style="font-size: 10px;">ssh</a> <a href="/tags/ssr/" style="font-size: 10px;">ssr</a> <a href="/tags/stream/" style="font-size: 10px;">stream</a> <a href="/tags/svn/" style="font-size: 10px;">svn</a> <a href="/tags/terminal/" style="font-size: 10px;">terminal</a> <a href="/tags/thrift/" style="font-size: 10px;">thrift</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/virtualDom/" style="font-size: 10px;">virtualDom</a> <a href="/tags/vue/" style="font-size: 12.5px;">vue</a> <a href="/tags/vue-vuex/" style="font-size: 10px;">vue vuex</a> <a href="/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/tags/weakSet/" style="font-size: 10px;">weakSet</a> <a href="/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 11.25px;">web安全</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/xss/" style="font-size: 10px;">xss</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1/" style="font-size: 10px;">事件冒泡</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 10px;">事件循环</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%8D%95%E8%8E%B7/" style="font-size: 10px;">事件捕获</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%86%92%E6%B3%A1%E7%AE%97%E6%B3%95/" style="font-size: 10px;">冒泡算法</a> <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">函数式编程</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BC%96%E8%AF%91/" style="font-size: 10px;">前端编译</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 10px;">动态规划</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 10px;">响应式</a> <a href="/tags/%E5%9B%9E%E6%96%87/" style="font-size: 10px;">回文</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 18.75px;">基础</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 10px;">安全</a> <a href="/tags/%E5%AF%B9%E8%B1%A1/" style="font-size: 11.25px;">对象</a> <a href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 11.25px;">小程序</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" style="font-size: 11.25px;">微信开发</a> <a href="/tags/%E5%BE%AE%E5%89%8D%E7%AB%AF/" style="font-size: 10px;">微前端</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">快速算法</a> <a href="/tags/%E6%80%A7%E8%83%BD/" style="font-size: 10px;">性能</a> <a href="/tags/%E6%8F%92%E5%85%A5%E7%AE%97%E6%B3%95/" style="font-size: 10px;">插入算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12.5px;">数据库</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 10px;">数组</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF/" style="font-size: 10px;">服务端</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B8%B2%E6%9F%93/" style="font-size: 10px;">服务端渲染</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 10px;">浏览器</a> <a href="/tags/%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/" style="font-size: 10px;">硬件加速</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.75px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">线程</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%99%9A%E6%8B%9FDOM/" style="font-size: 10px;">虚拟DOM</a> <a href="/tags/%E8%AF%95%E9%A2%98/" style="font-size: 12.5px;">试题</a> <a href="/tags/%E8%AF%B7%E6%B1%82%E5%A4%B4/" style="font-size: 10px;">请求头</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" style="font-size: 10px;">软件安装</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10px;">进程</a> <a href="/tags/%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95/" style="font-size: 10px;">选择算法</a> <a href="/tags/%E9%95%BF%E8%BF%9E%E6%8E%A5/" style="font-size: 10px;">长连接</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 12.5px;">面试</a> <a href="/tags/%E9%BD%90%E5%88%98%E6%B5%B7/" style="font-size: 10px;">齐刘海</a>
     </div>
   </div>
 
